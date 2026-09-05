@@ -1,0 +1,10 @@
+.DS_Store
+.godot/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+/work/
+/build/
+/dist/
