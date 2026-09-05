@@ -1,0 +1,42 @@
+[
+  {
+    "number": 1,
+    "slug": "01-prussian-ink",
+    "title": "Prussian Ink",
+    "branch": "codex/01-prussian-ink",
+    "revision": "aa301a0",
+    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/01-prussian-ink"
+  },
+  {
+    "number": 2,
+    "slug": "02-faded-tides",
+    "title": "Faded Tides",
+    "branch": "codex/02-faded-tides",
+    "revision": "c6c9613",
+    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/02-faded-tides"
+  },
+  {
+    "number": 3,
+    "slug": "03-paper-theatre",
+    "title": "Paper Theatre",
+    "branch": "codex/03-paper-theatre",
+    "revision": "3f51a2b",
+    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/03-paper-theatre"
+  },
+  {
+    "number": 4,
+    "slug": "04-woodblock-wings",
+    "title": "Woodblock Wings",
+    "branch": "codex/04-woodblock-wings",
+    "revision": "72de9b1",
+    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/04-woodblock-wings"
+  },
+  {
+    "number": 5,
+    "slug": "05-ink-diorama",
+    "title": "Ink Diorama",
+    "branch": "codex/05-ink-diorama",
+    "revision": "48a7843",
+    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/05-ink-diorama"
+  }
+]
