@@ -40,3 +40,7 @@ All new SVG artwork is editable source, not a copied game texture. Generated geo
 6. Ask which qualities to retain. Do not merge an artistic winner until the user responds.
 
 This is a visual experiment, not a fishing/inventory/story expansion. Future production work includes weather extremes, movement/recycling, targeting consistency, art coverage for every camera angle and measured performance.
+
+## Next priority after selection
+
+User clarification, 2026-09-06: fish are secondary now. The next visual pass should focus on the ocean's layer cohesion, individual weather-driven motion, coverage throughout 12–52° and bucket framing. Do not expand fishing or block visual refinement on fish visibility/targeting. The hidden gameplay surface remains a documented future integration concern, not the immediate task.
