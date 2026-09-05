@@ -2,6 +2,10 @@
 
 Status: first executable foundation, 5 September 2026. This follows the user's decision to separate story-triggered events from chance-based side opportunities while allowing the same activation concepts in any domain. The weather handler is integrated; quest, achievement and story handlers remain to be authored.
 
+## Pending scheduling proposal
+
+The user is reviewing a size-two weather queue and linked weather/encounter story requests. See [coordinator proposal](weather_encounter_scheduler.md). It is not implemented or approved and does not yet supersede the runtime rules below.
+
 ## Latest encounter revision
 
 The user now requires no overlapping encounters and no weather transitions during an encounter, with weather-dependent chance rates and local event field modifiers. The [encounter-fields proposal](encounter_fields_and_pacing.md) defines that revision. Its global admission/transition gate supersedes the earlier future-concurrent-domain proposal below and is implemented for a salvage fixture. The user approved90s quiet and a240s minimum mean eligible wait, and declined protecting ordinary fishing fights. Remaining event families and their draft rate balance still need content work.
