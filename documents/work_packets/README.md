@@ -16,4 +16,4 @@ The camera owner may request revisions to either packet when runtime evidence ex
 
 First run the camera/flat-proxy experiment and settle the supported view range and representation contract. Then fishing, inventory, and environment/director prototypes can proceed in separate contexts against stable interfaces. Story and encounter production follow their integration.
 
-The work packets and fixture file are preparation artifacts, not a playable prototype or an executed engine test suite.
+The work packets and fixture file are specifications. The first [runnable prototype](../../game/README.md) now exists; its [visual review](p1_visual_review.md) separates implemented behavior, passed checks, and outstanding user decisions.

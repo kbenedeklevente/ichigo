@@ -23,3 +23,5 @@ The [development philosophy](../dev_philosophy.md) applies throughout. The [earl
 The first context split is now organized in [bounded work packets](../work_packets/README.md), with the primary agent retaining camera/integration ownership.
 
 Build a camera-and-asset test scene with a child silhouette in a bucket, water, sky, one target, and one fish proxy. Compare angle and projection before producing a full asset set. The current request completes the planning package; implementation and subagent execution follow as separate work.
+
+Implementation update: the [first camera study](../../game/README.md) is runnable. Review its [findings and feedback gate](../work_packets/p1_visual_review.md) before choosing the camera range or producing final assets.

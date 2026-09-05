@@ -1,6 +1,6 @@
 # P1 camera prototype — integration work packet
 
-Owner: primary integration agent, with the human creator. Status: scoped and ready for engine setup; runtime implementation has not started.
+Owner: primary integration agent, with the human creator. Status: the first runnable P1 baseline is implemented; camera/framing decisions await user feedback. See the [visual review](p1_visual_review.md) and [prototype instructions](../../game/README.md). The task specification below remains the reference for unfinished comparisons.
 
 Authority: [integrated game plan](../design/integrated_game_plan.md) and [visual engine roadmap](../design/visual_engine_roadmap.md). This packet narrows their first experiment; it does not finalize their open artistic choices.
 
@@ -10,7 +10,7 @@ Can the child/bucket scene support readable local interactions while retaining a
 
 ## Local readiness
 
-The current project is `/Users/benedekkoos/projects/ichigo`. The inspected host reports an Apple M2 and 8 GiB memory. No Godot executable was found on PATH or as a Godot app in `/Applications` or the user's `Applications` directory. This does not rule out an installation elsewhere. The first implementation step is to locate or install the chosen stable Godot 4 build and record its version. No editor installation or performance benchmark was performed in this preparation pass.
+The current project is `/Users/benedekkoos/projects/ichigo`. The inspected host reports an Apple M2 and 8 GiB memory. Godot 4.7.2 stable was downloaded from the official vendor, its code signature verified, and its editor installed at `/Applications/Godot.app`. The first camera scene has been run and captured. A sustained performance benchmark is still pending.
 
 Start comparison captures at a modest explicitly recorded internal resolution, then test both 16:9 and 16:10. Keep volumetric effects off in the baseline so camera and silhouette decisions can be evaluated independently. The 60 fps goal remains a target until measured on this host.
 
