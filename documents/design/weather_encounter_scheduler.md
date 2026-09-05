@@ -47,6 +47,8 @@ A linked story request must not starve while shorter ordinary requests keep refi
 
 Chance opportunities should continue to roll only when eligible rather than building a backlog during a blocked story. Explicit triggered requests can wait. Preserve existing quiet intervals and world-event exclusivity unless the user expressly changes them.
 
+See [eligibility and chance authoring](event_eligibility_and_chance.md) for the proposed per-definition rate tables and separate weather/encounter pacing budgets. The coordinator decides admission and starts the weather handler; the simulator owns transition progress and reports when conditions are established. Reserving a linked encounter must not activate the weather-transition hold before its required approach completes.
+
 ## Implementation sequence after review
 
 1. Add coordinator/request types and explicit queue-capacity behavior around the existing handlers; do not rewrite the physics or renderer.

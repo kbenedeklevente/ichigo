@@ -2,7 +2,7 @@
 
 ## Current implementation proposal
 
-Use [encounter fields and pacing](encounter_fields_and_pacing.md) for the six candidate events, weather-dependent rates, exclusive encounter gate, stable weather during encounters, sparse spatial index, optional local modifier matrices and wind-driven departure. Off-screen retirement and quest completion are separate outcomes. The new numerical pacing values are proposals, not yet implemented or approved.
+Use [encounter fields and pacing](encounter_fields_and_pacing.md) for weather-dependent rates, the exclusive encounter gate, stable weather during encounters, sparse spatial index, optional local modifier matrices and wind-driven departure. The 90-second quiet interval, 1/240 eligible-second aggregate hazard ceiling and 180-second lingering departure are approved and implemented for the salvage fixture. Other candidate families and their rates remain proposals. Off-screen retirement and quest completion are separate outcomes. See [starter ideas](starter_event_ideas.md) for the latest small-content review and [chance authoring](event_eligibility_and_chance.md) for the proposed matrix model.
 
 ## Purpose and shared constraints
 

@@ -19,6 +19,8 @@ Use this index to retrieve the smallest useful design context. Start with the cu
 
 ## Current status and precedence
 
+For chance-table authoring, read [event eligibility and chance](event_eligibility_and_chance.md) alongside the event-system row. For small next-content proposals, read [starter weather and encounter ideas](starter_event_ideas.md); these are not selected or implemented content.
+
 - Historical baseline `8255dd4` introduced a runnable camera/weather study, connected raised crests and a salvage encounter fixture. See [P2 implementation review](../work_packets/p2_wave_encounter_review.md) for tested behavior and remaining limits.
 - **Paper Theatre is selected and merged into main** at `1622c52`. See [selected study](../experiments/variant.md). Its independent illustrated cards and ribbons replace the shared visible surface; the invisible gameplay sampler remains approximate. Other variants are historical references.
 - Current visual priority: ocean cohesion, layer motion, camera coverage and bucket framing. Fish are secondary; do not make their targeting/visibility a prerequisite for this art pass.
