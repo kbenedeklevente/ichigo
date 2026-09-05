@@ -3,7 +3,7 @@ extends RefCounted
 ## meaningful crest relief: gameplay and the vertex shader evaluate this field.
 ## Values below are comparison defaults, not an approved final art direction.
 const SUBDIVISIONS := 24
-const FACE_RISE := 0.58
+const FACE_RISE := 0.56
 const PROFILE_TRAVEL := 0.38
 const NORMAL_STEP := 0.012
 var _simulation
@@ -103,20 +103,21 @@ func analytic_height(point: Vector2) -> float:
 			var seed_value := _seed(cell)
 			var center := Vector2(cell) * _cell_size + Vector2((seed_value - 0.5) * 1.5, (fposmod(seed_value * 7.0, 1.0) - 0.5) * 1.05)
 			var local := (traveled - center) * (4.0 / _cell_size)
-			var half_width := 1.40 + 0.25 * seed_value
+			var half_width := 2.15 + 0.30 * seed_value
 			if absf(local.x) >= half_width:
 				continue
 			var across := local.x / half_width
-			# The long concave flank rises into an off-centre point; the short
-			# flank falls steeply. This is the standing fin silhouette, not a mound.
-			var tip := 0.18 + 0.18 * seed_value
-			var flank := (across + 1.0) / (tip + 1.0) if across < tip else (1.0 - across) / (1.0 - tip)
-			var taper := pow(maxf(0.0, flank), 1.35 if across < tip else 0.85) * smoothstep(0.0, 0.15, flank)
-			var along := local.y + 0.23 * across * across + 0.07 * sin(across * 5.0 + seed_value * 6.0)
-			var shoulder := 0.90 + 0.18 * seed_value
-			var front := 0.30 + 0.06 * seed_value
+			# Broad serpentine ribbons with two rounded shoulders replace a pointed
+			# fin. This exact field is duplicated in water_panel.gdshader.
+			var taper := 1.0 - smoothstep(0.48, 1.0, absf(across))
+			var curl := 0.48 * sin(across * 3.2 + seed_value * 2.0) + 0.20 * across
+			var along := local.y + curl
+			var shoulder := 1.36 + 0.16 * seed_value
+			var front := 0.23 + 0.04 * seed_value
 			var profile := smoothstep(-shoulder, -0.08, along) * (1.0 - smoothstep(0.0, front, along))
-			relief += FACE_RISE * (0.86 + 0.28 * seed_value) * taper * profile
+			var crown := 0.70 + 0.30 * pow(0.5 + 0.5 * sin(across * 4.0 + seed_value * 4.0), 2.0)
+			var echo := smoothstep(-1.85, -1.52, along) * (1.0 - smoothstep(-1.45, -1.12, along))
+			relief += FACE_RISE * (0.92 + 0.16 * seed_value) * taper * (crown * profile + 0.20 * echo)
 	var amplitude := _field(point, _amplitudes)
 	return _field(point, _heights) + relief * (1.0 + 0.18 * clampf((amplitude - 0.12) / 0.66, 0.0, 1.0))
 

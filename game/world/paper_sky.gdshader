@@ -16,10 +16,10 @@ float noise(vec2 p) {
 void sky() {
 	float elevation=max(EYEDIR.y,0.0);
 	float azimuth=atan(EYEDIR.x,-EYEDIR.z);
-	vec3 horizon=vec3(0.65,0.71,0.68);
-	vec3 indigo=vec3(0.10,0.25,0.36);
+	vec3 horizon=vec3(0.78,0.76,0.65);
+	vec3 indigo=vec3(0.065,0.19,0.31);
 	vec3 color=mix(horizon,indigo,smoothstep(0.0,0.24,elevation));
-	float layer=elevation*24.0;
+	float layer=elevation*15.0;
 	float row=floor(layer);
 	float across=azimuth*9.0 + cloud_offset.x;
 	float tear=(noise(vec2(across*2.0,row*3.0))-0.5)*0.18;
@@ -34,6 +34,6 @@ void sky() {
 		color = mix(color, vec3(0.26,0.36,0.39), bank * front_strength * 0.7);
 	}
 	float fiber=hash(floor(vec2(azimuth,elevation)*1800.0))-0.5;
-	color=mix(color,vec3(0.90,0.86,0.72),cloud*0.90);
+	color=mix(color,vec3(0.94,0.88,0.71),cloud*0.90);
 	COLOR=(color+fiber*0.012) * (weather_enabled ? mix(0.5,1.0,weather_light) : 1.0);
 }

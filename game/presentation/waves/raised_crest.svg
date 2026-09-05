@@ -1,15 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="768" height="512" viewBox="0 0 768 512">
-<!-- Original code-native curved-wave illustration study. V follows the shoulder,
-     pale crest lip and steep front of the shared geometric profile. -->
-<rect width="768" height="512" fill="#67888f"/>
-<path fill="#759599" d="M0 52H768V300Q570 311 384 301T0 302Z"/>
-<path fill="#99aaa1" d="M0 292Q200 300 384 294T768 294V349Q550 343 384 350T0 348Z"/>
-<path fill="#d9d6bc" d="M0 337Q192 333 384 338T768 337V354Q580 352 384 357T0 354Z"/>
-<path fill="#4d7382" d="M0 354Q194 356 384 358T768 354V512H0Z"/>
-<g fill="none" stroke-linecap="round">
-<path stroke="#345d70" stroke-width="2.2" opacity=".8" d="M0 359Q190 362 384 363T768 359"/>
-<path stroke="#bcc7b4" stroke-width="2.1" opacity=".72" d="M18 391Q99 369 163 389T293 392M312 391Q405 372 470 393T635 390M657 394Q719 381 776 391M54 411Q106 393 147 409M184 416Q257 400 315 418M381 413Q442 398 510 416M568 414Q654 397 722 417"/>
-<path stroke="#b5c3b0" stroke-width="1.8" opacity=".65" d="M38 163Q110 149 177 165M230 193Q293 175 355 191M445 146Q512 131 581 151M631 191Q702 179 759 192M78 257Q181 239 263 251M327 267Q420 248 504 264M564 252Q661 236 731 253"/>
-<path stroke="#426c7b" stroke-width="1.5" opacity=".65" d="M26 431Q113 419 194 434M224 447Q306 432 378 448M426 436Q516 420 595 439M625 450Q700 432 767 447"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512">
+<!-- Original carved-ink atlas. Broad contour bundles climb the shoulder; the
+     ivory curl sits on the shared mesh lip at V .66–.69. No photo texture. -->
+<rect width="1024" height="512" fill="#083a59"/>
+<path fill="#145674" d="M0 45C210 135 275 17 442 79S745 187 1024 52V342H0Z"/>
+<path fill="#0b4668" d="M0 162C138 88 257 214 416 143S773 90 1024 170V350H0Z"/>
+<path fill="#072e4d" d="M0 360H1024V512H0Z"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<!-- Sweeping bundles, deliberately thick enough to survive a low camera. -->
+<path stroke="#78a3ab" stroke-width="9" d="M-40 56C118 164 231 16 398 96S727 191 1080 71M-20 88C142 186 228 57 392 124S752 223 1045 104"/>
+<path stroke="#c8d0b9" stroke-width="5" d="M-40 66C128 174 231 26 398 106S727 201 1080 81M-20 98C142 196 228 67 392 134S752 233 1045 114"/>
+<path stroke="#86abb0" stroke-width="7" d="M-15 183C100 133 179 225 299 201S469 120 607 179S874 229 1035 158M-15 205C100 155 179 247 299 223S469 142 607 201S874 251 1035 180"/>
+<path stroke="#e8dfbf" stroke-width="4" d="M0 230C104 183 156 268 294 245S469 164 607 223S874 273 1024 202"/>
+<path stroke="#bed0c1" stroke-width="6" d="M-18 268C124 229 173 290 331 261S541 245 653 278S849 282 1043 243M-20 286C113 249 195 307 331 281S538 263 653 296S849 300 1043 261"/>
+<!-- Ink shadows between cream crest fingers. -->
+<path stroke="#031e3b" stroke-width="13" d="M-5 346C116 318 197 364 304 334S476 340 575 343S850 313 1035 345"/>
+<path stroke="#f2e7c7" stroke-width="14" d="M-5 333C116 305 197 351 304 321S476 327 575 330S850 300 1035 332"/>
+<path stroke="#f2e7c7" stroke-width="10" d="M118 327C178 304 194 258 158 255C128 253 125 280 146 282C159 284 163 271 156 268M315 325C384 319 425 273 395 255C368 239 342 259 351 277C358 291 378 279 371 269M660 328C724 312 752 252 714 247C681 243 669 268 689 279C703 286 716 272 707 264M892 324C942 311 955 280 932 272C908 264 896 287 914 292"/>
+<path stroke="#f2e7c7" stroke-width="5" d="M99 318L102 292M113 308L123 284M180 314L202 293M301 311L310 287M323 304L339 282M411 316L434 291M640 316L645 288M659 305L668 281M750 311L778 290M875 315L881 294M943 318L967 300"/>
+<!-- Descending carved ribs turn beneath the lip. -->
+<path stroke="#5e8f9c" stroke-width="5" d="M0 383C141 350 153 421 296 380S483 409 586 381S828 365 1032 386M0 404C141 371 153 442 296 401S483 430 586 402S828 386 1032 407M0 433C141 400 153 471 296 430S483 459 586 431S828 415 1032 436M0 465C141 432 153 503 296 462S483 491 586 463S828 447 1032 468"/>
+<path stroke="#c5d0b7" stroke-width="3" d="M0 379C141 346 153 417 296 376S483 405 586 377S828 361 1032 382M0 429C141 396 153 467 296 426S483 455 586 427S828 411 1032 432"/>
+</g>
+<g fill="#efe3c4">
+<ellipse cx="212" cy="280" rx="5" ry="8" transform="rotate(28 212 280)"/><ellipse cx="228" cy="295" rx="4" ry="5"/>
+<ellipse cx="445" cy="272" rx="5" ry="7" transform="rotate(35 445 272)"/><ellipse cx="464" cy="298" rx="3" ry="5"/>
+<ellipse cx="781" cy="276" rx="4" ry="8" transform="rotate(40 781 276)"/><ellipse cx="800" cy="294" rx="4" ry="5"/>
 </g>
 </svg>

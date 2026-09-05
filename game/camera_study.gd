@@ -46,7 +46,7 @@ var _capture_directory: String = ""
 
 func _ready() -> void:
 	if "--weather-study" in OS.get_cmdline_user_args():
-		DisplayServer.window_set_title("Ichigo — Raised Waves Study")
+		DisplayServer.window_set_title("Ichigo — 01 Prussian Ink")
 		weather_runtime = EnvironmentRuntime.new()
 		weather_runtime.configure(15, true)
 		water_surface = WaterSurface.new()
@@ -384,7 +384,7 @@ func _build_hud() -> void:
 	title.add_theme_font_size_override("font_size",27)
 	root.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "CAMERA STUDY  /  01"
+	subtitle.text = "01  /  PRUSSIAN INK"
 	subtitle.position = Vector2(35,62)
 	subtitle.add_theme_font_size_override("font_size",11)
 	root.add_child(subtitle)
@@ -401,7 +401,7 @@ func _build_hud() -> void:
 	panel.offset_top = -119
 	panel.offset_bottom = -24
 	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.075,0.19,0.24,0.90)
+	panel_style.bg_color = Color(0.015,0.09,0.16,0.93)
 	panel_style.set_corner_radius_all(8)
 	panel_style.content_margin_left = 20
 	panel_style.content_margin_right = 20

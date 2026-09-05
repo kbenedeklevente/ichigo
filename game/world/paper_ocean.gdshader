@@ -33,7 +33,7 @@ void fragment() {
 	float fiber = grain(floor(p * 130.0)) - 0.5;
 	color += fiber * 0.028;
 	float haze = smoothstep(12.0,52.0,distance_from_bucket);
-	color = mix(color, vec3(0.5686,0.647,0.639), haze);
-	if (distant_surface) { color = vec3(0.5686,0.647,0.639); }
+	color = mix(color, vec3(0.18,0.34,0.43), haze);
+	if (distant_surface) { color = vec3(0.18,0.34,0.43); }
 	ALBEDO = color * illumination;
 }
