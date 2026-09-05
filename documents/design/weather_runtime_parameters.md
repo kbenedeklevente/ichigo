@@ -2,6 +2,10 @@
 
 Status: implemented study parameters, 5 September 2026. The user authorized initial parameter definition. These values are editable art/game tuning, not measured real-world forecasts or final pacing.
 
+## Current renderer and next wind study
+
+Paper Theatre is selected and runs by default; use `--camera-baseline` for the historical camera fixture. Its matching child/bucket art is implemented. The user now classifies the current curling-wave artwork as intensity 2 and requests a separate 0–3 wind intensity field for lateral/vertical animation. That change is pending clarified timing/travel conventions. See [wind visual motion](wind_visual_motion.md). The physical profile table below still describes the implemented solver; do not replace its vector units with animation intensity.
+
 ## Subsequent visual review
 
 The user rejected this study's flat waves. The [raised-wave correction](raised_paper_waves.md) now governs the next renderer iteration. The measurements and runtime behavior below describe the existing horizontal-sheet implementation, not an approved final representation.
