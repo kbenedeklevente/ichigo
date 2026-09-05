@@ -1,5 +1,7 @@
 # Open-ocean survival — concept plan v0.1
 
+> Historical concept plan. The [integrated design package](../../documents/design/README.md) is the current planning authority. It supersedes this document's food/water loop, required navigation/route progression, unrestricted camera assumptions, and earlier slice order. Current direction: travel in any heading with encounter-driven progress; a bounded adjustable camera; cohesive assets across its range; paper, low-poly, and medium-poly experiments; and an initial playable proposal without hunger or thirst. Preserve the material below as the record of earlier exploration, not as conflicting instructions for implementation.
+
 Prepared 5 September 2026. Planning and concept-art deliverables; no playable engine build has been produced in this phase.
 
 ## The game we are making
@@ -42,7 +44,11 @@ Navigation and observation puzzles advance three broad milestones: establish whe
 
 The loop is: notice a cue → approach or avoid → observe/manipulate → gain knowledge or resources → repair or solve → choose the next heading → encounter changed conditions. Quiet stretches are part of the experience. The director should make them interesting through navigation, wildlife behavior, sound, and anticipation rather than filling every minute with incidents.
 
-The journal records concrete observations, drawings, and unresolved questions. It does not automatically answer every puzzle. Facts become useful through play, with optional short sourced notes after discovery. Avoid trivia quizzes and arbitrary locks floating in the sea.
+**Minimal text is a core presentation requirement.** Tell the story through the child's actions, recurring objects, environmental changes, sound, and the consequences of play. Teach interactions through readable affordances, demonstrations, and safe opportunities to experiment. Avoid mandatory prose journals, dialogue boxes, tutorial paragraphs, and written quest explanations. Use brief control prompts or labels only where needed; retain concise settings, captions, and optional accessibility descriptions. Do not replace written exposition with long spoken exposition.
+
+If we keep a journal, make it primarily a visual fieldbook: sketches, silhouettes, tracks, spatial relationships, and sequences of observed behavior. It records what the player has seen without automatically answering every puzzle. Wildlife learning should emerge from observing and testing a real behavior. Keep research citations in development documents and optional reference material; short factual labels can be available on request when a precise fact cannot be conveyed visually. Avoid trivia quizzes and arbitrary locks floating in the sea.
+
+For future inventory and survival feedback, prefer recognizable objects, visible quantities where practical, gestures, and changes in the bucket or child's condition. Use short labels when icons alone are ambiguous. Pair essential sound cues with visible feedback and avoid conveying essential information through color alone. These are design constraints for later implementation; the current phase remains visual exploration.
 
 ## 3. Art direction
 
@@ -114,8 +120,8 @@ Use third person for travel, awareness, and the relationship between the tiny bo
 Three puzzle families:
 
 1. **Read the drift:** compare a fixed/reference bearing with multiple observations of a floating object; account for boat drift and windage; infer which heading intercepts a recoverable survey marker. A single floating object is not a universal current meter.
-2. **Repair the instrument:** inspect a damaged mechanism, route or connect components, test it, and use the recovered reading to interpret a field note. Failure consumes time or changes available approaches, not the only copy of a story clue.
-3. **Find the observational window:** combine logged conditions with available visibility or celestial observations. Cloud cover changes which evidence can be used. Provide another evidence route rather than making the player wait indefinitely for one sky state.
+2. **Repair the instrument:** inspect a damaged mechanism, route or connect components, test it, and match the recovered reading to a pictorial diagram or environmental landmark. Failure consumes time or changes available approaches, not the only copy of a story clue.
+3. **Find the observational window:** combine sketched observations with available visibility or celestial observations. Cloud cover changes which evidence can be used. Provide another evidence route rather than making the player wait indefinitely for one sky state.
 
 Prototype puzzle 1 at a deliberately simplified, legible scale. The physical manipulation should be meaningful: align bearings and an estimate on a damp chart, then test the prediction by steering. The first-person transition emphasizes commitment and tactility, not a hidden movie. Urgent actions such as bracing or cutting a snagged line use the same controls with tighter timing; any QTE remains interactive and accessible.
 
@@ -179,6 +185,8 @@ First-demo budget: one small boat, one local ocean region, one character, three 
 Target 60 fps at an agreed internal resolution on the actual Mac, then choose a 30 fps quality option only if that tradeoff is acceptable. These are targets, not established results. Profile water, transparency, shadows, animal count, and volumetric effects before expanding scope. Test at the intended render resolution rather than silently using the full Retina panel resolution.
 
 Validate the director with a batch of seeds for impossible prerequisites and excessive waits; manually play a smaller representative set because simulation alone cannot verify meaning or enjoyment. Test missed clues, interrupted puzzles, unhelpful weather, harmful interaction, and save/load during events. Validate art from both cameras and in every demo weather state.
+
+Include a comprehension playtest without developer narration or explanatory prose: can a new player discover the interaction, recognize its consequence, and infer the next useful action? Improve the scene, feedback, or interaction where understanding breaks down; add a brief prompt when necessary. Check that a wildlife encounter communicates the intended fact accurately, rather than merely looking attractive. Test optional accessibility text separately so reducing default text does not remove access to essential information.
 
 ## 10. How we work together
 

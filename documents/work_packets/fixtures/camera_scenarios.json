@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "contract_version": "0.1-proposed",
+  "status": "Declarative P1 fixtures; not automated tests or implemented APIs. All numeric values are provisional.",
+  "units": {"distance": "meters", "time": "seconds", "angle": "degrees"},
+  "coordinates": {"handedness": "right", "up": "+Y", "right": "+X", "initial_camera_horizontal_forward": "-Z", "pitch": "positive downward from horizontal", "mean_ocean_y": 0},
+  "defaults": {
+    "projection": "perspective",
+    "vertical_fov_deg": 60,
+    "preferred_pitch_deg": 20,
+    "roll_deg": 0,
+    "azimuth_policy": "fixed",
+    "pitch_profiles_deg": {"wide": [12, 52], "sky_comparison": [12, 26]},
+    "viewport_sizes_px": [[1280, 720], [1280, 800]],
+    "subject_frame_height_fraction": [0.2, 0.3],
+    "preset_transition_s": 0.5,
+    "reduced_motion_transition_s": 0,
+    "reach_horizontal_m": 12,
+    "reach_boundary": "inclusive; calculated from root interaction anchor to surface hit in X/Z",
+    "minimum_normalized_ray_down_y_exclusive": 0.0001,
+    "maximum_ray_travel_m": 200,
+    "position_comparison_tolerance_m": 0.001,
+    "waterline_comparison_tolerance_m": 0.01,
+    "steering_speed_m_per_s": 2,
+    "speed_comparison_tolerance_m_per_s": 0.01,
+    "reference_simulation_tick_s": 0.016666666666666666
+  },
+  "entities": [
+    {"id": "bucket-p1", "root_position_m": [0, 0, 0], "interaction_anchor_offset_m": [0, 0, 0], "waterline_offset_y_m": 0, "role": "player proxy; dimensions and camera anchor height remain to be calibrated"},
+    {"id": "target-near", "root_position_m": [0, 0, -6], "available": true},
+    {"id": "target-boundary", "root_position_m": [0, 0, -12], "available": true},
+    {"id": "target-outside", "root_position_m": [0, 0, -12.1], "available": true}
+  ],
+  "scenarios": [
+    {
+      "id": "CAM-01",
+      "name": "Sweep and resize",
+      "setup": {"ocean": "flat Y=0", "bucket_id": "bucket-p1", "target_id": "target-near", "pitch_samples_deg": [12, 20, 26, 38, 52], "profiles": ["wide", "sky_comparison"]},
+      "actions": ["Calibrate physical focus anchor, distance and offsets; record them with captures.", "Sweep each profile at both default viewports, clamping requests to that profile.", "Resize while transitioning; repeat with reduced motion and the lowest quality setting."],
+      "expected_invariants": ["Vertical FOV remains 60 degrees and roll remains zero.", "Pitch stays within the selected profile, including during transitions.", "Camera motion never changes physical state or target reach.", "Capture notes explicitly identify clipping, overlap and unreadable targets; no visual pass is assumed."],
+      "observations_to_record": ["Subject frame height versus the provisional target.", "Sky band and horizon presence: ideal flat-ocean estimates are about 32%, 18%, and 8% at 12, 20, and 26 degrees; horizon is outside the frame at 38 and 52 degrees.", "Choose whether wider overview access or always-visible sky better supports interaction."]
+    },
+    {
+      "id": "CAM-02",
+      "name": "Reach and ray rejection",
+      "setup": {"ocean": "flat Y=0", "bucket_id": "bucket-p1", "initial_selected_target_id": "target-near", "input_paths": ["pointer", "controller_reticle"], "candidate_target_ids": ["target-boundary", "target-outside"], "synthetic_camera_ray_origin_m": [0, 3, 0], "normalized_ray_directions": {"sky": [0, 1, 0], "parallel": [0, 0, -1], "near_parallel": [0, -0.00001, -0.99999999995]}, "synthetic_ray_note": "These explicit directions specify rejection cases for a future harness; manual runs reproduce equivalent active-camera rays."},
+      "actions": ["At both pitch extremes, aim each input path at the boundary and outside target surface anchors.", "Attempt sky, parallel and near-parallel ocean rays.", "Place a temporary opaque blocker between the active camera and target-near and attempt selection."],
+      "expected_invariants": ["An unobstructed surface hit at 12 meters is eligible; 12.1 meters is rejected by both paths.", "Invalid rays or occlusion return no candidate, create no coordinates or commitment, and preserve current selection.", "Changing viewport uses the current active camera projection immediately.", "Every accepted ray hit is finite, forward, within the travel cap and within horizontal reach."]
+    },
+    {
+      "id": "CAM-03",
+      "name": "Identity through presentation",
+      "setup": {"ocean": "flat Y=0", "selected_target_id": "target-near", "committed_point_m": [0, 0, -6], "simulation_motion": "frozen for presentation-only comparison", "visual_scale_factors": [1, 1.25]},
+      "actions": ["Commit a point preview on target-near, then tilt through the wide range and resize.", "Apply the listed visual-only scale factors and limited billboard rotation.", "Resume simulation and move target-near by [1, 0, 0] meters through its root.", "Mark target-near unavailable."],
+      "expected_invariants": ["Presentation changes preserve target-near identity, root transform, collision and reach.", "The committed point remains [0, 0, -6] within position tolerance after both camera and entity motion.", "A live selected entity anchor follows legitimate root motion without changing its ID.", "Unavailability explicitly invalidates selection; it never selects a replacement under the cursor.", "Camera operations make no world-randomness draws and change no interaction outcome."]
+    },
+    {
+      "id": "CAM-04",
+      "name": "Shared ocean phase",
+      "setup": {"bucket_id": "bucket-p1", "buoyancy_mode": "direct-follow P1 surface proxy; the 1 cm agreement is not a tracking requirement for future damped physical buoyancy", "ocean": {"kind": "analytic single-wave fixture", "amplitude_m": 0.15, "wavelength_m": 8, "period_s": 4, "phase_origin_x_m": 0, "phase_origin_time_s": 0, "height_definition": "h(x,z,t) = 0.15 * sin(2*pi*(x/8 - t/4))", "normal_definition": "normalize([-dh/dx, 1, 0])", "flow_velocity_m_per_s": [0, 0, 0], "flow_note": "No advective drift in this fixture; height still changes with simulation time."}, "pause_at_simulation_time_s": 1, "pause_wall_duration_s": 2, "sample_positions_xz_m": [[0, 0], [2, 0]]},
+      "actions": ["Compare rendered surface and buoyancy waterline against the same analytic samples over one period.", "Tilt the camera while observing root motion.", "Pause at the declared simulation time, wait the declared wall duration, then resume."],
+      "expected_invariants": ["Height, normal and local flow use the documented world origin, units and simulation time.", "Rendered water and configured bucket waterline agree within waterline tolerance at matching presentation times.", "At x=0 and t=1, height is -0.15 meters; at x=2 and t=1, height is 0 meters.", "Pause freezes simulation phase, root motion and world effects; resume continues without a wall-clock phase jump.", "Camera changes do not introduce root movement or roll the camera with the bucket."]
+    },
+    {
+      "id": "CAM-05",
+      "name": "Input ownership",
+      "setup": {"ocean": "flat Y=0, zero flow", "bucket_id": "bucket-p1", "target_id": "target-near", "modes": ["exploration", "target_preview", "paused_ui"], "movement_sample_duration_s": 1, "requested_context_pitch_deg": 38},
+      "actions": ["Hold cardinal and diagonal steering separately while changing pitch; compare speed after any movement acceleration settles.", "Enter target preview, request contextual framing, adjust preferred pitch to 26 degrees, then cancel.", "Hold commit while opening pause/settings; route pointer/controller UI input.", "Resume while commit remains held, release it, then issue one fresh commit."],
+      "expected_invariants": ["Normalized diagonal and cardinal steering have the same provisional physical speed within speed tolerance, independent of pitch.", "One mode owns each action; consumed UI input never reaches world selection or movement.", "Cancel releases preview ownership and restores the latest preferred pitch of 26 degrees.", "Paused UI advances neither simulation nor target-preview state.", "Resume causes zero held/queued commitments; one fresh valid commit produces exactly one preview commitment."]
+    }
+  ]
+}
