@@ -1,4 +1,6 @@
-# Ichigo
+# Ichigo — 02 Faded Tides
+
+This branch is the **Faded Tides** visual experiment: sunbleached blue and dusty teal, broad rounded scalloped swells, engraved current lines and aged-ivory foam. [Design, references and verification](documents/experiments/variant.md).
 
 An ocean adventure about a young child in a wooden bucket, with tactile fishing, wildlife, puzzles, chance-based discoveries, and a strongly authored visual identity.
 

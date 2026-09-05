@@ -46,8 +46,8 @@ func _run() -> void:
 			max_relief = maxf(max_relief, surface.height_at(p) - float(weather.sample(p).height))
 			max_front_slope = maxf(max_front_slope, (surface.height_at(p - Vector2(0.0, 0.01)) - surface.height_at(p + Vector2(0.0, 0.01))) / 0.02)
 	_check(max_error < 0.00001, "Gameplay height equals actual deformed triangle interpolation (error %f)" % max_error)
-	_check(max_relief > 0.45 and max_relief < 0.75, "Calm geometry contains meaningful bounded raised crests (%f m)" % max_relief)
-	_check(max_front_slope > 1.30, "Front faces actually stand up, beyond old 8.6 degree sheet tilt (%f slope)" % max_front_slope)
+	_check(max_relief > 0.25 and max_relief < 0.60, "Faded Tides retains low, meaningful rounded crest relief (%f m)" % max_relief)
+	_check(max_front_slope > 0.25 and max_front_slope < 1.10, "Broad scalloped fronts stay rounded rather than standing as fins (%f slope)" % max_front_slope)
 	for p in [Vector2(0.1, 0.2), Vector2(-0.73, -0.29), Vector2(3.13, 4.44), Vector2(7.52, -8.17)]:
 		var sample := surface.sample(p)
 		_check(sample.has("rain") and sample.has("wind") and sample.has("wave_speed"), "Shared sample preserves environment fields")

@@ -25,15 +25,15 @@ void fragment() {
 	float ribbon = p.y + 0.38 * sin(p.x * 0.65) + 0.11 * sin(p.x * 2.3);
 	float band = sin(ribbon * 2.5 + 0.12 * sin(simulation_time * 0.5));
 	float step_band = floor((band * 0.5 + 0.5) * 4.0) / 4.0;
-	vec3 dark_ink = vec3(0.17,0.34,0.41);
-	vec3 blue_paper = vec3(0.37,0.55,0.59);
+	vec3 dark_ink = vec3(0.47,0.64,0.68);
+	vec3 blue_paper = vec3(0.68,0.78,0.77);
 	vec3 color = mix(dark_ink, blue_paper, 0.3 + step_band * 0.6);
 	float edge = smoothstep(0.91,0.98,band) * (1.0-smoothstep(0.98,1.0,band));
 	color += vec3(0.14,0.16,0.14) * edge * 0.36;
 	float fiber = grain(floor(p * 130.0)) - 0.5;
 	color += fiber * 0.028;
 	float haze = smoothstep(12.0,52.0,distance_from_bucket);
-	color = mix(color, vec3(0.5686,0.647,0.639), haze);
-	if (distant_surface) { color = vec3(0.5686,0.647,0.639); }
+	color = mix(color, vec3(0.76,0.80,0.75), haze);
+	if (distant_surface) { color = vec3(0.76,0.80,0.75); }
 	ALBEDO = color * illumination;
 }

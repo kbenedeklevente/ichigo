@@ -7,8 +7,8 @@ uniform vec2 field_origin;
 uniform float field_side = 33.0;
 uniform float cell_size = 4.0;
 uniform float crest_phase = 0.0;
-uniform float face_rise = 0.58;
-uniform float profile_travel = 0.38;
+uniform float face_rise = 0.34;
+uniform float profile_travel = 0.24;
 uniform vec2 bucket_center = vec2(0.0);
 uniform float illumination = 1.0;
 uniform float render_extent = 34.0;
@@ -30,26 +30,25 @@ void vertex() {
 		for (int x = -1; x <= 1; x++) {
 			vec2 cell = owner + vec2(float(x), float(y));
 			float seed = mod(cell.x * 17.0 + cell.y * 31.0, 13.0) / 13.0;
-			vec2 center = cell * cell_size + vec2((seed - 0.5) * 1.5, (fract(seed * 7.0) - 0.5) * 1.05);
+			vec2 center = cell * cell_size + vec2((seed - 0.5) * 1.2, (fract(seed * 7.0) - 0.5) * 0.8);
 			vec2 local = (traveled - center) * (4.0 / cell_size);
-			float half_width = 1.40 + 0.25 * seed;
+			float half_width = 2.55 + 0.35 * seed;
 			float across = local.x / half_width;
-			float tip = 0.18 + 0.18 * seed;
-			float flank = across < tip ? (across + 1.0) / (tip + 1.0) : (1.0 - across) / (1.0 - tip);
-			float taper = pow(max(0.0, flank), across < tip ? 1.35 : 0.85) * smoothstep(0.0, 0.15, flank);
-			float along = local.y + 0.23 * across * across + 0.07 * sin(across * 5.0 + seed * 6.0);
-			float shoulder = 0.90 + 0.18 * seed;
-			float front = 0.30 + 0.06 * seed;
-			float profile = smoothstep(-shoulder, -0.08, along) * (1.0 - smoothstep(0.0, front, along));
-			float rise = face_rise * (0.86 + 0.28 * seed) * taper * profile;
+			float taper = smoothstep(0.0, 0.70, 1.0 - abs(across));
+			float scallop = 0.10 * cos(across * 9.42477796 + seed * 3.0);
+			float along = local.y + 0.46 * across * across + scallop;
+			float shoulder = 1.48 + 0.22 * seed;
+			float front = 0.76 + 0.12 * seed;
+			float profile = smoothstep(-shoulder, -0.16, along) * (1.0 - smoothstep(0.08, front, along));
+			float rise = face_rise * (0.88 + 0.18 * seed) * taper * profile;
 			relief += rise;
 			// Extend illustration coordinates through buried roots. Selecting only
 			// nonzero heights snapped UVs to zero and left triangular ink shards.
 			float art_influence = taper * max(0.0, 1.0 - abs(along) / 2.4);
 			if (art_influence > dominant) {
 				dominant = art_influence;
-				// Atlas V: broader upper shoulder, narrow lip, dark descending face.
-				float art_v = along < -0.08 ? 0.66 * (along + shoulder) / (shoulder - 0.08) : (along < 0.0 ? mix(0.66, 0.69, (along + 0.08) / 0.08) : mix(0.69, 1.0, along / front));
+				// Atlas V: engraved shoulder to rounded ivory lip, then pale teal front.
+				float art_v = along < -0.16 ? 0.59 * (along + shoulder) / (shoulder - 0.16) : (along < 0.08 ? mix(0.59, 0.70, (along + 0.16) / 0.24) : mix(0.70, 1.0, (along - 0.08) / (front - 0.08)));
 				drawing_uv = vec2(across * 0.5 + 0.5, art_v);
 				drawing_weight = taper * smoothstep(0.0, 0.09, profile);
 			}
@@ -62,10 +61,10 @@ void vertex() {
 void fragment() {
 	if (length(world_position.xz - bucket_center) < 0.98) { discard; }
 	vec3 ink = texture(illustration, drawing_uv).rgb;
-	vec3 substrate = vec3(0.39, 0.53, 0.56);
+	vec3 substrate = vec3(0.59, 0.72, 0.73);
 	float edge_distance = max(abs(world_position.x - bucket_center.x), abs(world_position.z - bucket_center.y));
 	float haze = smoothstep(render_extent * 0.42, render_extent * 0.94, edge_distance);
 	float fiber = fract(sin(dot(floor(world_position.xz * 155.0), vec2(127.1,311.7))) * 43758.5453) - 0.5;
-	vec3 color = mix(substrate, ink, clamp(drawing_weight, 0.0, 1.0)) + fiber * 0.018;
-	ALBEDO = mix(color, vec3(0.5686,0.647,0.639), haze) * illumination;
+	vec3 color = mix(substrate, ink, clamp(drawing_weight, 0.0, 1.0)) + fiber * 0.026;
+	ALBEDO = mix(color, vec3(0.76,0.80,0.75), haze) * illumination;
 }

@@ -2,10 +2,10 @@
 config_version=5
 
 [application]
-config/name="Ichigo — Camera Study"
+config/name="Ichigo — 02 Faded Tides"
 run/main_scene="res://game/camera_study.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/description="An interactive camera and paper-form experiment."
+config/description="Faded Tides: sunbleached engraved currents and broad scalloped swells."
 
 [display]
 window/size/viewport_width=1280
@@ -19,4 +19,4 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
 anti_aliasing/quality/msaa_3d=2
-environment/defaults/default_clear_color=Color(0.32, 0.47, 0.51, 1)
+environment/defaults/default_clear_color=Color(0.76, 0.80, 0.75, 1)

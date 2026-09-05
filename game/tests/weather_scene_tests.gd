@@ -44,7 +44,7 @@ func _run() -> void:
 	scene.simulation_time = 20.0
 	scene._update_scene(0.0)
 	var local: Dictionary = scene.weather_runtime.weather.sample(Vector2.ZERO)
-	_check(absf(scene.bucket.position.y - local.height) < 0.00001, "Bucket follows the actual connected panel surface.")
+	_check(absf(scene.bucket.position.y - scene.water_surface.height_at(Vector2.ZERO)) < 0.00001, "Bucket follows the actual connected panel surface during weather too.")
 	_check(local.rain > 0.3, "The incoming rain front reaches the player.")
 	_check(scene.weather_presentation.get("_rain").multimesh.visible_instance_count > 0, "Local rainfall generates visible nearby rain instances.")
 	_check(scene._sun.light_energy < 0.72, "Cloud attenuation affects the actual scene light.")

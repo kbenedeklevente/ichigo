@@ -46,7 +46,7 @@ var _capture_directory: String = ""
 
 func _ready() -> void:
 	if "--weather-study" in OS.get_cmdline_user_args():
-		DisplayServer.window_set_title("Ichigo — Raised Waves Study")
+		DisplayServer.window_set_title("Ichigo — 02 Faded Tides")
 		weather_runtime = EnvironmentRuntime.new()
 		weather_runtime.configure(15, true)
 		water_surface = WaterSurface.new()
