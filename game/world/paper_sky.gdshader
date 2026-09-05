@@ -35,5 +35,11 @@ void sky() {
 	}
 	float fiber=hash(floor(vec2(azimuth,elevation)*1800.0))-0.5;
 	color=mix(color,vec3(0.90,0.86,0.72),cloud*0.90);
+	// Matte theatrical backing below the horizon, not an ocean mesh. Small
+	// residual spaces between the independent scenery cards stay in the ink palette.
+	if (EYEDIR.y < 0.0 && weather_enabled) {
+		color = mix(color, vec3(0.094, 0.192, 0.263), smoothstep(0.0, 0.10, -EYEDIR.y));
+		fiber *= 1.0 - smoothstep(0.0, 0.10, -EYEDIR.y);
+	}
 	COLOR=(color+fiber*0.012) * (weather_enabled ? mix(0.5,1.0,weather_light) : 1.0);
 }

@@ -1,6 +1,6 @@
 # 03 — Paper Theatre
 
-This experiment makes the visible sea out of 289 upright illustrated cutouts. Each card is a rigid XY quad with a transparent die-cut silhouette, placed in a staggered 17 × 17 grid. Both original ocean planes are hidden in weather-study mode. The sky's matte lower hemisphere fills the gaps; there is no visible connected water mesh beneath the cards.
+This unselected experiment makes the visible sea out of 289 upright illustrated crest cutouts and 289 broad, reclining scenic ribbons. Each card is a rigid XY quad with a transparent die-cut silhouette, placed in a staggered 17 × 17 grid. Both original ocean planes are hidden in weather-study mode. The reclining ribbons overlap in depth between crest rows; an ink-blue matte lower sky hemisphere backs small residual gaps. There is no visible connected water mesh beneath the cards.
 
 Three original SVG drawings explore a hooked breaker, paired curls, and a long sweeping crest. Their indigo shadows, ivory foam outlines, small spiral foam marks, and parallel engraved flow lines are authored in the artwork. Row overlap, asymmetry, occasional reflected drawings, and restrained changes in scale make a puppet-stage arrangement. Alpha scissor and opaque depth drawing remove transparent rectangular sorting artifacts. The cards receive weather illumination without atmospheric haze washing out their ink.
 
@@ -16,8 +16,8 @@ Each foot follows its own cell's spring height, with its pivot driven by that ce
 
 The retained `illustrated_water_surface.gd` is invisible. Buoyancy, normals, targeting, fish positions, and encounters use its preexisting continuous height field. Decorative upright cards are not colliders and cannot be represented by a single-valued height map. A card's visible crest therefore does not equal its collision height; casting through scenery still targets the underlying gameplay sea. The bucket has a small shader cutout to keep its interior dry.
 
-This stage is designed for the existing fixed camera azimuth, not free orbit. At steep pitch, card gaps deliberately reveal matte background. The finite 17 × 17 boundary and reuse of three drawings are study limits. A fully drawn bucket/child is future work. Launch with `-- --weather-study`; the legacy fixture without that flag remains available for its existing camera contract tests. Capture arguments and deterministic capture flow are preserved.
+This stage is designed for the existing fixed camera azimuth, not free orbit. After the first 20°/52° capture review exposed large gray gaps, the second pass added separate low ribbon cards, reduced calm crest height, and changed the lower matte backing to ink blue. Fresh angle captures must confirm this coverage fix. The finite 17 × 17 boundary and reuse of four drawings are study limits. A fully drawn bucket/child is future work. Launch with `-- --weather-study`; the legacy fixture without that flag remains available for its existing camera contract tests. Capture arguments and deterministic capture flow are preserved.
 
 ## Verification
 
-Headless editor import passed. Paper-card geometry/weather/pause checks: 15 passed. Weather scene integration checks: 16 passed. Weather simulation checks: 128 passed. `git diff --check` passed. Rendered aesthetic acceptance requires the coordinated root-agent angle captures; this agent does not launch graphical Godot.
+Headless editor import passed. Paper-card geometry/weather/pause checks: 18 passed. Weather scene integration checks: 16 passed. Weather simulation checks: 128 passed. `git diff --check` passed. Rendered aesthetic acceptance requires the coordinated root-agent angle captures; this agent does not launch graphical Godot.

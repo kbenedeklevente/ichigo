@@ -4,6 +4,8 @@ extends Node3D
 
 var _panels := MultiMeshInstance3D.new()
 var _rain := MultiMeshInstance3D.new()
+var _ribbons := MultiMeshInstance3D.new()
+var _ribbon_transforms: Array[Transform3D] = []
 var _panel_material := ShaderMaterial.new()
 var _card_transforms: Array[Transform3D] = []
 var _fallback_surface
@@ -32,6 +34,7 @@ func _ready() -> void:
 	_panel_material.set_shader_parameter("curl_art", preload("res://game/presentation/waves/theatre_curl.svg"))
 	_panel_material.set_shader_parameter("double_art", preload("res://game/presentation/waves/theatre_double.svg"))
 	_panel_material.set_shader_parameter("sweep_art", preload("res://game/presentation/waves/theatre_sweep.svg"))
+	_panel_material.set_shader_parameter("ribbon_art", preload("res://game/presentation/waves/theatre_ribbon.svg"))
 	_panels.multimesh = MultiMesh.new()
 	_panels.multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	_panels.multimesh.use_custom_data = true
@@ -40,6 +43,14 @@ func _ready() -> void:
 	_panels.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_panels.extra_cull_margin = 2.0
 	add_child(_panels)
+	_ribbons.multimesh = MultiMesh.new()
+	_ribbons.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	_ribbons.multimesh.use_custom_data = true
+	_ribbons.multimesh.mesh = mesh
+	_ribbons.material_override = _panel_material
+	_ribbons.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_ribbons.extra_cull_margin = 3.0
+	add_child(_ribbons)
 	var drop := QuadMesh.new()
 	drop.size = Vector2(0.016, 0.26)
 	_rain.multimesh = MultiMesh.new()
@@ -65,7 +76,9 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 	var states: Array[Dictionary] = simulation.get_panel_states()
 	if _panels.multimesh.instance_count != states.size():
 		_panels.multimesh.instance_count = states.size()
+		_ribbons.multimesh.instance_count = states.size()
 	_card_transforms.resize(states.size())
+	_ribbon_transforms.resize(states.size())
 	for index in range(states.size()):
 		var state: Dictionary = states[index]
 		var point: Vector2 = state.position
@@ -77,13 +90,21 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 		# The whole drawing rocks about its submerged foot; no UV travel or bending.
 		var basis := Basis.from_euler(Vector3(-0.18 + tilt.x * 0.45,
 			(seed_value - 0.5) * 0.12, tilt.y * 0.6))
-		var size_y := lerpf(0.86, 1.05, seed_value)
+		var size_y := lerpf(0.70, 0.85, seed_value)
 		basis = basis.scaled(Vector3(1.0, size_y, 1.0))
-		var position := Vector3(point.x + stagger, float(state.height) - 2.0, point.y + (seed_value - 0.5) * 0.36)
+		var position := Vector3(point.x + stagger, float(state.height) - 1.65, point.y + (seed_value - 0.5) * 0.36)
 		_card_transforms[index] = Transform3D(basis, position)
 		_panels.multimesh.set_instance_transform(index, _card_transforms[index])
 		var variant := float(posmod(cell.x + cell.y * 3, 3)) * 0.5
 		_panels.multimesh.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0))
+		# A second independent drawing reclines between crest rows. It has real
+		# depth coverage at high pitch, but never joins into a continuous sea mesh.
+		var ribbon_basis := Basis.from_euler(Vector3(-1.15 + tilt.x * 0.2, 0.0, tilt.y * 0.2))
+		ribbon_basis = ribbon_basis * Basis.from_scale(Vector3(1.18, 1.65, 1.0))
+		var ribbon_position := Vector3(point.x + stagger - 1.0, float(state.height) - 2.25, point.y + 4.0)
+		_ribbon_transforms[index] = Transform3D(ribbon_basis, ribbon_position)
+		_ribbons.multimesh.set_instance_transform(index, _ribbon_transforms[index])
+		_ribbons.multimesh.set_instance_custom_data(index, Color(0.0, seed_value, 0.0, 0.0))
 	var local: Dictionary = simulation.sample(Vector2(player.x, player.z))
 	_panel_material.set_shader_parameter("bucket_center", Vector2(player.x, player.z))
 	_panel_material.set_shader_parameter("illumination", lerpf(0.50, 1.0, clampf(local.light, 0.0, 1.0)))
