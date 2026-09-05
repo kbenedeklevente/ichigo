@@ -384,7 +384,7 @@ func _build_hud() -> void:
 	title.add_theme_font_size_override("font_size",27)
 	root.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "CAMERA STUDY  /  01"
+	subtitle.text = "05  /  INK DIORAMA"
 	subtitle.position = Vector2(35,62)
 	subtitle.add_theme_font_size_override("font_size",11)
 	root.add_child(subtitle)

@@ -25,3 +25,7 @@ Godot 4.7.2 headless editor import succeeded. Headless scene startup succeeded. 
 The baseline invisible `illustrated_water_surface.gd` sampler still drives buoyancy, reach and target rays. **Collision/targeting is approximate relative to the independent visible cards**, not exact relief matching. Artistic clearance lowers nearby paper beneath the bucket; that does not change physical reach. Near drawings change motif across distance bands, and distant scenery follows the player as theatrical scenery. These are explicit experiment limitations to review during movement. The rendering uses separate instances and shared materials; performance is not profiled. Fish and salvage remain baseline interaction assets and are outside the child/bucket replacement scope.
 
 Next review: all five pitches, continuous tilt, steering across cell borders, low-angle horizon overlap, calm-to-wind transition, and rod/target visibility. Selection remains the user's decision.
+
+## First capture review
+
+The 20° and 52° captures exposed stark rectangular joins between scenic props and distant line-detail moiré. These remain known visual limits of this proposal; the ocean art has not passed its acceptance gate. The child’s first path-drawn 5 read like a 3 at gameplay scale: its top-left vertical and bowl were corrected to an unmistakable 5, and longer/broader jersey hem and sleeves now emphasize dad’s oversized clothing. The study HUD reads `05 / INK DIORAMA`. Final recapture is pending after this correction.
