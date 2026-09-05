@@ -35,5 +35,6 @@ void sky() {
 	}
 	float fiber=hash(floor(vec2(azimuth,elevation)*1800.0))-0.5;
 	color=mix(color,vec3(0.90,0.86,0.72),cloud*0.90);
+	if (EYEDIR.y < 0.0) { color = vec3(0.31, 0.45, 0.51); }
 	COLOR=(color+fiber*0.012) * (weather_enabled ? mix(0.5,1.0,weather_light) : 1.0);
 }

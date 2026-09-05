@@ -2,7 +2,7 @@
 config_version=5
 
 [application]
-config/name="Ichigo — Camera Study"
+config/name="Ichigo — 05 Ink Diorama"
 run/main_scene="res://game/camera_study.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/description="An interactive camera and paper-form experiment."

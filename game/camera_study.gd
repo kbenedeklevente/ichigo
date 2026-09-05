@@ -3,10 +3,10 @@ extends Node3D
 
 const CameraRig = preload("res://game/camera/orbit_camera.gd")
 const Ocean = preload("res://game/world/ocean_surface.gd")
-const BucketArt = preload("res://game/presentation/bucket_proxy.gd")
+const BucketArt = preload("res://game/presentation/ink_bucket.gd")
 const FishArt = preload("res://game/presentation/fish_proxy.gd")
 const EnvironmentRuntime = preload("res://game/events/environment_runtime.gd")
-const WeatherPresentation = preload("res://game/world/weather_presentation.gd")
+const WeatherPresentation = preload("res://game/world/ink_diorama.gd")
 const WaterSurface = preload("res://game/world/illustrated_water_surface.gd")
 const EncounterPresentation = preload("res://game/presentation/encounter_presentation.gd")
 
@@ -45,12 +45,11 @@ var _using_controller: bool = false
 var _capture_directory: String = ""
 
 func _ready() -> void:
-	if "--weather-study" in OS.get_cmdline_user_args():
-		DisplayServer.window_set_title("Ichigo — Raised Waves Study")
-		weather_runtime = EnvironmentRuntime.new()
-		weather_runtime.configure(15, true)
-		water_surface = WaterSurface.new()
-		water_surface.configure(weather_runtime.weather)
+	DisplayServer.window_set_title("Ichigo — 05 Ink Diorama")
+	weather_runtime = EnvironmentRuntime.new()
+	weather_runtime.configure(15, true)
+	water_surface = WaterSurface.new()
+	water_surface.configure(weather_runtime.weather)
 	_register_input()
 	_build_environment()
 	ocean = Ocean.new()
@@ -61,6 +60,7 @@ func _ready() -> void:
 		encounter_presentation = EncounterPresentation.new()
 		add_child(encounter_presentation)
 		ocean.get("_surface").visible = false
+		ocean.get("_far_surface").visible = false
 	bucket = BucketArt.new()
 	bucket.name = "BucketSimulationRoot"
 	add_child(bucket)
@@ -216,7 +216,7 @@ func _update_preview() -> void:
 	_candidate = CameraRig.resolve_plane_hit(origin,direction,bucket.position)
 	if _candidate.valid:
 		var hit: Vector3 = _candidate.point
-		# Refine the mean-plane guess against the SAME height function rendered by the ocean.
+		# Approximate targeting uses the retained invisible water sampler in this art experiment.
 		var distance: float = origin.distance_to(hit)
 		var iterations: int = 0 if water_surface != null else 5
 		if water_surface != null:
