@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="512" viewBox="0 0 768 512">
+<!-- Original code-native curved-wave illustration study. V follows the shoulder,
+     pale crest lip and steep front of the shared geometric profile. -->
+<rect width="768" height="512" fill="#67888f"/>
+<path fill="#759599" d="M0 52H768V300Q570 311 384 301T0 302Z"/>
+<path fill="#99aaa1" d="M0 292Q200 300 384 294T768 294V349Q550 343 384 350T0 348Z"/>
+<path fill="#d9d6bc" d="M0 337Q192 333 384 338T768 337V354Q580 352 384 357T0 354Z"/>
+<path fill="#4d7382" d="M0 354Q194 356 384 358T768 354V512H0Z"/>
+<g fill="none" stroke-linecap="round">
+<path stroke="#345d70" stroke-width="2.2" opacity=".8" d="M0 359Q190 362 384 363T768 359"/>
+<path stroke="#bcc7b4" stroke-width="2.1" opacity=".72" d="M18 391Q99 369 163 389T293 392M312 391Q405 372 470 393T635 390M657 394Q719 381 776 391M54 411Q106 393 147 409M184 416Q257 400 315 418M381 413Q442 398 510 416M568 414Q654 397 722 417"/>
+<path stroke="#b5c3b0" stroke-width="1.8" opacity=".65" d="M38 163Q110 149 177 165M230 193Q293 175 355 191M445 146Q512 131 581 151M631 191Q702 179 759 192M78 257Q181 239 263 251M327 267Q420 248 504 264M564 252Q661 236 731 253"/>
+<path stroke="#426c7b" stroke-width="1.5" opacity=".65" d="M26 431Q113 419 194 434M224 447Q306 432 378 448M426 436Q516 420 595 439M625 450Q700 432 767 447"/>
+</g>
+</svg>

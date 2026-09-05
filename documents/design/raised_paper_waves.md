@@ -1,6 +1,6 @@
 # Raised illustrated waves: correction to the visual plan
 
-Status: required visual correction after the user reviewed the weather study. An Astra 6 High subagent independently inspected the renderer, artwork and calm/rain captures. This is a plan revision; the running demo still uses the rejected horizontal-sheet representation.
+Status: required visual correction after the user reviewed the weather study. An Astra 6 High subagent independently inspected the renderer, artwork and calm/rain captures. The next implementation is now available in the raised-waves study: a shared continuous surface with asymmetric pointed crests, steep drawn faces and pale lips. Root inspected the sharper revision at20° and52°. Final appearance remains for user review; see the [implementation review](../work_packets/p2_wave_encounter_review.md).
 
 ## What went wrong
 

@@ -6,7 +6,7 @@ Use the [illustrated ocean and nested weather plan](paper_ocean_weather.md) for 
 
 ## Exclusive encounter update
 
-The [encounter-fields proposal](encounter_fields_and_pacing.md) adds a global encounter gate and holds weather transitions while an encounter is present or departing. Existing physical motion continues. The event can supply a local wind/current modifier to drive departure without starting a second event or changing the base weather preset. This is a requested change, not behavior already present in the current weather study.
+The [encounter-fields proposal](encounter_fields_and_pacing.md) adds a global encounter gate and holds weather transitions while an encounter is present or departing. Existing physical motion continues. The event can supply a local wind/current modifier to drive departure without starting a second event or changing the base weather preset. This behavior is now integrated for the salvage fixture. Ordinary fishing fights do not independently hold weather or encounter admission, following user feedback.
 
 ## Open travel without a required route
 

@@ -4,13 +4,13 @@ This is the first runnable Godot prototype, not the fishing or survival game. It
 
 ## Weather and event study
 
-Run `./scripts/run_game.sh -- --weather-study` for connected illustrated water panels and shared triggered/chance weather. Keys1–4 select sky,5–8 wind; requests queue behind the current front. See [parameters, controls and known limits](../documents/design/weather_runtime_parameters.md). This adds the event/weather foundation; the solid child/bucket proxies still need replacement.
+Run `./scripts/run_game.sh -- --weather-study` to open **Ichigo — Raised Waves Study** with pointed illustrated crests, shared triggered/chance weather and the salvage encounter fixture. Keys1–4 select sky,5–8 wind. I requests salvage; O sends it away as abandoned. Requests respect active encounters, weather transitions and the approved quiet interval. See [parameters, controls and known limits](../documents/design/weather_runtime_parameters.md). This adds the event/weather foundation; the solid child/bucket proxies still need replacement.
 
 ## Run
 
 Pinned and tested editor: **Godot 4.7.2 stable**, standard GDScript build. On the development Mac the verified official editor is installed at `/Applications/Godot.app`. [Official macOS download](https://godotengine.org/download/macos/).
 
-Double-click `Run Ichigo.command` in the project root, or run:
+Double-click `Run Ichigo.command` in the project root for the latest raised-wave/encounter study. For the original camera baseline, run:
 
 ```sh
 ./scripts/run_game.sh
@@ -70,3 +70,13 @@ Additional foundation checks:
 ./scripts/run_game.sh --headless --script game/tests/environment_runtime_tests.gd
 ./scripts/run_game.sh --headless --script game/tests/weather_scene_tests.gd -- --weather-study
 ```
+
+Raised-wave and encounter checks:
+
+```sh
+./scripts/run_game.sh --headless --script game/tests/raised_wave_tests.gd
+./scripts/run_game.sh --headless --script game/tests/encounter_runtime_tests.gd
+./scripts/run_game.sh --headless --script game/tests/encounter_weather_tests.gd
+```
+
+The [latest review](../documents/work_packets/p2_wave_encounter_review.md) records implementation boundaries and visual feedback needs.

@@ -7,8 +7,12 @@ const BucketArt = preload("res://game/presentation/bucket_proxy.gd")
 const FishArt = preload("res://game/presentation/fish_proxy.gd")
 const EnvironmentRuntime = preload("res://game/events/environment_runtime.gd")
 const WeatherPresentation = preload("res://game/world/weather_presentation.gd")
+const WaterSurface = preload("res://game/world/illustrated_water_surface.gd")
+const EncounterPresentation = preload("res://game/presentation/encounter_presentation.gd")
 
 var weather_runtime
+var water_surface
+var encounter_presentation: Node3D
 var weather_presentation: Node3D
 var _sky_material: ShaderMaterial
 var _sun: DirectionalLight3D
@@ -42,8 +46,11 @@ var _capture_directory: String = ""
 
 func _ready() -> void:
 	if "--weather-study" in OS.get_cmdline_user_args():
+		DisplayServer.window_set_title("Ichigo — Raised Waves Study")
 		weather_runtime = EnvironmentRuntime.new()
-		weather_runtime.configure(15)
+		weather_runtime.configure(15, true)
+		water_surface = WaterSurface.new()
+		water_surface.configure(weather_runtime.weather)
 	_register_input()
 	_build_environment()
 	ocean = Ocean.new()
@@ -51,6 +58,8 @@ func _ready() -> void:
 	if weather_runtime != null:
 		weather_presentation = WeatherPresentation.new()
 		add_child(weather_presentation)
+		encounter_presentation = EncounterPresentation.new()
+		add_child(encounter_presentation)
 		ocean.get("_surface").visible = false
 	bucket = BucketArt.new()
 	bucket.name = "BucketSimulationRoot"
@@ -124,6 +133,8 @@ func _process(delta: float) -> void:
 		_update_controller(delta)
 		if weather_runtime != null:
 			weather_runtime.advance(delta, Vector2(bucket.position.x, bucket.position.z))
+			var current: Vector2 = weather_runtime.weather.sample(Vector2(bucket.position.x, bucket.position.z)).get("current", Vector2.ZERO)
+			bucket.position += Vector3(current.x, 0.0, current.y) * delta
 	_update_scene(delta if not paused else 0.0)
 	if not paused:
 		_update_preview()
@@ -134,6 +145,8 @@ func _process(delta: float) -> void:
 	_update_hud()
 
 func _update_scene(delta: float) -> void:
+	if water_surface != null:
+		water_surface.update()
 	bucket.position.y = _height_at(bucket.position)
 	bucket.update_pose(simulation_time,Input.get_vector("move_left","move_right","move_forward","move_back").length()>0.1 and not paused)
 	ocean.update_surface(simulation_time,bucket.position)
@@ -149,6 +162,8 @@ func _update_scene(delta: float) -> void:
 		fishes[index].update_pose(simulation_time + index)
 	camera.focus_position = Vector3(bucket.position.x,1.5,bucket.position.z-0.8)
 	camera.update_camera(delta)
+	if encounter_presentation != null:
+		encounter_presentation.update_encounter(weather_runtime.encounters, water_surface, camera, bucket.position)
 	if has_committed_point:
 		committed.position = Vector3(committed_point.x,_height_at(committed_point)+0.045,committed_point.z)
 		_draw_line(bucket.to_global(bucket.get_rod_tip_local()),committed.position)
@@ -157,18 +172,18 @@ func _update_scene(delta: float) -> void:
 
 func _height_at(point: Vector3) -> float:
 	if weather_runtime != null:
-		return weather_runtime.weather.sample(Vector2(point.x, point.z)).height
+		return water_surface.height_at(Vector2(point.x, point.z))
 	return Ocean.height_at(point, simulation_time)
 
 func _normal_at(point: Vector3) -> Vector3:
 	if weather_runtime != null:
-		return weather_runtime.weather.sample(Vector2(point.x, point.z)).normal
+		return water_surface.sample(Vector2(point.x, point.z)).normal
 	return Ocean.normal_at(point, simulation_time)
 
 func _update_weather_presentation(delta: float) -> void:
 	var local: Dictionary = weather_runtime.weather.sample(Vector2(bucket.position.x, bucket.position.z))
 	var status: Dictionary = weather_runtime.weather.get_status()
-	weather_presentation.update_weather(weather_runtime.weather, simulation_time, bucket.position)
+	weather_presentation.update_weather(water_surface, simulation_time, bucket.position)
 	ocean.get("_far_surface").position.y = -1.4
 	_cloud_offset += local.wind * delta * 0.006
 	_sky_material.set_shader_parameter("weather_enabled", true)
@@ -203,7 +218,10 @@ func _update_preview() -> void:
 		var hit: Vector3 = _candidate.point
 		# Refine the mean-plane guess against the SAME height function rendered by the ocean.
 		var distance: float = origin.distance_to(hit)
-		for iteration in range(5):
+		var iterations: int = 0 if water_surface != null else 5
+		if water_surface != null:
+			distance = _trace_raised_water(origin, direction, distance)
+		for iteration in range(iterations):
 			var point: Vector3 = origin+direction*distance
 			var normal: Vector3 = _normal_at(point)
 			var derivative: float = direction.y + normal.x/normal.y * direction.x + normal.z/normal.y * direction.z
@@ -222,8 +240,43 @@ func _update_preview() -> void:
 	if _candidate.valid:
 		preview.position = _candidate.point + Vector3.UP*0.04
 
+func _trace_raised_water(origin: Vector3, direction: Vector3, mean_distance: float) -> float:
+	# Find the first surface crossing rather than letting Newton's method jump
+	# through a steep illustrated face to a hidden wave farther along the ray.
+	var start: float = maxf(0.0, (2.5 - origin.y) / direction.y)
+	var limit: float = minf(200.0, mean_distance + 20.0)
+	var previous: float = start
+	var previous_point := origin + direction * previous
+	var previous_gap: float = previous_point.y - _height_at(previous_point)
+	while previous < limit:
+		var next: float = minf(previous + 0.15, limit)
+		var point := origin + direction * next
+		var gap: float = point.y - _height_at(point)
+		if previous_gap >= 0.0 and gap <= 0.0:
+			var low: float = previous
+			var high: float = next
+			for iteration in range(12):
+				var middle: float = (low + high) * 0.5
+				var sample_point := origin + direction * middle
+				if sample_point.y > _height_at(sample_point):
+					low = middle
+				else:
+					high = middle
+			return (low + high) * 0.5
+		previous = next
+		previous_gap = gap
+	return -1.0
+
 func _unhandled_input(event: InputEvent) -> void:
 	if weather_runtime != null and not paused and event is InputEventKey and event.pressed and not event.echo:
+		if event.physical_keycode == KEY_I:
+			weather_runtime.encounters.trigger("salvage")
+			return
+		if event.physical_keycode == KEY_O:
+			var active_event = weather_runtime.encounters.get_active()
+			if active_event != null:
+				active_event.resolve("abandoned")
+			return
 		var key_index: int = event.physical_keycode - KEY_1
 		if key_index >= 0 and key_index < 8:
 			var conditions := ["sunny", "cloudy", "raincloud", "storm", "calm", "breeze", "strong", "storm"]
@@ -395,7 +448,7 @@ func _build_hud() -> void:
 	column.add_child(footer_label)
 	if weather_runtime != null:
 		var weather_hint := Label.new()
-		weather_hint.text = "WEATHER LAB · 1–4 sky: sunny / cloudy / rain / storm · 5–8 wind: calm / breeze / strong / storm"
+		weather_hint.text = "LAB · 1–4 sky · 5–8 wind · I request salvage · O send salvage away"
 		weather_hint.add_theme_font_size_override("font_size", 12)
 		weather_hint.modulate = Color("b2c4c0")
 		column.add_child(weather_hint)
@@ -407,6 +460,9 @@ func _update_hud() -> void:
 	if weather_runtime != null and not paused:
 		var status: Dictionary = weather_runtime.weather.get_status()
 		mode_label.text = "%s · %s" % [weather_runtime.last_source.to_upper(), status.stage.to_upper()]
+		var active_event = weather_runtime.encounters.get_active()
+		if active_event != null:
+			mode_label.text = "SALVAGE · %s" % active_event.phase.to_upper()
 
 func _unshaded(color: Color) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

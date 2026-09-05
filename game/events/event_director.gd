@@ -217,6 +217,8 @@ func _group_available(id: String) -> bool:
 
 
 func _dispatch_pending(context: Dictionary, dispatched: Array[Dictionary]) -> void:
+	if context.get("admission_blocked", false):
+		return
 	_pending.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		var ap: int = _definitions[a["id"]]["priority"]
 		var bp: int = _definitions[b["id"]]["priority"]
@@ -233,6 +235,8 @@ func _dispatch_pending(context: Dictionary, dispatched: Array[Dictionary]) -> vo
 
 
 func _roll_chance(context: Dictionary, dispatched: Array[Dictionary]) -> void:
+	if context.get("admission_blocked", false):
+		return
 	var candidates: Array[Dictionary] = []
 	for id: String in _ids:
 		var definition: Dictionary = _definitions[id]

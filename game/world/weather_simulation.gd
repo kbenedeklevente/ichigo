@@ -50,6 +50,26 @@ var _sky: String = "sunny"
 var _wind: String = "calm"
 var _direction := Vector2.RIGHT
 var _center := Vector2.ZERO
+var _transition_held: bool = false
+var _event_modifiers: Array = []
+
+func set_transition_hold(enabled: bool) -> void:
+	_transition_held = enabled
+
+func set_event_modifiers(modifiers: Array) -> void:
+	# Ephemeral sources are owned/saved by encounters, never baked into base fields.
+	_event_modifiers = modifiers.duplicate()
+
+func _modifier_at(point: Vector2) -> Dictionary:
+	var wind := Vector2.ZERO
+	var current := Vector2.ZERO
+	var amplitude := 0.0
+	for modifier in _event_modifiers:
+		var value: Dictionary = modifier.sample(point)
+		wind += value.get("wind_delta", Vector2.ZERO)
+		current += value.get("current_delta", Vector2.ZERO)
+		amplitude += float(value.get("amplitude_delta", 0.0))
+	return {"wind": wind.limit_length(12.0), "current": current.limit_length(3.0), "amplitude": clampf(amplitude, -0.5, 0.5)}
 
 func configure(seed_value: int = 15) -> void:
 	cell_size = maxf(cell_size, 0.25)
@@ -75,6 +95,8 @@ func configure(seed_value: int = 15) -> void:
 	_wind = baseline_wind
 	_direction = Vector2.RIGHT
 	_center = Vector2.ZERO
+	_transition_held = false
+	_event_modifiers.clear()
 	_fields.clear()
 	for field_name in FIELD_NAMES:
 		var values := PackedFloat64Array()
@@ -87,7 +109,7 @@ func configure(seed_value: int = 15) -> void:
 func start_event(payload: Dictionary) -> bool:
 	if _fields.is_empty():
 		configure(_seed)
-	if _active:
+	if _active or _transition_held:
 		return false
 	var sky_name := str(payload.get("sky", baseline_sky))
 	var wind_name := str(payload.get("wind", baseline_wind))
@@ -148,10 +170,16 @@ func sample(point: Vector2) -> Dictionary:
 	result["wave_amplitude"] = result.amplitude
 	result["wave_speed"] = _wave_speed
 	result["light"] = float(result.light) * _daylight()
+	result["current"] = Vector2.ZERO
+	if not _event_modifiers.is_empty():
+		var modifier := _modifier_at(point)
+		result["wind"] += modifier.wind
+		result["current"] = modifier.current
+		result["wave_amplitude"] = maxf(0.0, float(result.wave_amplitude) + modifier.amplitude)
 	return result
 
 func get_status() -> Dictionary:
-	return {"active": _active, "event_complete": _complete, "stage": _stage(), "incoming_direction": _direction, "center": _center,
+	return {"active": _active, "event_complete": _complete, "stage": _stage(), "transition_held": _transition_held, "incoming_direction": _direction, "center": _center,
 		"sky": _sky if _active else baseline_sky, "wind": _wind if _active else baseline_wind, "elapsed": _elapsed,
 		"progress": _stage_progress(), "simulation_time": _clock, "phase": _phase, "wave_speed": _wave_speed, "cell_size": cell_size,
 		"render_radius": render_radius, "simulation_radius": simulation_radius, "origin": _origin,
@@ -177,7 +205,7 @@ func snapshot() -> Dictionary:
 		"simulation_radius": simulation_radius, "baseline_sky": baseline_sky, "baseline_wind": baseline_wind,
 		"day_period_s": day_period_s, "day_phase": day_phase, "origin": _origin, "player": _player,
 		"clock": _clock, "remainder": _remainder, "phase": _phase, "wave_speed": _wave_speed,
-		"active": _active, "complete": _complete, "elapsed": _elapsed, "approach_s": _approach_s,
+		"active": _active, "complete": _complete, "transition_held": _transition_held, "elapsed": _elapsed, "approach_s": _approach_s,
 		"hold_s": _hold_s, "clearing_s": _clearing_s, "sky": _sky, "wind": _wind,
 		"direction": _direction, "center": _center, "fields": _fields.duplicate(true)}
 
@@ -239,11 +267,13 @@ func restore(data: Dictionary) -> bool:
 	_direction = data.direction
 	_center = data.center
 	_fields = data.fields.duplicate(true)
+	_transition_held = bool(data.get("transition_held", false))
+	_event_modifiers.clear()
 	return true
 
 func _step(dt: float) -> void:
 	_clock += dt
-	if _active:
+	if _active and not _transition_held:
 		_elapsed += dt
 		if _elapsed >= _approach_s + _hold_s + _clearing_s:
 			_active = false
@@ -273,7 +303,10 @@ func _step(dt: float) -> void:
 			_fields.wind_z[index] = lerpf(_fields.wind_z[index], target_vector.y, wind_mix)
 			var amplitude_target := lerpf(float(WIND_PROFILES[baseline_wind].wave_amplitude), float(WIND_PROFILES[_wind].wave_amplitude), influence)
 			_fields.amplitude[index] = lerpf(_fields.amplitude[index], amplitude_target, amplitude_mix)
-			targets[index] = _wave(point, _fields.amplitude[index])
+			var effective_amplitude: float = _fields.amplitude[index]
+			if not _event_modifiers.is_empty():
+				effective_amplitude = maxf(0.0, effective_amplitude + _modifier_at(point).amplitude)
+			targets[index] = _wave(point, effective_amplitude)
 	# Read only last-step heights; commit together so neighbor order cannot bias motion.
 	var next_height: PackedFloat64Array = _fields.height.duplicate()
 	var next_velocity: PackedFloat64Array = _fields.velocity.duplicate()

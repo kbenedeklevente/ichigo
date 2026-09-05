@@ -23,6 +23,21 @@ func _run() -> void:
 	scene._update_scene(0.0)
 	_check(scene.weather_presentation.get("_panels").multimesh.instance_count == 289, "Only the near289 cells have individual panel instances.")
 	_check(scene.weather_runtime.weather.get_status().simulated_cells == 1089, "The simulation includes a larger1089-cell region.")
+	var crest_point := Vector2.ZERO
+	var greatest_relief: float = 0.0
+	for x in range(-4, 5):
+		for z in range(-4, 5):
+			var point := Vector2(x, z) * 0.5
+			var sample: Dictionary = scene.water_surface.sample(point)
+			if sample.crest_height > greatest_relief:
+				greatest_relief = sample.crest_height
+				crest_point = point
+	_check(greatest_relief > 0.25, "The calm surface contains actual raised crest relief.")
+	scene.bucket.position = Vector3(crest_point.x, 0.0, crest_point.y)
+	scene._update_scene(0.0)
+	_check(absf(scene.bucket.position.y - scene.water_surface.height_at(crest_point)) < 0.00001, "Bucket buoyancy follows the raised rendered crest, not only the coarse wave root.")
+	scene.bucket.position = Vector3.ZERO
+	scene._update_scene(0.0)
 	await _capture(scene, "calm")
 	_check(scene.weather_runtime.director.trigger("weather.mix.raincloud.strong"), "The scene admits a triggered mixed front.")
 	scene.weather_runtime.advance(20.0, Vector2.ZERO)

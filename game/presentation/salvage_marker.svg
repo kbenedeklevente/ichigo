@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="128" viewBox="0 0 256 128">
+  <!-- Original editable driftwood bundle; encounter integration fixture only. -->
+  <g stroke="#394e51" stroke-width="4" stroke-linejoin="round">
+    <path fill="#9f805c" d="M14 48L213 20L237 38L31 76Z"/>
+    <path fill="#b2986b" d="M27 70L219 44L245 67L51 98Z"/>
+    <path fill="#80684e" d="M8 90L219 71L230 91L33 113Z"/>
+    <path fill="#e0d4af" d="M83 29L99 27L135 105L116 107Z"/>
+    <path fill="#d3c7a3" d="M151 25L167 24L197 96L181 99Z"/>
+  </g>
+  <g fill="none" stroke="#685f4b" stroke-width="2">
+    <path d="M26 53L73 46M113 40L145 35M178 33L205 29M51 81L102 72M143 67L170 64M44 99L103 93M142 91L176 89"/>
+  </g>
+</svg>

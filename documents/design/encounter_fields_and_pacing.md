@@ -1,6 +1,6 @@
 # Encounter fields, weather-dependent chances and breathing room
 
-Status: design proposal following the working weather study. The user requested weather-dependent event chances, no overlapping events, no weather transitions during an encounter, off-screen retirement, and wind-driven departure for lingering side events. Those requirements are recorded here; this change does not yet implement the encounter actors, global lock, modifiers or revised pacing. Numerical encounter rates and the two questions below await user feedback.
+Status: design proposal following the working weather study. The user requested weather-dependent event chances, no overlapping events, no weather transitions during an encounter, off-screen retirement, and wind-driven departure for lingering side events. The user approved90 seconds of quiet, at least240 seconds mean eligible random wait, and180-second side-event departure. They explicitly declined protecting ordinary hooked-fish fights from weather/events. A salvage-only runtime, global encounter/transition gate, sparse bounds index and local modifier composition are now implemented. Other event families and their draft rates remain future content work. See [implementation review](../work_packets/p2_wave_encounter_review.md).
 
 ## The data model
 
@@ -58,7 +58,7 @@ Author a rate per unit of eligible time, not an arbitrary percentage that change
 
 For a desired mean eligible wait of 240 seconds, the total event probability is 0.416% per 1s tick, 2.062% per 5s tick, or 4.081% per 10s tick. These describe the same distribution under stable conditions. A 0 rate stays exactly0 for every tick size.
 
-Proposed pacing controls, to review before implementation:
+Approved pacing controls (implemented for the salvage fixture):
 
 - A 90-second guaranteed quiet interval after a side encounter leaves. Ordinary fishing remains available.
 - A total random-event rate capped at one per 240 seconds of eligible idle time on average. This is not a deadline or a guarantee of an event every 4 minutes.
@@ -114,12 +114,14 @@ Propose requiring the complete event bounds to be outside a padded viewport for 
 
 Story-required events may leave the rendered region but their unresolved milestone must remain pending, with a later opportunity to continue. The forced side-event timeout does not silently delete the only required story path. Keep the encounter lock through visible departure and release it after retirement; fade out modifiers and clean up all actor/interaction references through the owning systems.
 
-## Questions before implementation
+## User answers and remaining review
 
-1. Should a hooked-fish fight outside a special encounter also hold off new encounters and weather transitions? Proposed answer: yes during the fight, while ordinary casting/waiting allows opportunities.
-2. Is the starting pace appropriate: 90 seconds guaranteed quiet, then a random wait averaging at least4 eligible minutes; a lingering side event starts departing after3 minutes? These timing values and event candidates are proposals for the user to adjust.
+1. **No:** ordinary hooked-fish fights do not hold off new encounters or weather transitions. Fishing within an already active world encounter inherits that encounter's lock; a fight is not a separate lock.
+2. **Yes:**90 seconds guaranteed quiet, then a random wait averaging at least4 eligible minutes, with forced departure starting at3 minutes for a lingering side encounter even during interaction.
 
-Do not interpret silence or elapsed time as approval. The user already authorized the broad event/field model, but these play-feel decisions need explicit feedback before choosing the implementation values.
+The first implementation enables only salvage, with its draft weather rate table and a total rate ceiling. Since one candidate is enabled, its actual mean random wait can be longer than4 minutes. The developer I key requests the fixture without waiting for a random roll, but still obeys the encounter lock and quiet period. O begins its departure as abandoned, not completed. This does not implement collection rewards or a fishing minigame.
+
+The optional local-grid API exists; the salvage fixture uses an analytic gust. Full game saves and persistent custom-grid authoring remain future work. Future unanswered design questions still require explicit user input.
 
 ## Implementation sequence and checks
 
