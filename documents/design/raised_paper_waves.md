@@ -1,5 +1,11 @@
 # Raised illustrated waves: correction to the visual plan
 
+## Selected direction — Paper Theatre, 6 September 2026
+
+The user chose Paper Theatre from the five art studies. It is merged into main at `1622c52`: independent upright illustrated crest cards plus separate reclining ribbon cards, weather-driven cell motion, and an ink-colored backdrop. There is no shared visible water mesh. Older requirements below for a matching visible substrate are superseded by this choice. The existing invisible gameplay sampler is retained as a documented approximation; fish and fishing integration are secondary now.
+
+Preserve the selected wave drawings and composition while matching Ichigo and the brown bucket to their paper, ink and palette. Next visual priorities are layer cohesion, convincing motion, repetition, camera coverage at 12–52° and bucket framing. See [the selected study](../experiments/variant.md) and [comparison review](../experiments/showcase_review.md).
+
 Status: required visual correction after the user reviewed the weather study. An Astra 6 High subagent independently inspected the renderer, artwork and calm/rain captures. The next implementation is now available in the raised-waves study: a shared continuous surface with asymmetric pointed crests, steep drawn faces and pale lips. Root inspected the sharper revision at20° and52°. Final appearance remains for user review; see the [implementation review](../work_packets/p2_wave_encounter_review.md).
 
 ## What went wrong

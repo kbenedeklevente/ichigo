@@ -1,5 +1,7 @@
 # Five wave art experiments
 
+**Selection, 6 September 2026:** Paper Theatre is the chosen direction, merged into main at `1622c52`. Other active studies are retired. Keep the selected waves and match the child/bucket artwork next. The comparison notes below record the earlier review process.
+
 2026-09-05. Baseline: `8255dd4`. These are parallel visual proposals, not a chosen replacement for the main game. Each lives in its own Git worktree and branch. The user will choose or combine directions after reviewing actual engine captures.
 
 ## Shared brief

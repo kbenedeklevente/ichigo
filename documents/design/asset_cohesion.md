@@ -1,5 +1,11 @@
 # Asset cohesion and production plan
 
+## Selected direction — Paper Theatre, 6 September 2026
+
+The user chose Paper Theatre from the five art studies. It is merged into main at `1622c52`: independent upright illustrated crest cards plus separate reclining ribbon cards, weather-driven cell motion, and an ink-colored backdrop. There is no shared visible water mesh. Older requirements below for a matching visible substrate are superseded by this choice. The existing invisible gameplay sampler is retained as a documented approximation; fish and fishing integration are secondary now.
+
+Preserve the selected wave drawings and composition while matching Ichigo and the brown bucket to their paper, ink and palette. Next visual priorities are layer cohesion, convincing motion, repetition, camera coverage at 12–52° and bucket framing. See [the selected study](../experiments/variant.md) and [comparison review](../experiments/showcase_review.md).
+
 ## Latest water review
 
 The flat sheet water is rejected. Use [raised illustrated waves](raised_paper_waves.md): thin drawings with a rising dark face, pale crest lip and readable upper shoulder. Equal-sided cells organize the simulation, not the visible silhouette. Preserve calm motion, a continuous water substrate and shared crest/buoyancy sampling.

@@ -27,7 +27,7 @@ The [development philosophy](../dev_philosophy.md) applies throughout. The [earl
 
 ## Immediate next action
 
-Current work: compare [five isolated wave art experiments](../experiments/wave_art_directions.md). Two adapt the raised mesh; three replace the visible surface with separate illustrated stage pieces. All remain unselected proposals. The camera implementation below is already complete; its original build instruction is historical.
+Current work: Paper Theatre is selected and merged into main (`1622c52`). Keep its waves and match Ichigo/bucket to the same paper aesthetic. Other visual variants are retired; the [gallery](../experiments/gallery/index.html) preserves the comparison. The original camera build instructions below are historical.
 
 The first context split is now organized in [bounded work packets](../work_packets/README.md), with the primary agent retaining camera/integration ownership.
 

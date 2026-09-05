@@ -6,11 +6,11 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
-The pointed-wave correction is implemented. The user requested [five artistic refactors in isolated worktrees](../experiments/wave_art_directions.md): two SVG/profile studies and three separate paper-stage constructions. Compare actual game captures before choosing a direction. Removing the shared visible water surface is authorized inside those experiments; it is not yet a main-game contract change. Use the [context map](context_map.md) when retrieving a system plan.
+The user selected **Paper Theatre** as the clear winner of the five art studies. It is merged into main at `1622c52`. Its ocean uses independent illustrated crest cards, separate reclining ribbon cards, and an ink-colored backdrop; the old shared visible water mesh is removed. The invisible gameplay sampler remains approximate and is a later integration concern.
 
-User priority update (6 September 2026): fish are secondary for now. After selecting an art direction, prioritize ocean-layer cohesion, motion, camera coverage and bucket framing; defer fishing expansion and fish-specific integration work.
+The authorized cohesion pass is implemented for visual review: the selected waves are unchanged and Ichigo/bucket use matching layered drawings. See [character art study](../experiments/paper_theatre_character.md). Preserve the young ungendered child, very oversized number-15 jersey, no hat, giant wooden bucket, 12–52° camera and existing physical anchors. Fish are secondary. After this cohesion pass, refine ocean motion and camera coverage with the user.
 
-Previous correction and current runtime foundation: the [raised illustrated-wave study](raised_paper_waves.md). In parallel planning, the [encounter-field proposal](encounter_fields_and_pacing.md) records exclusive encounters, weather-transition holds, weather-dependent chances and optional local physics modifiers. The user approved the timers and declined protecting ordinary fishing fights. A pointed raised-wave prototype and salvage-only event integration are implemented; other event families, full fishing and final art remain unfinished. See the [implementation review](../work_packets/p2_wave_encounter_review.md).
+The alternatives are retired from active development; their committed snapshots remain historical references. See [selected study](../experiments/variant.md), [showcase review](../experiments/showcase_review.md) and [context map](context_map.md). The event/weather/salvage foundation remains implemented; full fishing, inventory and authored story remain unfinished.
 
 ## Experience
 

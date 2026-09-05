@@ -1,19 +1,19 @@
 # P1 camera study
 
-This is the first runnable Godot prototype, not the fishing or survival game. It tests camera framing, world-space targeting, shared water motion, and temporary child/bucket/fish forms. The user selected the full 12°–52° range and illustrated paper assets. The current solid proxies are awaiting replacement; they do not represent the selected art direction.
+This is the first runnable Godot prototype, not the fishing or survival game. It tests camera framing, world-space targeting, shared water motion, and temporary child/bucket/fish forms. The user selected the full 12°–52° range and illustrated paper assets. Paper Theatre is selected, with a matching child/bucket illustration pass now available for review.
 
 ## Weather and event study
 
-Run `./scripts/run_game.sh -- --weather-study` to open **Ichigo — Raised Waves Study** with pointed illustrated crests, shared triggered/chance weather and the salvage encounter fixture. Keys1–4 select sky,5–8 wind. I requests salvage; O sends it away as abandoned. Requests respect active encounters, weather transitions and the approved quiet interval. See [parameters, controls and known limits](../documents/design/weather_runtime_parameters.md). This adds the event/weather foundation; the solid child/bucket proxies still need replacement.
+Run `./scripts/run_game.sh -- --weather-study` to open **Ichigo — Paper Theatre** with independent illustrated crest and ribbon cards, shared triggered/chance weather and the salvage encounter fixture. Keys1–4 select sky,5–8 wind. I requests salvage; O sends it away as abandoned. Requests respect active encounters, weather transitions and the approved quiet interval. See [parameters, controls and known limits](../documents/design/weather_runtime_parameters.md). This adds the event/weather foundation; the child and bucket now have a matching illustrated art pass.
 
 ## Run
 
 Pinned and tested editor: **Godot 4.7.2 stable**, standard GDScript build. On the development Mac the verified official editor is installed at `/Applications/Godot.app`. [Official macOS download](https://godotengine.org/download/macos/).
 
-Double-click `Run Ichigo.command` in the project root for the latest raised-wave/encounter study. For the original camera baseline, run:
+Double-click `Run Ichigo.command` in the project root for the selected Paper Theatre/encounter study. Normal launch and editor Play use Paper Theatre. For the original camera baseline, run:
 
 ```sh
-./scripts/run_game.sh
+./scripts/run_game.sh -- --camera-baseline
 ```
 
 To edit the project:
@@ -40,21 +40,21 @@ Sky, Travel, and Detail compare 12°, 20°, and 52°. The Keep sky option has be
 
 ## Technical baseline and limits
 
-- Godot Compatibility renderer on the M2 test machine; no volumetric effects in this baseline. Final renderer/art selection is still open.
+- Godot Compatibility renderer on the M2 test machine; no volumetric effects in this baseline. Paper Theatre is the selected ocean direction; character/bucket cohesion is being refined.
 - Direct-follow wave fixture shared by the water and bucket; no independent shader wall clock.
 - The local ocean masks its surface inside the bucket so its interior remains dry.
 - The fish are visible surface-level geometry proxies, not finished underwater wildlife rendering or species claims.
 - Steering works in every horizontal direction. Weather-study mode has a generic event director and in-memory state snapshots; authored encounters, inventory, story progression and a game save UI remain unfinished.
 - Camera targeting has a 12 m horizontal reach, rejects sky/invalid rays, and checks bucket occlusion. A committed line is a visual targeting experiment, not a simulated rope.
 - Framing is slightly smaller (camera distance 10.2 m, previously 9.4 m) and the bucket uses warmer brown wood. Child-to-bucket proportions and gameplay reach are preserved.
-- Solid child/bucket proxies still need replacement with layered illustrations. See the [paper ocean and weather plan](../documents/design/paper_ocean_weather.md). Low-/medium-poly and volumetric studies remain optional later experiments; the next work prioritizes illustrated panels.
+- Child/bucket visuals use layered illustrations; the old proxy remains in source as historical reference. See the [paper ocean and weather plan](../documents/design/paper_ocean_weather.md). Low-/medium-poly and volumetric studies remain optional later experiments; the next work prioritizes illustrated panels.
 - Keyboard/mouse and real rendered captures are reviewed separately from headless logic tests; controller bindings need physical-device playtesting.
 
 ## Checks and captures
 
 ```sh
 ./scripts/run_game.sh --headless --script game/tests/camera_contract_tests.gd
-./scripts/run_game.sh --headless --script game/tests/scene_integration_tests.gd
+./scripts/run_game.sh --headless --script game/tests/scene_integration_tests.gd -- --camera-baseline
 ./scripts/run_game.sh --resolution 1280x800 -- --capture-dir=/absolute/path/to/captures
 ```
 

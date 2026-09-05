@@ -3,7 +3,7 @@ extends Node3D
 
 const CameraRig = preload("res://game/camera/orbit_camera.gd")
 const Ocean = preload("res://game/world/ocean_surface.gd")
-const BucketArt = preload("res://game/presentation/bucket_proxy.gd")
+const BucketArt = preload("res://game/presentation/paper_theatre/bucket_art.gd")
 const FishArt = preload("res://game/presentation/fish_proxy.gd")
 const EnvironmentRuntime = preload("res://game/events/environment_runtime.gd")
 const WeatherPresentation = preload("res://game/world/weather_presentation.gd")
@@ -45,8 +45,8 @@ var _using_controller: bool = false
 var _capture_directory: String = ""
 
 func _ready() -> void:
-	if "--weather-study" in OS.get_cmdline_user_args():
-		DisplayServer.window_set_title("Ichigo — 03 Paper Theatre")
+	if "--camera-baseline" not in OS.get_cmdline_user_args():
+		DisplayServer.window_set_title("Ichigo — Paper Theatre")
 		weather_runtime = EnvironmentRuntime.new()
 		weather_runtime.configure(15, true)
 		water_surface = WaterSurface.new()
@@ -385,7 +385,7 @@ func _build_hud() -> void:
 	title.add_theme_font_size_override("font_size",27)
 	root.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "PAPER THEATRE  /  03"
+	subtitle.text = "PAPER THEATRE"
 	subtitle.position = Vector2(35,62)
 	subtitle.add_theme_font_size_override("font_size",11)
 	root.add_child(subtitle)

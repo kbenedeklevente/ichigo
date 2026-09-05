@@ -4,7 +4,7 @@ An ocean adventure about a young child in a wooden bucket, with tactile fishing,
 
 Current phase: a runnable **P1 camera study** in Godot 4.7.2. It includes temporary child/bucket/fish forms, calm water, sky, adjustable camera pitch, steering, and line-target placement. A separate weather study now includes a shared event director, nested fields and illustrated water panels; authored gameplay and final art remain unfinished.
 
-Launch the new weather study with `./scripts/run_game.sh -- --weather-study`. Double-click `Run Ichigo.command` for the same latest study. Launch the original camera study with `./scripts/run_game.sh`. See [prototype controls and setup](game/README.md).
+Launch the new weather study with `./scripts/run_game.sh -- --weather-study`. Double-click `Run Ichigo.command` for the same latest study. Normal launch and editor Play now use the selected Paper Theatre scene. Launch the original camera fixture with `./scripts/run_game.sh -- --camera-baseline`. See [prototype controls and setup](game/README.md).
 
 - [Shared event system](documents/design/event_system.md)
 - [Weather study and parameters](documents/design/weather_runtime_parameters.md)

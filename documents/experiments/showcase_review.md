@@ -1,5 +1,7 @@
 # Wave art showcase review
 
+**Selection, 6 September 2026:** Paper Theatre is the chosen direction, merged into main at `1622c52`. Other active studies are retired. Keep the selected waves and match the child/bucket artwork next. The comparison notes below record the earlier review process.
+
 6 September 2026. Five isolated implementations from baseline `8255dd4`; no artistic winner merged. The user's current priority is finding the visual balance: drawn detail, separate paper layers, calm open space and convincing motion. Fish remain secondary.
 
 Open [the comparison gallery](gallery/index.html). It contains 25 actual Godot viewport captures for the five variants (12, 20, 26, 38, 52°), a baseline comparison and five archived earlier milestones. All gallery images are committed for future comparison. The exact initial rounded-crest source state was not separately committed; its history entry explicitly identifies an archived image only.
@@ -30,13 +32,13 @@ python3 scripts/wave_experiments.py capture 3
 python3 scripts/wave_experiments.py gallery
 ```
 
-Replace 3 with 1–5. `run` opens the selected worktree; `capture` refreshes its five gallery images; `gallery` updates the HTML and manifest. Inspect and commit refreshed captures together with their source changes. Opening `gallery/index.html` directly works offline; to serve it locally:
+After selection, 3 launches main; the other worktrees are retired. `capture 3` saves a new character-pass set without overwriting the chosen wave baseline; `gallery` updates the HTML and manifest. Inspect and commit refreshed captures together with their source changes. Opening `gallery/index.html` directly works offline; to serve it locally:
 
 ```sh
 python3 -m http.server 8767 --bind 127.0.0.1 --directory documents/experiments/gallery
 ```
 
-Worktrees are under `/Users/benedekkoos/projects/ichigo-experiments/`. Branches are `codex/01-prussian-ink`, `codex/02-faded-tides`, `codex/03-paper-theatre`, `codex/04-woodblock-wings`, and `codex/05-ink-diorama`. Each branch's commit history preserves its refinements. The earlier main revisions remain available without resetting main; use a separate checkout when revisiting them.
+The temporary worktrees under `/Users/benedekkoos/projects/ichigo-experiments/` were removed after selection. Branches are `codex/01-prussian-ink`, `codex/02-faded-tides`, `codex/03-paper-theatre`, `codex/04-woodblock-wings`, and `codex/05-ink-diorama`. Each branch's commit history preserves its refinements. The earlier main revisions remain available without resetting main; use a separate checkout when revisiting them.
 
 ## Next review
 

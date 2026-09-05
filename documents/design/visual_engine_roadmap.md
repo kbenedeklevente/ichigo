@@ -1,5 +1,11 @@
 # Visual engine experimentation roadmap
 
+## Selected direction — Paper Theatre, 6 September 2026
+
+The user chose Paper Theatre from the five art studies. It is merged into main at `1622c52`: independent upright illustrated crest cards plus separate reclining ribbon cards, weather-driven cell motion, and an ink-colored backdrop. There is no shared visible water mesh. Older requirements below for a matching visible substrate are superseded by this choice. The existing invisible gameplay sampler is retained as a documented approximation; fish and fishing integration are secondary now.
+
+Preserve the selected wave drawings and composition while matching Ichigo and the brown bucket to their paper, ink and palette. Next visual priorities are layer cohesion, convincing motion, repetition, camera coverage at 12–52° and bucket framing. See [the selected study](../experiments/variant.md) and [comparison review](../experiments/showcase_review.md).
+
 ## Latest correction: raised crests, not horizontal sheets
 
 The user rejected the flat wave appearance in the weather study. The next visual task is the [raised illustrated-wave correction](raised_paper_waves.md): visible front faces, crest lips and upper shoulders on thin curved paper strips, over a matching continuous water surface. The current horizontal-sheet renderer is not an accepted paper-wave representation. This correction takes priority over expanding weather polish or the art library.

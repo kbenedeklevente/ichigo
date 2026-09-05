@@ -5,7 +5,8 @@
     "title": "Prussian Ink",
     "branch": "codex/01-prussian-ink",
     "revision": "aa301a0",
-    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/01-prussian-ink"
+    "worktree": null,
+    "status": "retired"
   },
   {
     "number": 2,
@@ -13,7 +14,8 @@
     "title": "Faded Tides",
     "branch": "codex/02-faded-tides",
     "revision": "c6c9613",
-    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/02-faded-tides"
+    "worktree": null,
+    "status": "retired"
   },
   {
     "number": 3,
@@ -21,7 +23,8 @@
     "title": "Paper Theatre",
     "branch": "codex/03-paper-theatre",
     "revision": "3f51a2b",
-    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/03-paper-theatre"
+    "worktree": null,
+    "status": "selected baseline"
   },
   {
     "number": 4,
@@ -29,7 +32,8 @@
     "title": "Woodblock Wings",
     "branch": "codex/04-woodblock-wings",
     "revision": "72de9b1",
-    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/04-woodblock-wings"
+    "worktree": null,
+    "status": "retired"
   },
   {
     "number": 5,
@@ -37,6 +41,7 @@
     "title": "Ink Diorama",
     "branch": "codex/05-ink-diorama",
     "revision": "48a7843",
-    "worktree": "/Users/benedekkoos/projects/ichigo-experiments/05-ink-diorama"
+    "worktree": null,
+    "status": "retired"
   }
 ]
