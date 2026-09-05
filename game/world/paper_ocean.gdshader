@@ -4,6 +4,7 @@ render_mode unshaded, cull_disabled;
 uniform float simulation_time = 0.0;
 uniform vec2 bucket_center = vec2(0.0);
 uniform bool distant_surface = false;
+uniform float illumination = 1.0;
 varying vec3 world_position;
 
 float grain(vec2 p) {
@@ -34,5 +35,5 @@ void fragment() {
 	float haze = smoothstep(12.0,52.0,distance_from_bucket);
 	color = mix(color, vec3(0.5686,0.647,0.639), haze);
 	if (distant_surface) { color = vec3(0.5686,0.647,0.639); }
-	ALBEDO = color;
+	ALBEDO = color * illumination;
 }

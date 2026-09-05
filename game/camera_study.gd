@@ -5,6 +5,14 @@ const CameraRig = preload("res://game/camera/orbit_camera.gd")
 const Ocean = preload("res://game/world/ocean_surface.gd")
 const BucketArt = preload("res://game/presentation/bucket_proxy.gd")
 const FishArt = preload("res://game/presentation/fish_proxy.gd")
+const EnvironmentRuntime = preload("res://game/events/environment_runtime.gd")
+const WeatherPresentation = preload("res://game/world/weather_presentation.gd")
+
+var weather_runtime
+var weather_presentation: Node3D
+var _sky_material: ShaderMaterial
+var _sun: DirectionalLight3D
+var _cloud_offset := Vector2.ZERO
 
 var camera: Camera3D
 var ocean: Node3D
@@ -33,10 +41,17 @@ var _using_controller: bool = false
 var _capture_directory: String = ""
 
 func _ready() -> void:
+	if "--weather-study" in OS.get_cmdline_user_args():
+		weather_runtime = EnvironmentRuntime.new()
+		weather_runtime.configure(15)
 	_register_input()
 	_build_environment()
 	ocean = Ocean.new()
 	add_child(ocean)
+	if weather_runtime != null:
+		weather_presentation = WeatherPresentation.new()
+		add_child(weather_presentation)
+		ocean.get("_surface").visible = false
 	bucket = BucketArt.new()
 	bucket.name = "BucketSimulationRoot"
 	add_child(bucket)
@@ -80,6 +95,7 @@ func _build_environment() -> void:
 	var sky := Sky.new()
 	var material := ShaderMaterial.new()
 	material.shader = load("res://game/world/paper_sky.gdshader")
+	_sky_material = material
 	sky.sky_material = material
 	environment.sky = sky
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
@@ -89,6 +105,7 @@ func _build_environment() -> void:
 	environment_node.environment = environment
 	add_child(environment_node)
 	var sun := DirectionalLight3D.new()
+	_sun = sun
 	sun.rotation_degrees = Vector3(-38,-28,0)
 	sun.light_color = Color("f4edd6")
 	sun.light_energy = 0.72
@@ -105,6 +122,8 @@ func _process(delta: float) -> void:
 		if absf(tilt) > 0.01:
 			camera.set_pitch(camera.pitch_degrees + tilt * 25.0 * delta)
 		_update_controller(delta)
+		if weather_runtime != null:
+			weather_runtime.advance(delta, Vector2(bucket.position.x, bucket.position.z))
 	_update_scene(delta if not paused else 0.0)
 	if not paused:
 		_update_preview()
@@ -115,24 +134,51 @@ func _process(delta: float) -> void:
 	_update_hud()
 
 func _update_scene(delta: float) -> void:
-	bucket.position.y = Ocean.height_at(bucket.position,simulation_time)
+	bucket.position.y = _height_at(bucket.position)
 	bucket.update_pose(simulation_time,Input.get_vector("move_left","move_right","move_forward","move_back").length()>0.1 and not paused)
 	ocean.update_surface(simulation_time,bucket.position)
+	if weather_runtime != null:
+		_update_weather_presentation(delta)
 	for index in range(fishes.size()):
 		var t: float = simulation_time * 0.12 + float(index) * 0.55
 		# Deterministic local motion, independent of camera and player heading.
 		var p := Vector3(sin(t)*2.4+2.2+float(index%2)*0.5,0,-3.2+cos(t)*1.2-float(index)*0.48)
-		p.y = Ocean.height_at(p,simulation_time) + 0.032
+		p.y = _height_at(p) + 0.032
 		fishes[index].position = p
 		fishes[index].rotation.y = -t + PI*0.5
 		fishes[index].update_pose(simulation_time + index)
 	camera.focus_position = Vector3(bucket.position.x,1.5,bucket.position.z-0.8)
 	camera.update_camera(delta)
 	if has_committed_point:
-		committed.position = Vector3(committed_point.x,Ocean.height_at(committed_point,simulation_time)+0.045,committed_point.z)
+		committed.position = Vector3(committed_point.x,_height_at(committed_point)+0.045,committed_point.z)
 		_draw_line(bucket.to_global(bucket.get_rod_tip_local()),committed.position)
 	else:
 		fishing_line.mesh = null
+
+func _height_at(point: Vector3) -> float:
+	if weather_runtime != null:
+		return weather_runtime.weather.sample(Vector2(point.x, point.z)).height
+	return Ocean.height_at(point, simulation_time)
+
+func _normal_at(point: Vector3) -> Vector3:
+	if weather_runtime != null:
+		return weather_runtime.weather.sample(Vector2(point.x, point.z)).normal
+	return Ocean.normal_at(point, simulation_time)
+
+func _update_weather_presentation(delta: float) -> void:
+	var local: Dictionary = weather_runtime.weather.sample(Vector2(bucket.position.x, bucket.position.z))
+	var status: Dictionary = weather_runtime.weather.get_status()
+	weather_presentation.update_weather(weather_runtime.weather, simulation_time, bucket.position)
+	ocean.get("_far_surface").position.y = -1.4
+	_cloud_offset += local.wind * delta * 0.006
+	_sky_material.set_shader_parameter("weather_enabled", true)
+	_sky_material.set_shader_parameter("cloud_cover", local.cloud_cover)
+	_sky_material.set_shader_parameter("weather_light", local.light)
+	_sky_material.set_shader_parameter("cloud_offset", _cloud_offset)
+	_sky_material.set_shader_parameter("front_direction", status.incoming_direction)
+	_sky_material.set_shader_parameter("front_strength", 0.8 * sin(PI * status.progress) if status.stage == "approach" else 0.0)
+	_sun.light_energy = 0.72 * clampf(local.light, 0.1, 1.0)
+	ocean.get("_far_material").set_shader_parameter("illumination", lerpf(0.50, 1.0, clampf(local.light, 0.0, 1.0)))
 
 func _update_controller(delta: float) -> void:
 	if Input.get_connected_joypads().is_empty():
@@ -159,12 +205,12 @@ func _update_preview() -> void:
 		var distance: float = origin.distance_to(hit)
 		for iteration in range(5):
 			var point: Vector3 = origin+direction*distance
-			var normal: Vector3 = Ocean.normal_at(point,simulation_time)
-			var derivative: float = direction.y + normal.x/normal.y * direction.x
+			var normal: Vector3 = _normal_at(point)
+			var derivative: float = direction.y + normal.x/normal.y * direction.x + normal.z/normal.y * direction.z
 			if absf(derivative)<0.0001:
 				_candidate.valid = false
 				break
-			distance -= (point.y-Ocean.height_at(point,simulation_time))/derivative
+			distance -= (point.y-_height_at(point))/derivative
 		hit = origin+direction*distance
 		if distance<0 or distance>200 or Vector2(hit.x-bucket.position.x,hit.z-bucket.position.z).length()>12.0:
 			_candidate.valid = false
@@ -177,6 +223,12 @@ func _update_preview() -> void:
 		preview.position = _candidate.point + Vector3.UP*0.04
 
 func _unhandled_input(event: InputEvent) -> void:
+	if weather_runtime != null and not paused and event is InputEventKey and event.pressed and not event.echo:
+		var key_index: int = event.physical_keycode - KEY_1
+		if key_index >= 0 and key_index < 8:
+			var conditions := ["sunny", "cloudy", "raincloud", "storm", "calm", "breeze", "strong", "storm"]
+			weather_runtime.trigger_weather("sky" if key_index < 4 else "wind", conditions[key_index])
+			return
 	if event is InputEventMouseMotion:
 		_using_controller = false
 	if event.is_action_pressed("toggle_hud"):
@@ -341,11 +393,20 @@ func _build_hud() -> void:
 	footer_label.add_theme_font_size_override("font_size",12)
 	footer_label.modulate = Color("b2c4c0")
 	column.add_child(footer_label)
+	if weather_runtime != null:
+		var weather_hint := Label.new()
+		weather_hint.text = "WEATHER LAB · 1–4 sky: sunny / cloudy / rain / storm · 5–8 wind: calm / breeze / strong / storm"
+		weather_hint.add_theme_font_size_override("font_size", 12)
+		weather_hint.modulate = Color("b2c4c0")
+		column.add_child(weather_hint)
 
 func _update_hud() -> void:
 	pitch_slider.set_value_no_signal(camera.pitch_degrees)
 	pitch_label.text = "View  %.0f°" % camera.pitch_degrees
 	mode_label.text = "PAUSED" if paused else "PROVISIONAL FORMS"
+	if weather_runtime != null and not paused:
+		var status: Dictionary = weather_runtime.weather.get_status()
+		mode_label.text = "%s · %s" % [weather_runtime.last_source.to_upper(), status.stage.to_upper()]
 
 func _unshaded(color: Color) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

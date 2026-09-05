@@ -1,6 +1,6 @@
 # Illustrated ocean panels and nested weather simulation
 
-Status: user direction recorded 5 September 2026. Camera/framing changes are implemented. This document proposes the next rendering and simulation work; the panel solver and weather system are **not implemented**. Unanswered design questions stay pending until the user replies, without a timeout or default selection.
+Status: user direction recorded 5 September 2026, followed by an executable weather/event study. Camera/framing changes, the shared event director, nested weather fields, connected panel springs and an initial drawn-water renderer are implemented. See [runtime parameters and limits](weather_runtime_parameters.md) and the [shared event system](event_system.md). This document retains the broader roadmap; final art and production optimizations remain unfinished. Unanswered future design questions stay pending until the user replies, without a timeout or default selection.
 
 ## Confirmed direction
 
@@ -25,13 +25,12 @@ Proposed asset set for the next study: several original small wave drawings, sep
 
 Square **ground cells** do not require square visible drawings. Each cell can host one or more irregular cutout cards that overlap its footprint. Cards may bend and tilt, with bounded camera compensation where required. A side drawing cannot acquire a convincing top surface through a mathematical warp alone; use additional illustrated layers/views where the camera exposes them. Choose the final layer construction after a small in-engine review, before producing the full asset set.
 
-## Three decisions awaiting the user
+## User decisions, now resolved
 
-1. Are the corresponding sky/wind pairs mandatory (sunny/calm, cloudy/breeze, raincloud/strong, storm/storm), or can sky and wind mix independently?
-2. Does individual physics mean connected panels that flex, bob and tilt, or loose pieces that can collide and separate? Proposed implementation is a coupled spring solver for the former; do not implement either interpretation until answered.
-3. Does lack of control apply to weather arrival and event scheduling, while local steering/fishing/puzzles still affect outcomes, or are those outcomes predetermined too? Preserve existing local agency until answered; do not silently reinterpret this as fake input.
-
-Grid budgets, transition durations, day length, panel displacement limits, and any storm damage are also unapproved tuning/design decisions. Expose a small comparison for review instead of declaring values final.
+1. Sky and wind may mix independently. The study catalog includes all16 combinations.
+2. Panels remain connected, with individual spring motion. Loose colliding pieces are excluded from this implementation.
+3. Use authored main-story triggers and chance-based side/achievement opportunities. Both activation methods can apply to any event domain. Triggered or chance weather approaches from a seeded random direction and centers over the player. Activation does not automatically complete a quest or determine a fishing/puzzle outcome.
+4. The user delegated initial weather parameter definition. Current values are documented in [runtime parameters](weather_runtime_parameters.md); these are tunable study values rather than finalized pacing or danger settings.
 
 ## Coordinates and nested regions
 
@@ -74,7 +73,7 @@ Use one authoritative environment snapshot per simulation tick. Ocean rendering,
 
 ## Weather states and natural transitions
 
-The following are candidate **corresponding presets**, pending the pairing answer. Day/night is a separate continuous cycle, not a fifth weather category.
+The following preserve the earlier comparison examples. **They are not mandatory pairs:** the user approved independent axes. Authoritative independent values are in [runtime parameters](weather_runtime_parameters.md). Day/night is a separate continuous cycle, not a fifth weather category.
 
 | Sky / wind | Clouds and light | Rain | Water response |
 |---|---|---|---|
@@ -87,13 +86,13 @@ Raincloud can have an approach phase before rain reaches the player. Lightning/t
 
 Proposed transition sequence: distant formation → approach → local onset → established weather → clearing → residual swell. These are phases of a weather event, not instantaneous biome switches. Each field has its own response rate: cloud density affects light as it arrives; wind changes motion promptly; rain has a spatial leading edge; wave height builds more slowly. On clearing, rain and cloud density decrease while the sea may remain unsettled. Reverse or interrupt transitions from their current values, not from a hardcoded preset start.
 
-Represent an active front with stable ID, origin, direction, extent, falloff, progress and target conditions. Rasterize its smooth influence into S. Make the incoming cloud bank legible in the distance before local rain/wind intensify. The requested eventual arrival needs an explicit director policy: a broad advancing front or expanding weather region can cover the player's travel envelope without visibly snapping or turning to chase them. Choose that behavior with the user after the agency answer; ordinary advection alone does not guarantee arrival.
+Represent an active front with stable ID, origin, direction, extent, falloff, progress and target conditions. Rasterize its smooth influence into S. Make the incoming cloud bank legible in the distance before local rain/wind intensify. The requested eventual arrival needs an explicit director policy: a broad advancing front or expanding weather region can cover the player's travel envelope without visibly snapping or turning to chase them. The user approved guaranteed player-centered arrival. The initial solver uses a player-relative decaying offset, documented in the runtime plan; ordinary advection alone would not guarantee arrival.
 
 For a scalar target response, a candidate update is `q += (target - q) * (1 - exp(-dt / tau))`, using a shorter response time for surface speed than amplitude. Integrate wave phase over time: `phase += omega * dt`. Recomputing phase as `omega(now) * total_time` would cause jumps when wind changes. Use spatially coherent phase/direction fields, not independently randomized oscillators per cell. Treat quicker motion before taller waves as the requested stylized response, not a claim about exact ocean dispersion.
 
 ## Individual panel physics proposal
 
-For connected panels, each has real dynamic state, with restoring force toward a sampled water surface, damping, wind forcing, and bounded coupling to its neighbors. A candidate height-offset equation is:
+The approved connected panels each have real dynamic state, with restoring force toward a sampled water surface, damping, wind forcing, and bounded coupling to its neighbors. A candidate height-offset equation is:
 
 `acceleration_i = stiffness * (target_height_i - height_i) - damping * velocity_i + neighbor_coupling * laplacian(height)_i + wind_force_i`
 
@@ -114,11 +113,11 @@ Record simulated cells, rendered cells, active panels, CPU simulation millisecon
 ## Ordered implementation plan
 
 1. **Feedback applied:** remove Keep sky, retain 12°–52°, slightly smaller framing and browner bucket. Run camera/scene checks and inspect captures.
-2. **Resolve the three questions:** record user answers before choosing weather coupling, panel solver, or agency policy.
-3. **Small illustrated asset study:** replace solid proxy appearance; review layered bucket/child, several water panels and cloud ribbons across the camera range. Keep water calm. Do not build a whole asset library yet.
-4. **Nested-grid debug study:** configurable square cells, strict R subset S, stable scrolling IDs, matrices displayed with debug colors, no costly distant drawings. Verify movement/reversal/rebase continuity and retained targets.
-5. **Connected or loose panel study:** implement the approved physics, first under constant conditions, then a wind ramp. Review visible seams, ocean continuity, paper motion and motion comfort.
-6. **One incoming transition:** implement the approved weather/front policy and render cloud, light, wind, rain and wave responses together. Show faster motion before increased height and residual swell after clearing.
+2. **Resolved:** independent sky/wind, connected springs, shared triggered/chance activation, and player-centered weather arrival.
+3. **Small illustrated asset study (partial):** a first SVG water sheet is integrated; replace the remaining solid child/bucket proxy appearance; review layered bucket/child, several water panels and cloud ribbons across the camera range. Keep water calm. Do not build a whole asset library yet.
+4. **Nested-grid study (foundation implemented):** configurable square cells, strict R subset S, stable scrolling IDs, matrices displayed with debug colors, no costly distant drawings. Verify movement/reversal/rebase continuity and retained targets.
+5. **Connected panel study (foundation implemented):** review the approved spring physics, first under constant conditions, then a wind ramp. Review visible seams, ocean continuity, paper motion and motion comfort.
+6. **Incoming transition (foundation implemented):** review the implemented weather/front policy and render cloud, light, wind, rain and wave responses together. Show faster motion before increased height and residual swell after clearing.
 7. **Complete approved weather presets and time preview:** separate weather darkening from time of day; review day/night readability and select timing with the user. Add gameplay consequences only after agreement.
 8. **Profile and integrate:** compare paused/static/moving/front-arrival cases on the M2 Mac; test camera extremes, rendering disabled, cell-border reversals, multiple seeds, active fishing targets, save/resume and reduced quality. Then divide implementation into bounded agent tasks around the agreed interfaces.
 

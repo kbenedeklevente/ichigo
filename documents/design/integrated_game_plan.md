@@ -2,7 +2,7 @@
 
 ## Latest visual and world direction
 
-The user selected the full 12°–52° camera range and removed Keep sky. Framing is slightly smaller and the bucket browner. The next visual study must use layered illustrations, replacing the solid-looking proxies. A player-centered square-cell render grid sits inside a larger simulation grid; approaching weather drives individual panel motion. The [paper ocean and weather plan](paper_ocean_weather.md) records this update and supersedes conflicting earlier proposals below. Weather pairing, the type of panel physics, and the scope of predetermined outcomes await explicit user answers. Do not resolve unanswered design questions by timeout.
+The user selected the full 12°–52° camera range and removed Keep sky. Framing is slightly smaller and the bucket browner. The next visual study must use layered illustrations, replacing the solid-looking proxies. A player-centered square-cell render grid sits inside a larger simulation grid; approaching weather drives individual panel motion. The [paper ocean and weather plan](paper_ocean_weather.md) records this update and supersedes conflicting earlier proposals below. The user approved independent sky/wind combinations, connected spring panels, authored story triggers and chance-based side opportunities. Both activation paths feed a shared event lifecycle; weather receives a random arrival direction and centers over the player. Initial weather parameters were delegated and are documented. See [event system](event_system.md) and [runtime parameters](weather_runtime_parameters.md). Do not resolve future unanswered design questions by timeout.
 
 ## Experience
 

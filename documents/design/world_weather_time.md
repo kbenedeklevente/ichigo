@@ -2,7 +2,7 @@
 
 ## Latest weather specification
 
-Use the [illustrated ocean and nested weather plan](paper_ocean_weather.md) for the new square-cell matrices, rendered subset, player-centered coordinates, individual panel dynamics, four sky/four wind categories, incoming fronts and transition phases. That plan supersedes older broad weather suggestions below. Pairing rules and the scope of player agency remain pending user answers; do not implement an assumed answer.
+Use the [illustrated ocean and nested weather plan](paper_ocean_weather.md) for the new square-cell matrices, rendered subset, player-centered coordinates, individual panel dynamics, four sky/four wind categories, incoming fronts and transition phases. That plan supersedes older broad weather suggestions below. The user approved independent sky/wind and connected panel springs, plus a [shared triggered/chance event system](event_system.md). Story progression supplies explicit triggers; side opportunities can use chance. All weather activations approach from a random bearing and center over the player. [Runtime parameters](weather_runtime_parameters.md) describe the executable study.
 
 ## Open travel without a required route
 

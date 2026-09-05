@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Editable original vector study: ink contours and overlapping paper water. -->
+  <path fill="#507c8b" d="M0 47Q32 61 64 43T128 39T192 49T256 36V256H0Z"/>
+  <path fill="#789d9d" d="M0 47Q32 61 64 43T128 39T192 49T256 36V71Q211 83 173 70T91 66T0 78Z"/>
+  <path fill="none" stroke="#e7dfc2" stroke-width="3" d="M0 48Q32 62 64 44T128 40T192 50T256 37"/>
+  <path fill="#406778" d="M0 160Q46 133 93 160T182 157T256 166V256H0Z"/>
+  <g fill="none" stroke="#b3c0ad" stroke-width="1.4" opacity=".72">
+    <path d="M-12 101Q28 76 73 99T159 99T265 91M-8 109Q28 84 73 107T159 107T263 99"/>
+    <path d="M8 142C26 118 60 114 66 131S43 160 37 143S56 128 55 138M92 132C113 112 139 121 143 138S118 154 123 139"/>
+    <path d="M166 120C186 101 221 113 221 132S198 151 197 135S212 124 211 134M-5 205Q31 181 71 202T159 208T264 194"/>
+    <path d="M0 218Q37 194 75 214T159 220T258 206M13 233Q48 215 88 234M176 238Q220 218 266 230"/>
+  </g>
+  <g fill="none" stroke="#254d64" stroke-width="1.7" opacity=".75">
+    <path d="M1 61Q34 76 65 56M90 52Q113 49 137 57M178 65Q222 70 255 52"/>
+    <path d="M7 170Q46 148 82 166M137 178Q184 174 202 166M207 220Q229 215 250 218"/>
+  </g>
+</svg>

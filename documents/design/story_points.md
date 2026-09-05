@@ -1,5 +1,8 @@
 # Overarching story points
 
+Implementation contract: main-story events use explicit progression triggers through the [shared event system](event_system.md). Side opportunities may use chance; either activation path can start the same environmental handler. Triggering an event does not automatically solve its puzzle or grant its outcome. Story content below remains proposed until reviewed with the user.
+
+
 ## Narrative contract
 
 Create a child-centered emotional journey expressed through repeated objects, actions, changing relationships, and discoveries. Ichigo has no specified gender or exact age. The oversized jersey belongs to their dad and carries 15; its deeper meaning and the dad's circumstances remain undecided. Do not infer death, abandonment, or a missing-parent plot from those details.
