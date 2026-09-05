@@ -46,7 +46,7 @@ var _capture_directory: String = ""
 
 func _ready() -> void:
 	if "--weather-study" in OS.get_cmdline_user_args():
-		DisplayServer.window_set_title("Ichigo — Raised Waves Study")
+		DisplayServer.window_set_title("Ichigo — 03 Paper Theatre")
 		weather_runtime = EnvironmentRuntime.new()
 		weather_runtime.configure(15, true)
 		water_surface = WaterSurface.new()
@@ -61,6 +61,7 @@ func _ready() -> void:
 		encounter_presentation = EncounterPresentation.new()
 		add_child(encounter_presentation)
 		ocean.get("_surface").visible = false
+		ocean.get("_far_surface").visible = false
 	bucket = BucketArt.new()
 	bucket.name = "BucketSimulationRoot"
 	add_child(bucket)
@@ -216,7 +217,7 @@ func _update_preview() -> void:
 	_candidate = CameraRig.resolve_plane_hit(origin,direction,bucket.position)
 	if _candidate.valid:
 		var hit: Vector3 = _candidate.point
-		# Refine the mean-plane guess against the SAME height function rendered by the ocean.
+		# Refine against the invisible gameplay surface; decorative cards have no collision.
 		var distance: float = origin.distance_to(hit)
 		var iterations: int = 0 if water_surface != null else 5
 		if water_surface != null:
@@ -384,7 +385,7 @@ func _build_hud() -> void:
 	title.add_theme_font_size_override("font_size",27)
 	root.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "CAMERA STUDY  /  01"
+	subtitle.text = "PAPER THEATRE  /  03"
 	subtitle.position = Vector2(35,62)
 	subtitle.add_theme_font_size_override("font_size",11)
 	root.add_child(subtitle)

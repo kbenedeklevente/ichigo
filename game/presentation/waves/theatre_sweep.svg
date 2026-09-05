@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 800 400">
+<!-- Original paper theatre wave drawing: transparent outside the die-cut contour. -->
+<defs><clipPath id="body"><path d="M8 281 C108 281 169 263 221 228 C286 184 312 114 371 89 C420 67 471 75 489 107 C511 144 486 181 455 167 C478 151 467 131 447 132 C423 133 424 164 443 189 C474 226 533 232 578 213 C624 193 649 172 685 183 C722 194 726 234 792 252 L792 354 Q707 388 625 365 Q538 395 465 375 Q380 399 300 377 Q224 397 147 373 Q72 385 8 354 Z"/></clipPath></defs>
+<path d="M8 281 C108 281 169 263 221 228 C286 184 312 114 371 89 C420 67 471 75 489 107 C511 144 486 181 455 167 C478 151 467 131 447 132 C423 133 424 164 443 189 C474 226 533 232 578 213 C624 193 649 172 685 183 C722 194 726 234 792 252 L792 354 Q707 388 625 365 Q538 395 465 375 Q380 399 300 377 Q224 397 147 373 Q72 385 8 354 Z" fill="#17364d" stroke="#102438" stroke-width="8" stroke-linejoin="round"/>
+<g clip-path="url(#body)">
+<path d="M8 281 C108 281 169 263 221 228 C286 184 312 114 371 89 C420 67 471 75 489 107 C511 144 486 181 455 167 C478 151 467 131 447 132 C423 133 424 164 443 189 C474 226 533 232 578 213 C624 193 649 172 685 183 C722 194 726 234 792 252 L792 354 Q707 388 625 365 Q538 395 465 375 Q380 399 300 377 Q224 397 147 373 Q72 385 8 354 Z" fill="#42717e"/>
+<path d="M-20 275 Q180 344 371 259 T820 278 V410 H-20Z" fill="#23465e"/>
+<path d="M-20 329 Q130 371 300 336 T570 342 T820 326 V410 H-20Z" fill="#163248"/>
+<path d="M15 305 C159 303 265 252 309 195 C344 150 352 123 391 112 M28 331 C203 324 290 275 337 211 C367 170 371 152 391 144 M91 354 C237 341 319 293 361 240 C385 208 391 189 394 174 M214 361 C311 345 367 305 390 264 M301 366 C389 341 430 310 428 275 M399 368 C487 343 513 310 486 282 M488 371 C576 352 608 313 579 282 M581 365 C663 348 678 318 655 285 M670 361 C730 343 750 315 725 291" fill="none" stroke="#a4b9ab" stroke-width="4" stroke-linecap="round"/>
+<path d="M-10 348 Q139 377 254 354 T483 357 T800 346" fill="none" stroke="#728f92" stroke-width="2.5"/>
+</g>
+<path d="M8 281 C108 281 169 263 221 228 C286 184 312 114 371 89 C420 67 471 75 489 107 C511 144 486 181 455 167 C478 151 467 131 447 132 C423 133 424 164 443 189 C474 226 533 232 578 213 C624 193 649 172 685 183 C722 194 726 234 792 252" fill="none" stroke="#10283d" stroke-width="22" stroke-linecap="round"/>
+<path d="M8 281 C108 281 169 263 221 228 C286 184 312 114 371 89 C420 67 471 75 489 107 C511 144 486 181 455 167 C478 151 467 131 447 132 C423 133 424 164 443 189 C474 226 533 232 578 213 C624 193 649 172 685 183 C722 194 726 234 792 252" fill="none" stroke="#eee4c5" stroke-width="15" stroke-linecap="round"/>
+<path d="M8 281 C108 281 169 263 221 228 C286 184 312 114 371 89 C420 67 471 75 489 107 C511 144 486 181 455 167 C478 151 467 131 447 132 C423 133 424 164 443 189 C474 226 533 232 578 213 C624 193 649 172 685 183 C722 194 726 234 792 252" fill="none" stroke="#c9cbb0" stroke-width="2" stroke-dasharray="3 11 18 7" stroke-linecap="round"/>
+<path d="M60 296 C44 270 92 262 92 287 C92 302 65 303 65 288 C65 274 83 274 81 288" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M137 282 C119 254 173 246 173 273 C173 290 142 291 142 274 C142 258 162 258 160 274" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M206 265 C193 242 232 234 232 256 C232 268 211 269 211 257 C211 246 226 246 224 257" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M307 291 C288 262 345 254 345 282 C345 300 312 301 312 283 C312 266 333 266 331 283" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M388 312 C374 288 416 280 416 303 C416 316 393 317 393 304 C393 292 409 292 407 304" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M492 276 C474 248 528 240 528 267 C528 284 497 285 497 268 C497 252 517 252 515 268" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M587 262 C573 238 615 230 615 253 C615 266 592 267 592 254 C592 242 608 242 606 254" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M692 280 C674 252 728 244 728 271 C728 288 697 289 697 272 C697 256 717 256 715 272" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M746 300 C735 279 768 271 768 291 C768 301 751 302 751 292 C751 283 764 283 762 292" fill="none" stroke="#d9dcc0" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M323 114 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+<path d="M342 86 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+<path d="M358 61 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+<path d="M382 55 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+<path d="M539 81 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+<path d="M562 66 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+<path d="M580 60 q-8 11 -3 15 q10 1 7 -9 Z" fill="#eee4c5" stroke="#17364d" stroke-width="2"/>
+</svg>

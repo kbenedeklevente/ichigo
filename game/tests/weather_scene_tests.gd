@@ -23,6 +23,7 @@ func _run() -> void:
 	scene._update_scene(0.0)
 	_check(scene.weather_presentation.get("_panels").multimesh.instance_count == 289, "Only the near289 cells have individual panel instances.")
 	_check(scene.weather_runtime.weather.get_status().simulated_cells == 1089, "The simulation includes a larger1089-cell region.")
+	_check(not scene.ocean.get("_surface").visible and not scene.ocean.get("_far_surface").visible, "Both legacy continuous ocean meshes are hidden.")
 	var crest_point := Vector2.ZERO
 	var greatest_relief: float = 0.0
 	for x in range(-4, 5):
@@ -35,7 +36,7 @@ func _run() -> void:
 	_check(greatest_relief > 0.25, "The calm surface contains actual raised crest relief.")
 	scene.bucket.position = Vector3(crest_point.x, 0.0, crest_point.y)
 	scene._update_scene(0.0)
-	_check(absf(scene.bucket.position.y - scene.water_surface.height_at(crest_point)) < 0.00001, "Bucket buoyancy follows the raised rendered crest, not only the coarse wave root.")
+	_check(absf(scene.bucket.position.y - scene.water_surface.height_at(crest_point)) < 0.00001, "Bucket buoyancy follows the retained invisible gameplay surface.")
 	scene.bucket.position = Vector3.ZERO
 	scene._update_scene(0.0)
 	await _capture(scene, "calm")
@@ -44,7 +45,7 @@ func _run() -> void:
 	scene.simulation_time = 20.0
 	scene._update_scene(0.0)
 	var local: Dictionary = scene.weather_runtime.weather.sample(Vector2.ZERO)
-	_check(absf(scene.bucket.position.y - local.height) < 0.00001, "Bucket follows the actual connected panel surface.")
+	_check(absf(scene.bucket.position.y - scene.water_surface.height_at(Vector2.ZERO)) < 0.00001, "Bucket follows the invisible shared gameplay surface.")
 	_check(local.rain > 0.3, "The incoming rain front reaches the player.")
 	_check(scene.weather_presentation.get("_rain").multimesh.visible_instance_count > 0, "Local rainfall generates visible nearby rain instances.")
 	_check(scene._sun.light_energy < 0.72, "Cloud attenuation affects the actual scene light.")

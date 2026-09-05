@@ -1,50 +1,40 @@
 extends Node3D
 ## Rendering consumes weather state; no chance rolls or physics decisions here.
-## The single near batch is a measured-study baseline, not a final LOD layout.
+## Paper Theatre: upright die-cut illustrations, independently rooted in weather springs.
 
 var _panels := MultiMeshInstance3D.new()
 var _rain := MultiMeshInstance3D.new()
 var _panel_material := ShaderMaterial.new()
+var _card_transforms: Array[Transform3D] = []
 var _fallback_surface
 const SurfaceSampler = preload("res://game/world/illustrated_water_surface.gd")
 
 static func build_surface_mesh(cell_size: float = 4.0) -> ArrayMesh:
-	# Each assembly is a thin, connected shoulder/crest/face surface. World-space
-	# displacement joins its boundary vertices exactly to the adjoining assembly.
-	var n: int = SurfaceSampler.SUBDIVISIONS
-	var vertices := PackedVector3Array()
-	var normals := PackedVector3Array()
-	var uvs := PackedVector2Array()
-	var indices := PackedInt32Array()
-	for z in range(n + 1):
-		for x in range(n + 1):
-			vertices.append(Vector3((float(x) / n - 0.5) * cell_size, 0.0, (float(z) / n - 0.5) * cell_size))
-			normals.append(Vector3.UP)
-			uvs.append(Vector2(float(x) / n, float(z) / n))
-	for z in range(n):
-		for x in range(n):
-			var a: int = z * (n + 1) + x
-			var b: int = a + 1
-			var c: int = a + n + 1
-			var d: int = c + 1
-			indices.append_array(PackedInt32Array([a, d, b, a, c, d]))
+	# A standing card with its pivot at the submerged lower edge. Its silhouette
+	# comes solely from the original transparent SVG, never a displaced sea mesh.
+	var width := cell_size * 1.70
+	var height := cell_size * 0.95
 	var arrays := []
 	arrays.resize(Mesh.ARRAY_MAX)
-	arrays[Mesh.ARRAY_VERTEX] = vertices
-	arrays[Mesh.ARRAY_NORMAL] = normals
-	arrays[Mesh.ARRAY_TEX_UV] = uvs
-	arrays[Mesh.ARRAY_INDEX] = indices
+	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array([
+		Vector3(-width / 2.0, 0.0, 0.0), Vector3(width / 2.0, 0.0, 0.0),
+		Vector3(width / 2.0, height, 0.0), Vector3(-width / 2.0, height, 0.0)])
+	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array([Vector3.BACK, Vector3.BACK, Vector3.BACK, Vector3.BACK])
+	arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array([Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)])
+	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2, 0, 2, 3])
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	mesh.custom_aabb = AABB(Vector3(-cell_size * 0.5, -3.0, -cell_size * 0.5), Vector3(cell_size, 6.0, cell_size))
 	return mesh
 
 func _ready() -> void:
 	var mesh := build_surface_mesh()
 	_panel_material.shader = preload("res://game/world/water_panel.gdshader")
-	_panel_material.set_shader_parameter("illustration", preload("res://game/presentation/waves/raised_crest.svg"))
+	_panel_material.set_shader_parameter("curl_art", preload("res://game/presentation/waves/theatre_curl.svg"))
+	_panel_material.set_shader_parameter("double_art", preload("res://game/presentation/waves/theatre_double.svg"))
+	_panel_material.set_shader_parameter("sweep_art", preload("res://game/presentation/waves/theatre_sweep.svg"))
 	_panels.multimesh = MultiMesh.new()
 	_panels.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	_panels.multimesh.use_custom_data = true
 	_panels.multimesh.mesh = mesh
 	_panels.material_override = _panel_material
 	_panels.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -75,14 +65,25 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 	var states: Array[Dictionary] = simulation.get_panel_states()
 	if _panels.multimesh.instance_count != states.size():
 		_panels.multimesh.instance_count = states.size()
+	_card_transforms.resize(states.size())
 	for index in range(states.size()):
 		var state: Dictionary = states[index]
 		var point: Vector2 = state.position
-		# Root height and meaningful relief are both applied by the shared field.
-		_panels.multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY, Vector3(point.x, 0.0, point.y)))
-	var parameters: Dictionary = simulation.get_render_parameters()
-	for key in parameters:
-		_panel_material.set_shader_parameter(key, parameters[key])
+		var cell: Vector2i = state.cell_id
+		var seed_value := fposmod(float(cell.x * 17 + cell.y * 31), 13.0) / 13.0
+		var stagger := 2.0 if posmod(cell.y, 2) == 0 else 0.0
+		var tilt: Vector2 = state.tilt
+		# The spring solver already supplies independently coupled height and slope.
+		# The whole drawing rocks about its submerged foot; no UV travel or bending.
+		var basis := Basis.from_euler(Vector3(-0.18 + tilt.x * 0.45,
+			(seed_value - 0.5) * 0.12, tilt.y * 0.6))
+		var size_y := lerpf(0.86, 1.05, seed_value)
+		basis = basis.scaled(Vector3(1.0, size_y, 1.0))
+		var position := Vector3(point.x + stagger, float(state.height) - 2.0, point.y + (seed_value - 0.5) * 0.36)
+		_card_transforms[index] = Transform3D(basis, position)
+		_panels.multimesh.set_instance_transform(index, _card_transforms[index])
+		var variant := float(posmod(cell.x + cell.y * 3, 3)) * 0.5
+		_panels.multimesh.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0))
 	var local: Dictionary = simulation.sample(Vector2(player.x, player.z))
 	_panel_material.set_shader_parameter("bucket_center", Vector2(player.x, player.z))
 	_panel_material.set_shader_parameter("illumination", lerpf(0.50, 1.0, clampf(local.light, 0.0, 1.0)))
