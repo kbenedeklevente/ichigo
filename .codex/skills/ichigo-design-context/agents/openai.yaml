@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ichigo Design Context"
+  short_description: "Read relevant game plans and keep them in sync"
+  default_prompt: "Use $ichigo-design-context to load the relevant Ichigo plans and keep this change aligned with them."
+policy:
+  allow_implicit_invocation: true
