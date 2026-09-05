@@ -1,7 +1,7 @@
 extends RefCounted
-## Shared reconstruction for the raised-paper study. This is the sole owner of
-## meaningful crest relief: gameplay and the vertex shader evaluate this field.
-## Values below are comparison defaults, not an approved final art direction.
+## Retained invisible gameplay surface for the Paper Theatre experiment.
+## Buoyancy and targeting still use this continuous raised-profile approximation.
+## Upright decorative wave cards follow weather springs but are not colliders.
 const SUBDIVISIONS := 24
 const FACE_RISE := 0.58
 const PROFILE_TRAVEL := 0.38
@@ -131,7 +131,7 @@ func _vertex_height(index: Vector2i) -> float:
 	return _vertex_heights[index]
 
 func height_at(point: Vector2) -> float:
-	# Match the actual rendered triangles, including the choice of diagonal.
+	# Preserve the original gameplay triangle interpolation and its diagonal.
 	# Cell edges sit at half-cell coordinates, so this lattice never moves on scroll.
 	var step := _cell_size / SUBDIVISIONS
 	var grid := (point + Vector2.ONE * _cell_size * 0.5) / step
