@@ -6,7 +6,9 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
-Correct the rejected flat waves using the [raised illustrated-wave study](raised_paper_waves.md). In parallel planning, the [encounter-field proposal](encounter_fields_and_pacing.md) records exclusive encounters, weather-transition holds, weather-dependent chances and optional local physics modifiers. The user approved the timers and declined protecting ordinary fishing fights. A pointed raised-wave prototype and salvage-only event integration are implemented; other event families, full fishing and final art remain unfinished. See the [implementation review](../work_packets/p2_wave_encounter_review.md).
+The pointed-wave correction is implemented. The user requested [five artistic refactors in isolated worktrees](../experiments/wave_art_directions.md): two SVG/profile studies and three separate paper-stage constructions. Compare actual game captures before choosing a direction. Removing the shared visible water surface is authorized inside those experiments; it is not yet a main-game contract change. Use the [context map](context_map.md) when retrieving a system plan.
+
+Previous correction and current runtime foundation: the [raised illustrated-wave study](raised_paper_waves.md). In parallel planning, the [encounter-field proposal](encounter_fields_and_pacing.md) records exclusive encounters, weather-transition holds, weather-dependent chances and optional local physics modifiers. The user approved the timers and declined protecting ordinary fishing fights. A pointed raised-wave prototype and salvage-only event integration are implemented; other event families, full fishing and final art remain unfinished. See the [implementation review](../work_packets/p2_wave_encounter_review.md).
 
 ## Experience
 

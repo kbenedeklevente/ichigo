@@ -2,6 +2,8 @@
 
 Status: planning baseline, 5 September 2026. Prepared together in one context before delegating implementation. These documents describe proposed systems and experiments; they do not represent an implemented game or measured performance.
 
+For a specific game system, use the [context map](context_map.md) to load only its relevant plans. The repository [Ichigo design-context skill](../../.codex/skills/ichigo-design-context/SKILL.md) keeps this retrieval and documentation-update workflow consistent.
+
 Start with the [integrated game plan](integrated_game_plan.md). It is the authority for shared decisions. Specialist plans refine it; they must not independently redefine the camera, progression, input, or world rules.
 
 | Document | Responsibility |
@@ -24,6 +26,8 @@ Start with the [integrated game plan](integrated_game_plan.md). It is the author
 The [development philosophy](../dev_philosophy.md) applies throughout. The [earlier concept plan](../../docs/concept/ocean-game-concept-plan.md) is historical background; its survival, navigation, and camera proposals are superseded where they conflict with this baseline. Existing [art studies](../../docs/concept/art/) supply palette and material references only: their adult, hat, and skiff are incorrect for Ichigo.
 
 ## Immediate next action
+
+Current work: compare [five isolated wave art experiments](../experiments/wave_art_directions.md). Two adapt the raised mesh; three replace the visible surface with separate illustrated stage pieces. All remain unselected proposals. The camera implementation below is already complete; its original build instruction is historical.
 
 The first context split is now organized in [bounded work packets](../work_packets/README.md), with the primary agent retaining camera/integration ownership.
 
