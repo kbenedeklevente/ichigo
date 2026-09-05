@@ -23,7 +23,7 @@ Gameplay uses the invisible illustrated-water sampler. **Collision, fishing targ
 - Godot 4.7.2 headless editor import: passed.
 - `game/tests/woodblock_wings_tests.gd`: 17 checks passed. Covers hidden legacy sheets, replacement near renderer, baseline cell counts, wing dimensions, bounded recycling, retained world anchors, simulation immutability during presentation updates, five camera angles, rain and weather-driven bob.
 - `game/tests/weather_simulation_tests.gd`: 128 checks passed, zero failures. Local timing sample: 6.554ms per fixed tick including the original 289 panel exports.
-- Existing capture mode remains intact: `--capture-dir=/absolute/path` saves 12°, 20°, 26°, 38°, and 52° views. Graphical capture review is coordinated by the root task; this agent has not launched a competing graphical window.
+- Existing capture mode remains intact: `--capture-dir=/absolute/path` saves 12°, 20°, 26°, 38°, and 52° views. Root-task captures at 20° and 52° showed legible bold cut-paper waves and no card gaps. A follow-up cut-edge mask softens the square sheet ends; remaining overlap seams are intentional visible scenery joins. This agent has not launched a competing graphical window.
 
 ## References
 

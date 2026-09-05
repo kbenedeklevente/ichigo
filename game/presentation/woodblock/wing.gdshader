@@ -9,6 +9,9 @@ void fragment() {
     vec4 ink = texture(illustration, UV);
     // Opaque cutouts: no alpha-scissor sorting, no rectangular transparent shadows.
     if (ink.a < 0.48) { discard; }
+    // Scallop the physical ends like hand-cut scenic wings, within the overlap.
+    float cut_edge = 0.025 + 0.018 * sin(UV.y * 8.0) + 0.006 * sin(UV.y * 27.0);
+    if (UV.x < cut_edge || UV.x > 1.0 - cut_edge) { discard; }
     float distance_back = max(0.0, player_position.y - world_position.z);
     float middle = smoothstep(5.0, 35.0, distance_back);
     float mist = smoothstep(32.0, 90.0, distance_back);
