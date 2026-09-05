@@ -10,7 +10,7 @@
     "preferred_pitch_deg": 20,
     "roll_deg": 0,
     "azimuth_policy": "fixed",
-    "pitch_profiles_deg": {"wide": [12, 52], "sky_comparison": [12, 26]},
+    "pitch_profiles_deg": {"wide": [12, 52]},
     "viewport_sizes_px": [[1280, 720], [1280, 800]],
     "subject_frame_height_fraction": [0.2, 0.3],
     "preset_transition_s": 0.5,
@@ -35,10 +35,10 @@
     {
       "id": "CAM-01",
       "name": "Sweep and resize",
-      "setup": {"ocean": "flat Y=0", "bucket_id": "bucket-p1", "target_id": "target-near", "pitch_samples_deg": [12, 20, 26, 38, 52], "profiles": ["wide", "sky_comparison"]},
+      "setup": {"ocean": "flat Y=0", "bucket_id": "bucket-p1", "target_id": "target-near", "pitch_samples_deg": [12, 20, 26, 38, 52], "profiles": ["wide"]},
       "actions": ["Calibrate physical focus anchor, distance and offsets; record them with captures.", "Sweep each profile at both default viewports, clamping requests to that profile.", "Resize while transitioning; repeat with reduced motion and the lowest quality setting."],
       "expected_invariants": ["Vertical FOV remains 60 degrees and roll remains zero.", "Pitch stays within the selected profile, including during transitions.", "Camera motion never changes physical state or target reach.", "Capture notes explicitly identify clipping, overlap and unreadable targets; no visual pass is assumed."],
-      "observations_to_record": ["Subject frame height versus the provisional target.", "Sky band and horizon presence: ideal flat-ocean estimates are about 32%, 18%, and 8% at 12, 20, and 26 degrees; horizon is outside the frame at 38 and 52 degrees.", "Choose whether wider overview access or always-visible sky better supports interaction."]
+      "observations_to_record": ["Subject frame height versus the provisional target.", "Sky band and horizon presence: ideal flat-ocean estimates are about 32%, 18%, and 8% at 12, 20, and 26 degrees; horizon is outside the frame at 38 and 52 degrees.", "The user selected the full 12–52 degree range; verify overview access and sky-visible travel."]
     },
     {
       "id": "CAM-02",

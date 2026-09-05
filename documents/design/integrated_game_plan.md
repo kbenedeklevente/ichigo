@@ -1,5 +1,9 @@
 # Integrated game plan
 
+## Latest visual and world direction
+
+The user selected the full 12°–52° camera range and removed Keep sky. Framing is slightly smaller and the bucket browner. The next visual study must use layered illustrations, replacing the solid-looking proxies. A player-centered square-cell render grid sits inside a larger simulation grid; approaching weather drives individual panel motion. The [paper ocean and weather plan](paper_ocean_weather.md) records this update and supersedes conflicting earlier proposals below. Weather pairing, the type of panel physics, and the scope of predetermined outcomes await explicit user answers. Do not resolve unanswered design questions by timeout.
+
 ## Experience
 
 Ichigo is an open-ocean adventure built around free movement, tactile fishing, wildlife encounters, environmental puzzles, and chance-based discoveries. The player feels small, curious, and capable inside a beautiful, changing world. The desired emotional rhythm is wonder and solitude with moments of danger.
@@ -18,7 +22,7 @@ An ordinary minute might involve drifting, noticing fish under a cloud shadow, c
 - Fishing must be compelling in its own right. Puzzles and discoveries drive the larger story.
 - Encounters and weather vary between playthroughs. Randomness respects world conditions, continuity, and viable progression.
 - The camera can tilt between a higher gameplay view and a lower sky-visible view, without reaching true overhead or a horizontal optical axis. Assets must remain coherent throughout the supported range.
-- Paper cutout is the current preference. Flat transformed assets, dimensional paper, low-poly, and medium-poly alternatives belong in the rendering experiment.
+- Layered illustrated paper is the next visual priority. Low-poly, medium-poly and volumetric alternatives remain later experiments, rather than a requirement before the paper study.
 - Complete the initial interdependent planning in one context before splitting implementation among agents.
 
 ## Proposed baseline for the first playable slice
@@ -30,7 +34,7 @@ These are practical starting choices, open to revision through playtests.
 | Survival pressure | Omit hunger, thirst, eating, and drinking | Fishing can focus on mastery and discovery; inventory can focus on tools and finds |
 | Travel | Continuous local movement with encounter-driven progression | Every heading remains viable; local physics and positioning remain meaningful |
 | Camera | Perspective first; adjustable pitch, fixed azimuth initially | Keeps a real horizon and limits the asset views needed for the first test |
-| Art production | Flat proxies first, then compare four representations | Exposes camera failures before we build a large library |
+| Art production | Layered illustrations first; replace rejected solid proxies | Exposes view-coverage and ocean-panel issues before producing a library |
 | Progression | Knowledge + usable tool capabilities + story milestones | Loot has purpose without endless stat inflation or food replenishment |
 | Failure | Recoverable setbacks in the slice | Prevents random tools, missed events, or inaccessible clues from ending progress |
 | Controls | Screen-relative steering; contextual interaction mode | Stable movement across camera pitch; explicit ownership during fishing/puzzles |
@@ -53,7 +57,7 @@ Keep macro progression independent of heading. A tool may let the player retriev
 - Earlier food/water survival loops are omitted from the first slice. Fishing rewards knowledge, mastery, equipment access, and collection decisions.
 - The initial camera test is bounded third-person pitch, not unrestricted orbit. Free yaw and first-person inspection are later experiments with explicit asset costs.
 - Earlier adult/skiff images are environment references only. Every new character/vessel asset uses the child and bucket.
-- Paper is preferred, but the visual system is not locked before testing low- and medium-poly versions under identical conditions.
+- Following the first review, prioritize illustrated paper layers. Low-/medium-poly variants remain optional later comparisons.
 
 ## Scope of the first coherent slice
 
@@ -76,9 +80,9 @@ First-person moments remain a longer-term desire. The slice can use a closer thi
 
 | Question | Proposed default | Evidence needed |
 |---|---|---|
-| Must sky remain visible at every angle? | Sky-visible travel view; high interaction view may temporarily lose the horizon | Compare high-angle usability with a narrower always-sky range |
+| Camera range (resolved) | Full 12°–52°; no Keep sky mode | User selected the wider range after the demo |
 | Should camera yaw be player-controlled? | Fixed azimuth in first prototype | Directional asset coverage and aim readability before enabling yaw |
-| Which representation wins? | Dimensional paper is the leading hypothesis | Matched motion tests against flat, low-poly, and medium-poly versions |
+| Illustrated representation | Layered drawings in spatial depth | Review individual wave panels and replacement child/bucket layers in motion |
 | What does keeping fish mean without eating? | Observation/release plus optional physical specimen storage | Does keeping add an interesting decision without repetitive maintenance? |
 | What is the story about? | Child-centered connection and growing understanding | Review the proposed story spine and physical motifs |
 | How dangerous is the world? | Recoverable encounter failures; no default permadeath | Does tension coexist with time to observe? |

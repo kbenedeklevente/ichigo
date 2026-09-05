@@ -1,5 +1,9 @@
 # Visual engine experimentation roadmap
 
+## Review update: illustrated panels first
+
+The user selected **12°–52° with no Keep sky option**, requested slightly smaller framing and browner wood, and rejected the solid-looking proxies as the visual direction. Follow the [illustrated ocean and nested weather roadmap](paper_ocean_weather.md) for the next experiment: separate drawings, individual panel motion, and a nearby render grid inside a larger weather simulation. Low-poly, medium-poly and volumetric studies remain available later; they do not block the requested paper study.
+
 ## Objective and scope
 
 Find a camera and asset system that supports readable systemic play while giving the ocean and sky a strong presence. Build experiments inside Godot rather than writing a new general-purpose rendering engine. Typed GDScript controls scene logic; materials and shaders handle the chosen stylization. Pin a stable engine version when creating the project, and record the actual Mac chip, memory, renderer, and render resolution with each benchmark.
@@ -26,7 +30,7 @@ This is our geometric derivation for an idealized scene, not a Godot-specific gu
 
 Raising the camera without changing pitch does not restore the ideal horizon's screen position. Increasing FOV can restore it at some angles, but changes scale and distortion. Avoid silently cropping/compositing a second sky camera as if it were a geometrically continuous view.
 
-Test two deliberate modes of the overall camera design: the wider 12°–52° range with a sky-visible normal view, and a narrower approximately 12°–26° range that keeps the horizon in view. Select based on actual interaction tests. It is acceptable for a requested high view to prioritize nearby play, but that tradeoff must be visible in the review.
+Camera review resolved: keep 12°–52° and remove the narrower sky-preserving comparison. The user accepts losing the horizon in higher views. Keep a sky-visible default.
 
 Godot Camera3D supports perspective, orthogonal, and frustum projections and provides screen/world projection methods. Lock the intended aspect behavior so the test really uses a vertical FOV. [Camera3D reference](https://docs.godotengine.org/en/stable/classes/class_camera3d.html)
 
@@ -64,10 +68,10 @@ Billboards keep a plane readable, but cannot reveal an unseen bucket interior or
 | Asset | First proxy | Candidate production representation |
 |---|---|---|
 | Ichigo | A few hand-authored elevation/directional poses on cards | Layered poses or a thin rigged mesh, depending on angle tests |
-| Bucket | Separate rear wall, interior, child layer, front rim/wall | Shallow modeled open bucket; flat decomposition is a feasibility test |
+| Bucket | Separate illustrated rear wall, interior, child layer, front rim/wall | Layered drawings; test extra elevation views and thin support geometry where needed |
 | Nearby fish | Flat silhouette with body bend | Elevation-aware sprites or thin/low-poly mesh for credible turning and depth |
 | Cloud ribbons | Long cards with subtle deformation | Layered cards or thin meshes; stable silhouettes across the camera range |
-| Ocean | Continuous surface with a few paper-like overlays | Shared geometric height surface plus art layers; no independently opening gaps |
+| Ocean | Individually illustrated moving panels on square ground cells | Shared weather/wave fields, per-panel dynamics, intentional overlap and concealed seams |
 | Tools and line | Simple geometry and a clear line | Physical attachment anchors with representation matching the selected style |
 
 Never mirror the number 15 to manufacture a reverse-facing character pose. If changing directional sprites, use angle thresholds with hysteresis; test crossfades for double images. Character heading must remain readable even if its visual card partially faces the camera.
@@ -89,7 +93,9 @@ Low/medium poly are geometry and silhouette experiments, not different color ide
 
 Volume is an independent experiment axis. First test physical thickness in paper forms. Then compare ordinary atmospheric haze with sparse volumetric fog. Finally consider actual volumetric clouds only if they serve the selected style and run well. Godot's built-in volumetric fog requires Forward+; it does not automatically supply our authored cloud shapes. [Volumetric fog](https://docs.godotengine.org/en/stable/tutorials/3d/volumetric_fog.html)
 
-## Ordered roadmap
+## Earlier comparison roadmap
+
+The ordered next tasks are now in [paper ocean and weather](paper_ocean_weather.md#ordered-implementation-plan). The table below retains the broader experiments for later review.
 
 | Task | Output | Exit condition |
 |---|---|---|

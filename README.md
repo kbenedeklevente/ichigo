@@ -8,5 +8,6 @@ Launch with `./scripts/run_game.sh` or double-click `Run Ichigo.command`. See [p
 
 - [Current design and implementation plans](documents/design/README.md)
 - [Development philosophy](documents/dev_philosophy.md)
+- [Illustrated ocean panels and nested weather plan](documents/design/paper_ocean_weather.md)
 - [Visual engine experimentation roadmap](documents/design/visual_engine_roadmap.md)
 - [Earlier concept art and notes](docs/concept/README.md)

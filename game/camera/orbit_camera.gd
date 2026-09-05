@@ -7,7 +7,8 @@ var preferred_pitch_degrees: float = 20.0
 var min_pitch: float = 12.0
 var max_pitch: float = 52.0
 var focus_position: Vector3 = Vector3(0.0, 0.85, 0.0)
-var follow_distance: float = 9.4
+# Slightly smaller on-screen framing, preserving child/bucket proportions.
+var follow_distance: float = 10.2
 var reduced_motion: bool = false
 var _display_pitch: float = 20.0
 
@@ -28,10 +29,6 @@ func set_pitch(value: float, immediate: bool = false) -> void:
 	if immediate or reduced_motion:
 		_display_pitch = pitch_degrees
 	update_camera(0.0)
-
-func set_sky_only(enabled: bool) -> void:
-	max_pitch = 26.0 if enabled else 52.0
-	set_pitch(preferred_pitch_degrees)
 
 func update_camera(delta: float) -> void:
 	if reduced_motion:

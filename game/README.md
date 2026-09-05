@@ -1,6 +1,6 @@
 # P1 camera study
 
-This is the first runnable Godot prototype, not the fishing or survival game. It tests camera framing, world-space targeting, shared water motion, and temporary child/bucket/fish forms. The art style, character details, scale, and final view range remain decisions for review.
+This is the first runnable Godot prototype, not the fishing or survival game. It tests camera framing, world-space targeting, shared water motion, and temporary child/bucket/fish forms. The user selected the full 12°–52° range and illustrated paper assets. The current solid proxies are awaiting replacement; they do not represent the selected art direction.
 
 ## Run
 
@@ -32,7 +32,7 @@ The launcher also accepts an executable via `ICHIGO_GODOT`, a project-local edit
 | Pause/resume | Escape / study button | Start |
 | Hide/show study controls | Tab | Keyboard only in this prototype |
 
-Sky, Travel, and Detail compare 12°, 20°, and 52°. Keep sky temporarily constrains the range to 12°–26°. These are developer study controls, not final game UI. The line has no fishing fight or reward behavior yet. Moving or tilting the camera does not move a committed endpoint; its visible marker follows the local water surface.
+Sky, Travel, and Detail compare 12°, 20°, and 52°. The Keep sky option has been removed following user review. These are developer study controls, not final game UI. The line has no fishing fight or reward behavior yet. Moving or tilting the camera does not move a committed endpoint; its visible marker follows the local water surface.
 
 ## Technical baseline and limits
 
@@ -42,7 +42,8 @@ Sky, Travel, and Detail compare 12°, 20°, and 52°. Keep sky temporarily const
 - The fish are visible surface-level geometry proxies, not finished underwater wildlife rendering or species claims.
 - Steering works in every horizontal direction. The prototype has no encounter generator, inventory, story, saves, or progression yet.
 - Camera targeting has a 12 m horizontal reach, rejects sky/invalid rays, and checks bucket occlusion. A committed line is a visual targeting experiment, not a simulated rope.
-- Materials, child hairstyle/skin/jersey coloring, and the shallow geometry are provisional representations. The full flat/paper/low-/medium-poly comparison has not been produced.
+- Framing is slightly smaller (camera distance 10.2 m, previously 9.4 m) and the bucket uses warmer brown wood. Child-to-bucket proportions and gameplay reach are preserved.
+- Solid child/bucket proxies still need replacement with layered illustrations. See the [paper ocean and weather plan](../documents/design/paper_ocean_weather.md). Low-/medium-poly and volumetric studies remain optional later experiments; the next work prioritizes illustrated panels.
 - Keyboard/mouse and real rendered captures are reviewed separately from headless logic tests; controller bindings need physical-device playtesting.
 
 ## Checks and captures

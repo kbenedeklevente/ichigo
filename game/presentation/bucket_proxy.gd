@@ -18,7 +18,7 @@ func _ready() -> void:
 	_skin = _material(Color("d7b991"))
 	_blue = _material(Color("447489"))
 	_hair = _material(Color("55483f"))
-	for color in ["a69b80", "b4a58a", "beb194", "998f79", "c2b497"]:
+	for color in ["896348", "9b7353", "a37b58", "795940", "ad825b"]:
 		_wood.append(_material(Color(color)))
 	_build_bucket()
 	_build_child()

@@ -1,5 +1,9 @@
 # Asset cohesion and production plan
 
+## First prototype review
+
+The solid bucket/child proxies missed the requested art direction. Prioritize layered illustrations in the selected 12°–52° camera range, with a slightly smaller on-screen assembly and browner wood. Water drawings have individual motion and overlapping silhouettes on equal-sided grid cells. Follow the [paper ocean study](paper_ocean_weather.md); low-/medium-poly comparisons below remain later options.
+
 ## Dependency and objective
 
 Begin with proxies while the [camera experiment](visual_engine_roadmap.md) is open. Produce the wider asset set only after its supported view range and representation contract are recorded. Every asset must look like it belongs to the same world from every supported angle, including during transitions.
@@ -48,7 +52,7 @@ For the bucket, explicitly test rear wall → child/tools → front rim occlusio
 | Bucket | Exterior, interior, rim; optional separate staves/folds per style | Looks round and contains the child throughout the tilt range |
 | Fishing rig | Rod/handline proxy, lure, float if used, line | Tip/line/hand attachment holds during movement and camera change |
 | Fish | Two behavior silhouettes or one species with two prototype profiles | Heading, turn, depth, and response can be read without labels |
-| Water | Continuous base and limited art layers | Height follows shared surface; no gaps or stair-like crests |
+| Water | Individual illustrated panels, shared palette/line weight, coherent overlap | Panel physics follows shared weather/waves; intentional visible edges but no accidental holes through the ocean |
 | Sky | Cloud ribbon family and gradient | Clouds have a shared visual rhythm and plausible parallax |
 | Find | One recoverable tool/material and its inventory view | Same object is recognizable in-world and in the pouch |
 
@@ -58,7 +62,7 @@ Inventory depictions should reuse the same asset or a deliberately matched drawi
 
 1. Make a scale/palette sheet and proxy scene using the confirmed child and bucket.
 2. Supply cheap assets for R0/R1; record where flat transformations fail.
-3. Supply matched A/B/C/D variations for the visual comparison.
+3. Review the illustrated-panel scene first; supply other style comparisons later if requested.
 4. Lock shared materials, view coverage, anchors, and export conventions with the rendering owner.
 5. Produce the small package above, integrating each item in the actual camera scene immediately.
 6. Review in motion under clear light, overcast, dusk, water overlap, and both pitch endpoints.

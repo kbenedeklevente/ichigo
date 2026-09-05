@@ -112,17 +112,8 @@ func _test_pitch_profiles(camera: Camera3D, defaults: Dictionary) -> void:
 	_check(is_equal_approx(camera.get("pitch_degrees"), 52.0), "Wide profile clamps above its upper limit.")
 	camera.call("set_pitch", 38.0, true)
 	_check(is_equal_approx(camera.get("pitch_degrees"), 38.0), "A supported immediate pitch request is applied.")
-	camera.call("set_sky_only", true)
 	camera.call("set_pitch", 52.0, true)
-	_check(is_equal_approx(camera.get("max_pitch"), 26.0), "Sky comparison profile exposes its 26-degree upper limit.")
-	_check(is_equal_approx(camera.get("pitch_degrees"), 26.0), "Sky comparison profile clamps requested pitch.")
-	camera.call("set_pitch", 0.0, true)
-	_check(is_equal_approx(camera.get("pitch_degrees"), 12.0), "Sky comparison retains the 12-degree lower limit.")
-	camera.call("set_sky_only", false)
-	camera.call("set_pitch", 52.0, true)
-	_check(is_equal_approx(camera.get("max_pitch"), 52.0), "Returning to wide profile restores its upper limit.")
-	_check(is_equal_approx(camera.get("pitch_degrees"), 52.0), "Restored wide profile permits its upper endpoint.")
-	_check(is_equal_approx(camera.get("min_pitch"), 12.0), "Profile switching preserves the lower endpoint.")
+	_check(is_equal_approx(camera.get("pitch_degrees"), 52.0), "The selected range permits its upper endpoint.")
 
 
 func _test_ocean_samples() -> void:

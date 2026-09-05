@@ -24,7 +24,6 @@ var pitch_slider: HSlider
 var pitch_label: Label
 var mode_label: Label
 var footer_label: Label
-var sky_toggle: CheckButton
 var pause_button: Button
 var _candidate: Dictionary = {"valid":false}
 var _mouse_over_controls: bool = false
@@ -209,7 +208,6 @@ func _set_paused(value: bool) -> void:
 	_suppress_commit = true
 	pause_button.text = "Resume" if paused else "Pause"
 	pitch_slider.editable = not paused
-	sky_toggle.disabled = paused
 
 func _register_input() -> void:
 	_action("move_left",[KEY_A],JOY_AXIS_LEFT_X,-1.0)
@@ -334,12 +332,6 @@ func _build_hud() -> void:
 		button.pressed.connect(func():
 			if not paused: camera.set_pitch(angle))
 		row.add_child(button)
-	sky_toggle = CheckButton.new()
-	sky_toggle.text = "Keep sky"
-	sky_toggle.toggled.connect(func(enabled: bool):
-		camera.set_sky_only(enabled)
-		pitch_slider.max_value = camera.max_pitch)
-	row.add_child(sky_toggle)
 	pause_button = Button.new()
 	pause_button.text = "Pause"
 	pause_button.pressed.connect(func(): _set_paused(not paused))

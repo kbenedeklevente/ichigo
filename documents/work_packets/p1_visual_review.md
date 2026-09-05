@@ -20,9 +20,17 @@ A normal session was launched and its live window inspected. An observed UI stat
 
 The proxies currently use shallow modeled/low-detail forms. They are not the full directional flat-card library or a completed paper/low-poly/medium-poly comparison. Fish sit at the surface for visibility testing; convincing underwater presentation is still open. There is no inventory, fishing fight, encounter director, progression, weather cycle, or save system in this build.
 
-## Decisions requested from the user
+## Original questions (answered below)
 
 1. Retain the full tilt range with a sky-visible default, restrict normal motion to keep the sky present, or revise framing before choosing?
 2. Make the child and bucket larger on screen, retain the current framing, or make them smaller to emphasize the ocean?
 
 Character appearance, final geometry/material style, camera policy, and gameplay choices require user feedback before being locked. The current implementation values remain provisional. The next visual work applies that feedback, then produces matched flat-paper, dimensional-paper, low-poly, and medium-poly representation comparisons.
+
+## User response and follow-up
+
+The user selected the full 12°–52° range, requested removal of Keep sky, and asked for slightly smaller framing and browner wood. These adjustments are implemented; camera distance is now 10.2 m (previously 9.4 m). The solid-looking assets were rejected as the visual direction. The next study is layered illustrations with individually moving water panels and nested weather grids, described in the [new plan](../design/paper_ocean_weather.md). Earlier A/B/C/D comparison sequencing is deferred.
+
+After removal of the obsolete sky-profile tests, 118 camera/ocean checks and 34 actual-scene integration checks pass. These validate the revised camera baseline only, not the planned panel/weather systems.
+
+The follow-up graphical capture run completed all five angles with status 0 and exited intentionally. Inspection at 20° and 52° confirms the removed toggle, smaller framing and browner wood, with the bucket interior still visible. Captures are local under `outputs/p1-feedback/`; this remains the old proxy art, not the planned illustrated-panel demo.

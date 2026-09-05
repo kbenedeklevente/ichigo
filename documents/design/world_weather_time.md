@@ -1,5 +1,9 @@
 # World, event scheduling, weather, and time
 
+## Latest weather specification
+
+Use the [illustrated ocean and nested weather plan](paper_ocean_weather.md) for the new square-cell matrices, rendered subset, player-centered coordinates, individual panel dynamics, four sky/four wind categories, incoming fronts and transition phases. That plan supersedes older broad weather suggestions below. Pairing rules and the scope of player agency remain pending user answers; do not implement an assumed answer.
+
 ## Open travel without a required route
 
 Implement a continuous navigable ocean around the bucket. The player may paddle in any horizontal direction, stop, drift, turn back, or circle a local event. Physical positions and relative velocities must be real enough for targeting, fishing, and puzzles. Macro progression depends on knowledge, capabilities, and encounter outcomes rather than global coordinates.

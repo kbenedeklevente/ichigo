@@ -1,12 +1,12 @@
 # P1 camera prototype — integration work packet
 
-Owner: primary integration agent, with the human creator. Status: the first runnable P1 baseline is implemented; camera/framing decisions await user feedback. See the [visual review](p1_visual_review.md) and [prototype instructions](../../game/README.md). The task specification below remains the reference for unfinished comparisons.
+Owner: primary integration agent, with the human creator. Status: the first runnable P1 baseline is implemented; the user selected the full 12°–52° range, smaller framing and browner wood. See the [visual review](p1_visual_review.md) and [prototype instructions](../../game/README.md). The task specification below remains the reference for unfinished comparisons.
 
 Authority: [integrated game plan](../design/integrated_game_plan.md) and [visual engine roadmap](../design/visual_engine_roadmap.md). This packet narrows their first experiment; it does not finalize their open artistic choices.
 
 ## Question to answer
 
-Can the child/bucket scene support readable local interactions while retaining an attractive sky-visible travel view? Compare the planned wide tilt range with the narrower horizon-preserving range before choosing production assets.
+Can the child/bucket scene support readable local interactions while retaining an attractive sky-visible travel view? The user chose the wide tilt range; the next asset experiment follows the [illustrated ocean plan](../design/paper_ocean_weather.md).
 
 ## Local readiness
 
@@ -24,7 +24,7 @@ The initial scene contains a child silhouette in the correct oversized number 15
 
 - Fixed camera azimuth and no roll; positive-down pitch 12°–52°, starting at 20°.
 - Perspective with an explicitly vertical 60° FOV. Capture 12°, 20°, 26°, 38°, and 52° at matched subject scale.
-- Compare a 12°–26° limited preset with the wider range. Label settings as developer controls; they are not final gameplay UI.
+- Keep only the selected 12°–52° range. Label settings as developer controls; they are not final gameplay UI.
 - Retain real world-space roots, physical waterline, target IDs, and reach while visual children compensate for camera angle.
 - Allow screen-relative steering, a continuous tilt control, preset transitions, selection, and a simple cast-target marker. This marker tests projection, not the fishing minigame.
 - Reject sky rays, near-parallel invalid intersections, behind-camera hits, and points beyond reach. Once accepted, a target remains in world space during a camera sweep.
