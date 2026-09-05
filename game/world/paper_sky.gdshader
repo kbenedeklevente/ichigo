@@ -16,8 +16,8 @@ float noise(vec2 p) {
 void sky() {
 	float elevation=max(EYEDIR.y,0.0);
 	float azimuth=atan(EYEDIR.x,-EYEDIR.z);
-	vec3 horizon=vec3(0.65,0.71,0.68);
-	vec3 indigo=vec3(0.10,0.25,0.36);
+	vec3 horizon=vec3(0.93,0.89,0.76);
+	vec3 indigo=vec3(0.075,0.19,0.31);
 	vec3 color=mix(horizon,indigo,smoothstep(0.0,0.24,elevation));
 	float layer=elevation*24.0;
 	float row=floor(layer);
@@ -34,6 +34,8 @@ void sky() {
 		color = mix(color, vec3(0.26,0.36,0.39), bank * front_strength * 0.7);
 	}
 	float fiber=hash(floor(vec2(azimuth,elevation)*1800.0))-0.5;
-	color=mix(color,vec3(0.90,0.86,0.72),cloud*0.90);
+	color=mix(color,vec3(0.96,0.91,0.78),cloud*0.95);
+	// A matte paper void behind the scenic flats, never a water plane.
+	if (EYEDIR.y < 0.0) { color = vec3(0.12,0.28,0.39); }
 	COLOR=(color+fiber*0.012) * (weather_enabled ? mix(0.5,1.0,weather_light) : 1.0);
 }
