@@ -2,6 +2,10 @@
 
 Status: first executable foundation, 5 September 2026. This follows the user's decision to separate story-triggered events from chance-based side opportunities while allowing the same activation concepts in any domain. The weather handler is integrated; quest, achievement and story handlers remain to be authored.
 
+## Latest encounter revision
+
+The user now requires no overlapping encounters and no weather transitions during an encounter, with weather-dependent chance rates and local event field modifiers. The [encounter-fields proposal](encounter_fields_and_pacing.md) defines that revision. Its global admission/transition gate supersedes the earlier future-concurrent-domain proposal below; the current code still only enforces per-group exclusivity. Rate tables, quiet intervals and fishing protection remain proposed until reviewed.
+
 ## Activation and outcomes are separate
 
 An event definition describes **what can happen**. Its activation policy describes **why it starts**. Its handler controls **what happens during play**. Completion and rewards depend on the resulting outcome; dispatch alone does not complete a quest, solve a puzzle or grant an achievement.

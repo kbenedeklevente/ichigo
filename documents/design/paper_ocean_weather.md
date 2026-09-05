@@ -2,6 +2,10 @@
 
 Status: user direction recorded 5 September 2026, followed by an executable weather/event study. Camera/framing changes, the shared event director, nested weather fields, connected panel springs and an initial drawn-water renderer are implemented. See [runtime parameters and limits](weather_runtime_parameters.md) and the [shared event system](event_system.md). This document retains the broader roadmap; final art and production optimizations remain unfinished. Unanswered future design questions stay pending until the user replies, without a timeout or default selection.
 
+## Flat-wave review correction
+
+The implemented horizontal sheets missed the intended raised wave faces. Follow the [raised-paper-wave plan](raised_paper_waves.md) next. Square simulation cells own irregular illustrated crest assemblies; they do not force artwork to lie flat. The existing spring/weather foundation remains useful, but the surface representation and shared crest sampling must be corrected before calling the water visually coherent.
+
 ## Confirmed direction
 
 - Keep the full 12°–52° camera range; remove Keep sky. The horizon may leave the frame at higher angles.
@@ -114,7 +118,7 @@ Record simulated cells, rendered cells, active panels, CPU simulation millisecon
 
 1. **Feedback applied:** remove Keep sky, retain 12°–52°, slightly smaller framing and browner bucket. Run camera/scene checks and inspect captures.
 2. **Resolved:** independent sky/wind, connected springs, shared triggered/chance activation, and player-centered weather arrival.
-3. **Small illustrated asset study (partial):** a first SVG water sheet is integrated; replace the remaining solid child/bucket proxy appearance; review layered bucket/child, several water panels and cloud ribbons across the camera range. Keep water calm. Do not build a whole asset library yet.
+3. **Raised-wave correction first:** replace the rejected horizontal SVG sheets with the curved illustrated crest/substrate study; then replace the remaining solid child/bucket proxy appearance; review layered bucket/child, several water panels and cloud ribbons across the camera range. Keep water calm. Do not build a whole asset library yet.
 4. **Nested-grid study (foundation implemented):** configurable square cells, strict R subset S, stable scrolling IDs, matrices displayed with debug colors, no costly distant drawings. Verify movement/reversal/rebase continuity and retained targets.
 5. **Connected panel study (foundation implemented):** review the approved spring physics, first under constant conditions, then a wind ramp. Review visible seams, ocean continuity, paper motion and motion comfort.
 6. **Incoming transition (foundation implemented):** review the implemented weather/front policy and render cloud, light, wind, rain and wave responses together. Show faster motion before increased height and residual swell after clearing.

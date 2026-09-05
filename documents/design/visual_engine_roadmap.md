@@ -1,5 +1,9 @@
 # Visual engine experimentation roadmap
 
+## Latest correction: raised crests, not horizontal sheets
+
+The user rejected the flat wave appearance in the weather study. The next visual task is the [raised illustrated-wave correction](raised_paper_waves.md): visible front faces, crest lips and upper shoulders on thin curved paper strips, over a matching continuous water surface. The current horizontal-sheet renderer is not an accepted paper-wave representation. This correction takes priority over expanding weather polish or the art library.
+
 ## Review update: illustrated panels first
 
 The user selected **12°–52° with no Keep sky option**, requested slightly smaller framing and browner wood, and rejected the solid-looking proxies as the visual direction. Follow the [illustrated ocean and nested weather roadmap](paper_ocean_weather.md) for the next experiment: separate drawings, individual panel motion, and a nearby render grid inside a larger weather simulation. Low-poly, medium-poly and volumetric studies remain available later; they do not block the requested paper study.
@@ -71,7 +75,7 @@ Billboards keep a plane readable, but cannot reveal an unseen bucket interior or
 | Bucket | Separate illustrated rear wall, interior, child layer, front rim/wall | Layered drawings; test extra elevation views and thin support geometry where needed |
 | Nearby fish | Flat silhouette with body bend | Elevation-aware sprites or thin/low-poly mesh for credible turning and depth |
 | Cloud ribbons | Long cards with subtle deformation | Layered cards or thin meshes; stable silhouettes across the camera range |
-| Ocean | Individually illustrated moving panels on square ground cells | Shared weather/wave fields, per-panel dynamics, intentional overlap and concealed seams |
+| Ocean | Raised illustrated crest assemblies owned by square ground cells | Curved front/lip/shoulder strips above a matching substrate; shared surface sampling and connected motion |
 | Tools and line | Simple geometry and a clear line | Physical attachment anchors with representation matching the selected style |
 
 Never mirror the number 15 to manufacture a reverse-facing character pose. If changing directional sprites, use angle thresholds with hysteresis; test crossfades for double images. Character heading must remain readable even if its visual card partially faces the camera.

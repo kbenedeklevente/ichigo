@@ -1,5 +1,9 @@
 # Wildlife encounters and environmental puzzles
 
+## Current implementation proposal
+
+Use [encounter fields and pacing](encounter_fields_and_pacing.md) for the six candidate events, weather-dependent rates, exclusive encounter gate, stable weather during encounters, sparse spatial index, optional local modifier matrices and wind-driven departure. Off-screen retirement and quest completion are separate outcomes. The new numerical pacing values are proposals, not yet implemented or approved.
+
 ## Purpose and shared constraints
 
 Encounters make the ocean feel inhabited and offer observation, interaction, discovery, and occasional danger. Animals have their own behavior before, during, and after the player's involvement. Every encounter must remain playable and legible through the supported camera range, with minimal required text.

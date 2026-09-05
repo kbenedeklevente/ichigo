@@ -4,6 +4,10 @@
 
 Use the [illustrated ocean and nested weather plan](paper_ocean_weather.md) for the new square-cell matrices, rendered subset, player-centered coordinates, individual panel dynamics, four sky/four wind categories, incoming fronts and transition phases. That plan supersedes older broad weather suggestions below. The user approved independent sky/wind and connected panel springs, plus a [shared triggered/chance event system](event_system.md). Story progression supplies explicit triggers; side opportunities can use chance. All weather activations approach from a random bearing and center over the player. [Runtime parameters](weather_runtime_parameters.md) describe the executable study.
 
+## Exclusive encounter update
+
+The [encounter-fields proposal](encounter_fields_and_pacing.md) adds a global encounter gate and holds weather transitions while an encounter is present or departing. Existing physical motion continues. The event can supply a local wind/current modifier to drive departure without starting a second event or changing the base weather preset. This is a requested change, not behavior already present in the current weather study.
+
 ## Open travel without a required route
 
 Implement a continuous navigable ocean around the bucket. The player may paddle in any horizontal direction, stop, drift, turn back, or circle a local event. Physical positions and relative velocities must be real enough for targeting, fishing, and puzzles. Macro progression depends on knowledge, capabilities, and encounter outcomes rather than global coordinates.

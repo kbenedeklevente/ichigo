@@ -1,5 +1,9 @@
 # Asset cohesion and production plan
 
+## Latest water review
+
+The flat sheet water is rejected. Use [raised illustrated waves](raised_paper_waves.md): thin drawings with a rising dark face, pale crest lip and readable upper shoulder. Equal-sided cells organize the simulation, not the visible silhouette. Preserve calm motion, a continuous water substrate and shared crest/buoyancy sampling.
+
 ## First prototype review
 
 The solid bucket/child proxies missed the requested art direction. Prioritize layered illustrations in the selected 12°–52° camera range, with a slightly smaller on-screen assembly and browner wood. Water drawings have individual motion and overlapping silhouettes on equal-sided grid cells. Follow the [paper ocean study](paper_ocean_weather.md); low-/medium-poly comparisons below remain later options.
@@ -52,7 +56,7 @@ For the bucket, explicitly test rear wall → child/tools → front rim occlusio
 | Bucket | Exterior, interior, rim; optional separate staves/folds per style | Looks round and contains the child throughout the tilt range |
 | Fishing rig | Rod/handline proxy, lure, float if used, line | Tip/line/hand attachment holds during movement and camera change |
 | Fish | Two behavior silhouettes or one species with two prototype profiles | Heading, turn, depth, and response can be read without labels |
-| Water | Individual illustrated panels, shared palette/line weight, coherent overlap | Panel physics follows shared weather/waves; intentional visible edges but no accidental holes through the ocean |
+| Water | Raised illustrated crest assemblies, shared palette/line weight, coherent overlap | Visible face/lip/shoulder at all approved angles; shared water sampling; no accidental ocean holes |
 | Sky | Cloud ribbon family and gradient | Clouds have a shared visual rhythm and plausible parallax |
 | Find | One recoverable tool/material and its inventory view | Same object is recognizable in-world and in the pouch |
 

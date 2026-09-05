@@ -13,6 +13,8 @@ Start with the [integrated game plan](integrated_game_plan.md). It is the author
 | [Fishing](fishing.md) | Complete minigame, controls, feedback, mastery, consequences |
 | [Wildlife encounters and puzzles](encounters_puzzles.md) | Three-set encounter model, behaviors, puzzle authoring, player agency |
 | [Overarching story points](story_points.md) | Minimal-text narrative structure, milestone graph, ending through play |
+| [Raised illustrated-wave correction](raised_paper_waves.md) | Immediate visual priority: replace rejected horizontal sheets with raised crest assemblies and matching surface sampling |
+| [Encounter fields and pacing](encounter_fields_and_pacing.md) | Latest exclusive-encounter requirements, weather-dependent rate proposals, spatial event index and local field composition |
 | [Shared event system](event_system.md) | Trigger/chance activation, lifecycle, prerequisites, persistence and domain handlers |
 | [Weather runtime parameters](weather_runtime_parameters.md) | Independent profiles, front timing, grid and spring tuning, executable study and limits |
 | [Illustrated ocean and nested weather](paper_ocean_weather.md) | Latest visual feedback, square simulation/render grids, per-panel physics proposal, weather phases and pending decisions |
@@ -27,4 +29,4 @@ The first context split is now organized in [bounded work packets](../work_packe
 
 Build a camera-and-asset test scene with a child silhouette in a bucket, water, sky, one target, and one fish proxy. Compare angle and projection before producing a full asset set. The current request completes the planning package; implementation and subagent execution follow as separate work.
 
-Implementation update: the [camera study](../../game/README.md) is runnable. The user selected the full tilt range and requested smaller framing, browner wood, and illustrated panels. Those follow-up choices are resolved. The [weather study](weather_runtime_parameters.md) now runs shared triggered/chance events, independent weather profiles, connected paper-water sheets and nested simulation. The child/bucket illustration and final motion/cohesion review remain next.
+Implementation update: the [camera study](../../game/README.md) is runnable. The user selected the full tilt range and requested smaller framing, browner wood, and illustrated panels. Those follow-up choices are resolved. The [weather study](weather_runtime_parameters.md) now runs shared triggered/chance events, independent weather profiles, connected paper-water sheets and nested simulation. The user rejected the flat waves: the [raised-crest correction](raised_paper_waves.md) is the immediate visual priority. Child/bucket illustration and the proposed encounter-field integration remain unfinished.

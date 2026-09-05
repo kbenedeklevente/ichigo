@@ -2,6 +2,10 @@
 
 Status: implemented study parameters, 5 September 2026. The user authorized initial parameter definition. These values are editable art/game tuning, not measured real-world forecasts or final pacing.
 
+## Subsequent visual review
+
+The user rejected this study's flat waves. The [raised-wave correction](raised_paper_waves.md) now governs the next renderer iteration. The measurements and runtime behavior below describe the existing horizontal-sheet implementation, not an approved final representation.
+
 ## Run and inspect
 
 ```sh
