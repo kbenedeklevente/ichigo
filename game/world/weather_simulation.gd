@@ -197,7 +197,9 @@ func get_panel_states() -> Array[Dictionary]:
 			var value := sample(point)
 			var normal: Vector3 = value.normal
 			result.append({"cell_id": cell, "position": point, "height": value.height, "tilt": Vector2(atan2(normal.z, normal.y), -atan2(normal.x, normal.y)),
-				"normal": normal, "size": cell_size, "rain": value.rain, "cloud_cover": value.cloud_cover, "light": value.light})
+				"normal": normal, "size": cell_size, "rain": value.rain, "cloud_cover": value.cloud_cover, "light": value.light,
+				"wind_intensity": profile_coordinate(float(value.wind_strength), [0.12, 1.8, 5.0, 9.0]),
+				"sky_strength": profile_coordinate(float(value.cloud_cover), [0.12, 0.65, 0.88, 1.0])})
 	return result
 
 func snapshot() -> Dictionary:
@@ -421,12 +423,7 @@ func _initialize_cell(index: int, cell: Vector2i) -> void:
 ## Physical wind strength remains unchanged; 0–3 is a derived authoring coordinate.
 func chance_context(point: Vector2) -> Dictionary:
 	var local: Dictionary = sample(point)
-	var strengths := [0.12, 1.8, 5.0, 9.0]
-	var intensity: float = 3.0
-	for index: int in range(3):
-		if float(local.wind_strength) <= strengths[index + 1]:
-			intensity = index + clampf(inverse_lerp(strengths[index], strengths[index + 1], float(local.wind_strength)), 0.0, 1.0)
-			break
+	var intensity: float = profile_coordinate(float(local.wind_strength), [0.12, 1.8, 5.0, 9.0])
 	var names := ["sunny", "cloudy", "raincloud", "storm"]
 	var clouds := [0.12, 0.65, 0.88, 1.0]
 	var mix: Dictionary = {"storm": 1.0}
@@ -440,3 +437,12 @@ func chance_context(point: Vector2) -> Dictionary:
 	return {"wind_intensity": intensity, "sky": sky, "sky_mix": mix,
 		"day_phase": fposmod(day_phase + (_clock / day_period_s if day_period_s > 0.0 else 0.0), 1.0),
 		"weather_stage": _stage()}
+
+
+## Continuous 0–3 profile coordinate from a scalar field; opposing wind vectors
+## cannot cancel this strength. Shared by chance authoring and paper size.
+static func profile_coordinate(value: float, anchors: Array) -> float:
+	for index: int in range(3):
+		if value <= float(anchors[index + 1]):
+			return index + clampf(inverse_lerp(float(anchors[index]), float(anchors[index + 1]), value), 0.0, 1.0)
+	return 3.0

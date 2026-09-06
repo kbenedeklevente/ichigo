@@ -1,10 +1,22 @@
 # Paper Theatre wind and visual motion
 
-6 September 2026. User-directed next study; technical audits completed, animation implementation pending clarification. Saved baseline: commit `9c01864`, pushed tag `paper-theatre-before-wind-motion`.
+6 September 2026. Vertical-motion gain and weather-driven drawing height are implemented. Lateral oscillation still awaits clarification. Saved baseline: commit `9c01864`, pushed tag `paper-theatre-before-wind-motion`.
 
 ## Current vertical-motion adjustment
 
-The user confirmed doubling upward and downward movement around the existing resting position. `weather_presentation.gd` now multiplies the signed spring height by 2 for both crest and ribbon roots. Static offsets, artwork size, rocking, animation phase/speed and physical weather fields are unchanged. This is a presentation gain, not the pending lateral oscillator or a new wind profile. The invisible gameplay surface remains the existing approximation; the bucket’s physical bob is not doubled. Verification: the existing rendered weather-scene suite passed 19 checks including three captures. Root inspected strong-weather captures at 20° and 52° for layer coverage and bucket readability; this is a sampled visual check, not acceptance of every animation phase.
+The user confirmed doubling upward and downward movement around the existing resting position. `weather_presentation.gd` now multiplies the signed spring height by 2 for both crest and ribbon roots. This motion gain preserves rocking, animation phase/speed and physical weather fields. The subsequent drawing-size adjustment below independently scales the art and its submerged offsets. This is a presentation gain, not the pending lateral oscillator or a new wind profile. The invisible gameplay surface remains the existing approximation; the bucket’s physical bob is not doubled. Verification: the existing rendered weather-scene suite passed 19 checks including three captures. Root inspected strong-weather captures at 20° and 52° for layer coverage and bucket readability; this is a sampled visual check, not acceptance of every animation phase.
+
+## Weather-driven drawing height
+
+The user chose **half original height in calm → twice original height at maximum combined wind and storm strength**, preserving width. This supersedes the earlier inverse-size suggestion; there is no division by zero in calm conditions.
+
+`height_scale = lerp(0.5, 2.0, clamp((wind_intensity + sky_strength) / 6.0, 0.0, 1.0))`
+
+Both coordinates range continuously from 0 to 3. Wind uses the base scalar field and profile anchors 0.12/1.8/5/9; sky severity uses base cloud cover at the sunny/cloudy/raincloud/storm anchors 0.12/0.65/0.88/1.0. Each contributes equally. Sunny calm gives 0.5×; sunny strong wind gives 1×; maximum storm sky and wind give 2×. The rendered subset exports these local coordinates, so front arrival and clearing change drawing height smoothly across cells. Physical force, chance weights and weather timing are not changed.
+
+Scale world Y around each cell's moving waterline for both crest and ribbon: multiply the drawing basis's vertical component and its submerged root offset by the height factor, then add the existing 2× signed spring displacement. Preserve world X/Z width and depth, including the reclining ribbons' overlap. This avoids sinking a half-height drawing below its old submerged root or shortening the ribbons' depth coverage. Drawings remain original SVGs; the invisible gameplay sampler and bucket physics retain their documented approximation.
+
+Verification: 18 paper-card checks, 19 rendered weather-scene checks (including three captures), and 108 scheduler/chance regression checks passed. Root inspected calm 20° and strong/rain 52° captures for coverage and bucket readability. Full storm animation remains subject to user visual review.
 
 ## Accepted intent
 
@@ -17,7 +29,7 @@ The user confirmed doubling upward and downward movement around the existing res
 
 ## What exists now
 
-The renderer updates 289 upright crest cards and 289 reclining ribbon cards from the surrounding 33×33 weather simulation. There is no shared visible ocean mesh. Crest/ribbon X/Z anchors are currently fixed within their world cells; vertical positions follow the existing spring field with a 2× presentation gain, while rocking retains its original response. The shader masks drawings inside the bucket.
+The renderer updates 289 upright crest cards and 289 reclining ribbon cards from the surrounding 33×33 weather simulation. There is no shared visible ocean mesh. Crest/ribbon X/Z anchors are currently fixed within their world cells; vertical motion follows the existing spring field with a 2× presentation gain, and drawing height follows the local weather scale above. Rocking retains its original response. The shader masks drawings inside the bucket.
 
 The current runtime starts with calm wind despite the visually turbulent artwork. Calm still uses strength 0.12, target amplitude 0.12 m and phase speed 0.65 m/s. Therefore the new appearance/intensity mapping and stillness at level 0 are changes, not descriptions of current behavior.
 

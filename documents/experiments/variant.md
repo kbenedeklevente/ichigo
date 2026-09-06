@@ -6,6 +6,10 @@ Three original SVG drawings explore a hooked breaker, paired curls, and a long s
 
 Each foot follows twice its own cell's signed spring height after the user's vertical-motion adjustment, with its pivot driven by that cell's simulated slope. Neighbor coupling and incoming fronts remain owned by the existing 33 × 33 weather simulation. Artwork never slides through a shared displacement field. Rain, encounter logic, pause, replay, and the 12°–52° camera (20° default) remain operational. The child with oversized number-15 jersey, no hat, and brown open bucket remains a matching layered-illustration study.
 
+## Weather-dependent size
+
+The user approved a 0.5× calm to 2× maximum-storm drawing-height range, with equal normalized wind and sky contributions. Crest and ribbon world-Y dimensions and submerged offsets scale together; width/depth coverage remains unchanged. The existing doubled vertical displacement remains independent. See [motion and size parameters](../design/wind_visual_motion.md).
+
 ## References and decisions
 
 - [Shroom and Gloom art test](https://teamlazerbeam.itch.io/shroom-and-gloom-jam/devlog/745144/announcement-things-are-happening-with-shroom-and-gloom): its explicit use of drawn 2D illustrations in 3D space informs the rigid cutout construction and readable artwork. No game assets are copied.
