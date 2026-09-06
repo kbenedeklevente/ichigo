@@ -14,7 +14,8 @@ const MAX_HEIGHT_SCALE := 2.0
 const CALM_CREST_HEIGHT_SCALE := 0.35
 const CREST_CURVE_SHAPE := 9.0
 const MIN_VISUAL_DENSITY := 1
-const MAX_VISUAL_DENSITY := 8
+const MAX_VISUAL_DENSITY := 16
+const DEFAULT_VISUAL_DENSITY := 4
 var visual_density: int = 1
 var _layout_key: Array = []
 var _layout_rebuilds: int = 0
@@ -48,9 +49,13 @@ static func build_surface_mesh(cell_size: float = 4.0) -> ArrayMesh:
 func _ready() -> void:
 	var mesh := build_surface_mesh()
 	_panel_material.shader = preload("res://game/world/water_panel.gdshader")
-	_panel_material.set_shader_parameter("curl_art", preload("res://game/presentation/waves/theatre_curl.svg"))
-	_panel_material.set_shader_parameter("double_art", preload("res://game/presentation/waves/theatre_double.svg"))
-	_panel_material.set_shader_parameter("sweep_art", preload("res://game/presentation/waves/theatre_sweep.svg"))
+	_panel_material.set_shader_parameter("curl_art", preload("res://game/presentation/waves/crest_studies/quiet_cut/theatre_curl.svg"))
+	_panel_material.set_shader_parameter("double_art", preload("res://game/presentation/waves/crest_studies/quiet_cut/theatre_double.svg"))
+	_panel_material.set_shader_parameter("sweep_art", preload("res://game/presentation/waves/crest_studies/quiet_cut/theatre_sweep.svg"))
+	_panel_material.set_shader_parameter("storm_curl_art", preload("res://game/presentation/waves/storm_sprite_a_extended.png"))
+	_panel_material.set_shader_parameter("storm_double_art", preload("res://game/presentation/waves/storm_sprite_a_extended.png"))
+	_panel_material.set_shader_parameter("storm_sweep_art", preload("res://game/presentation/waves/storm_sprite_a_extended.png"))
+	_panel_material.set_shader_parameter("foam_art", preload("res://game/presentation/waves/storm_quiet_cut/surface_foam.svg"))
 	_panel_material.set_shader_parameter("ribbon_art", preload("res://game/presentation/waves/theatre_ribbon.svg"))
 	_panels.multimesh = MultiMesh.new()
 	_panels.multimesh.transform_format = MultiMesh.TRANSFORM_3D
@@ -112,8 +117,8 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 	_panel_material.set_shader_parameter("crest_curve_shape", CREST_CURVE_SHAPE)
 	# Shader motion is absent from static MultiMesh transforms: include actual
 	# field extrema and the largest artwork in explicit conservative bounds.
-	var y_min: float = float(parameters.minimum_height) * VERTICAL_MOTION_SCALE - 12.0
-	var y_max: float = float(parameters.maximum_height) * VERTICAL_MOTION_SCALE + 12.0
+	var y_min: float = float(parameters.minimum_height) * VERTICAL_MOTION_SCALE - 24.0
+	var y_max: float = float(parameters.maximum_height) * VERTICAL_MOTION_SCALE + 24.0
 	var span: float = (_visual_side - 1) * _visual_spacing + 16.0
 	var bounds := AABB(Vector3(_visual_origin.x - 8.0, y_min, _visual_origin.y - 8.0), Vector3(span, y_max - y_min, span))
 	_panels.multimesh.custom_aabb = bounds
@@ -192,3 +197,10 @@ func set_crest_study(index: int) -> bool:
 	for i in range(3):
 		_panel_material.set_shader_parameter(["curl_art", "double_art", "sweep_art"][i], textures[i])
 	return true
+
+## Upload only three bounded lifecycles; visual density does not create state.
+func update_breakers(state: Dictionary) -> void:
+	_panel_material.set_shader_parameter("breaker_count", state.count)
+	_panel_material.set_shader_parameter("breaker_state", state.crests)
+	_panel_material.set_shader_parameter("splash_state", state.splashes)
+	_panel_material.set_shader_parameter("breaker_direction", state.directions)

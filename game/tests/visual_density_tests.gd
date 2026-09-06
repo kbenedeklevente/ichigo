@@ -30,7 +30,7 @@ func _run() -> void:
 	var original_bounds: Rect2
 	var original_crests: Dictionary = _anchors(renderer._panels.multimesh)
 	var crest_rebuilds: int = renderer.get_density_status().crest_layout_rebuilds
-	for density: int in range(1, 9):
+	for density: int in range(1, 17):
 		scene.density_slider.value = density
 		scene._update_scene(0.0)
 		var status: Dictionary = renderer.get_density_status()
@@ -62,11 +62,11 @@ func _run() -> void:
 		await process_frame
 	await RenderingServer.frame_post_draw
 	var crest_pixels: PackedByteArray = root.get_texture().get_image().get_data()
-	scene.density_slider.value = 8
+	scene.density_slider.value = 16
 	for frame: int in range(3):
 		await process_frame
 	await RenderingServer.frame_post_draw
-	_check(root.get_texture().get_image().get_data() == crest_pixels, "Actual rendered crest geometry is pixel-identical between density 1 and 8.")
+	_check(root.get_texture().get_image().get_data() == crest_pixels, "Actual rendered crest geometry is pixel-identical between density 1 and 16.")
 	renderer._ribbons.visible = true
 	scene.hud.visible = true
 	# Verify field texture interpolation against the logical sampler, including
@@ -95,7 +95,7 @@ func _run() -> void:
 	_check(shared > 2000 and stable, "Overlapping negative-coordinate tiles keep stable world identity and artwork.")
 	_check(runtime.snapshot() == saved, "Rendering a scrolled window still cannot advance logical state.")
 	renderer.set_visual_density(1000)
-	_check(renderer.visual_density == 8, "Upper bound prevents accidental unbounded allocations.")
+	_check(renderer.visual_density == 16, "Upper bound prevents accidental unbounded allocations.")
 	renderer.set_visual_density(-3)
 	_check(renderer.visual_density == 1, "Lower bound prevents zero-sized units.")
 	# The new texture is transient presentation data and is rebuilt after restore.

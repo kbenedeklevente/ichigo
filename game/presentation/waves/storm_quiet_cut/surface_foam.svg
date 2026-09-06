@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+<!-- Surface-only foam overlay prototype. Transparent middle; irregular broken ivory ring. -->
+<path d="M187 68 C162 47 120 50 91 68 C66 82 57 112 64 143 C70 171 95 190 128 193 C157 196 182 184 197 161" fill="none" stroke="#eee4c5" stroke-width="12" stroke-linecap="round"/>
+<path d="M204 143 C210 117 203 94 193 83" fill="none" stroke="#eee4c5" stroke-width="8" stroke-linecap="round"/>
+<path d="M88 151 C81 132 87 109 103 96" fill="none" stroke="#a4b9ab" stroke-width="4" stroke-linecap="round"/>
+</svg>

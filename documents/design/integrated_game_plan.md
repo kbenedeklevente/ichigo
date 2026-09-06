@@ -6,7 +6,7 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
-The [three lower-crest studies](../experiments/crest_body_study.md) are ready for user comparison. The previous state is preserved at `acf75b7`; no redesigned family is selected yet.
+The user selected **Quiet Cut** from the [three lower-crest studies](../experiments/crest_body_study.md); it is now the default crest family. The previous studies are preserved at `6a8251d`. The [storm breaker experiment](../experiments/storm_breakers.md) is implemented for review: a maximum-Tempest alternate crest family, occasional transient growth/crash and a fixed 8×12-unit foam footprint. The staged Hokusai SVG artwork was reverted; the user later selected the first standalone generated sprite for maximum-storm crests, replacing the black-band storm drawing. Twice-finer lower panels and [five-source turbulence](../experiments/multisource_wave_motion.md) are retained. Next: apply the [saved breaker-only asset decision](../experiments/storm_breakers.md#next-session-decision): reserve the extended-base drawing for waves that grow, crash and produce bubbles. This selection change is documented but not implemented; other crest artwork and exact switching timing await user input. Also review motion, foam and low-angle bucket visibility. Breakers currently affect presentation, not bucket collision or damage.
 
 The [five-level weather study](five_level_weather.md) implements ten levels total (five sky and five wind), lower calm crests and a reversed-logarithmic rise to a 2× maximum. Tempest combinations are manually triggerable; their automatic probabilities remain unselected.
 

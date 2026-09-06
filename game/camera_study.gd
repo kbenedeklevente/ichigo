@@ -63,7 +63,7 @@ func _ready() -> void:
 	if weather_runtime != null:
 		weather_presentation = WeatherPresentation.new()
 		add_child(weather_presentation)
-		weather_presentation.set_visual_density(2)
+		weather_presentation.set_visual_density(WeatherPresentation.DEFAULT_VISUAL_DENSITY)
 		encounter_presentation = EncounterPresentation.new()
 		add_child(encounter_presentation)
 		ocean.get("_surface").visible = false
@@ -94,6 +94,12 @@ func _ready() -> void:
 	fishing_line.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(fishing_line)
 	_build_hud()
+	if "--storm-breakers" in OS.get_cmdline_user_args() and weather_runtime != null:
+		weather_runtime.scheduler.chance_enabled = false
+		weather_runtime.weather_change_mode = EnvironmentRuntime.WeatherChangeMode.REPLACE_NOW
+		weather_runtime.trigger_weather("sky", "tempest")
+		weather_runtime.trigger_weather("wind", "tempest")
+		weather_mode_select.select(2)
 	for argument in OS.get_cmdline_user_args():
 		if argument.begins_with("--capture-dir="):
 			_capture_directory = argument.trim_prefix("--capture-dir=")
@@ -190,6 +196,7 @@ func _normal_at(point: Vector3) -> Vector3:
 func _update_weather_presentation(delta: float) -> void:
 	var local: Dictionary = weather_runtime.weather.sample(Vector2(bucket.position.x, bucket.position.z))
 	var status: Dictionary = weather_runtime.weather.get_status()
+	weather_presentation.update_breakers(weather_runtime.breakers.render_state())
 	weather_presentation.update_weather(water_surface, simulation_time, bucket.position)
 	ocean.get("_far_surface").position.y = -1.4
 	_cloud_offset += local.wind * delta * 0.006
@@ -509,6 +516,7 @@ func _build_hud() -> void:
 				crest_study_select.add_item(study_title)
 			for state: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
 				crest_study_select.add_theme_color_override(state, Color("183e57"))
+			crest_study_select.select(1) # Selected normal artwork: Quiet Cut.
 			crest_study_select.item_selected.connect(func(index: int): weather_presentation.set_crest_study(index))
 			column.add_child(crest_study_select)
 

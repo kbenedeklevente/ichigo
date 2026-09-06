@@ -1,8 +1,8 @@
 # Asset cohesion and production plan
 
-## Lower-crest proposals — 6 September 2026
+## Selected crest growth artwork — 6 September 2026
 
-The user requested three redesigns of the lower crest body, preserving the upper curling silhouette and foam edge. [Quiet Cut, Ink Wash and Long Current](../experiments/crest_body_study.md) are implemented as switchable, unselected art families on their own branch. The saved original is retained as the normal default.
+The user selected [Quiet Cut](../experiments/crest_body_study.md) as the ordinary crest family and later chose **generated sprite A** for maximum-storm crests. See [storm breakers](../experiments/storm_breakers.md) for its material-based backdrop key and the retained splash/motion behavior. The preceding thick-black storm family and rejected staged Hokusai SVG atlas are historical comparisons. Surface splash rings remain ivory.
 
 ## Current crest proportions — 6 September 2026
 

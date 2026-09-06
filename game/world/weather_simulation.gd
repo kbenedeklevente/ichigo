@@ -25,6 +25,7 @@ const WAVE_LENGTH := 24.0
 const SPRING_STIFFNESS := 12.0
 const SPRING_DAMPING := 6.0
 const NEIGHBOR_STIFFNESS := 1.2
+const WaveSources = preload("res://game/world/wave_sources.gd")
 const FIELD_NAMES := ["height", "velocity", "amplitude", "wind_strength", "wind_x", "wind_z", "cloud_cover", "rain", "light", "sky_strength"]
 
 var cell_size: float = 4.0
@@ -37,6 +38,7 @@ var day_period_s: float = 0.0
 var day_phase: float = 0.25
 
 var _rng := RandomNumberGenerator.new()
+var _wave_sources := WaveSources.new()
 var _seed: int = 15
 var _origin := Vector2i.ZERO
 var _side: int = 33
@@ -89,6 +91,7 @@ func configure(seed_value: int = 15) -> void:
 		baseline_wind = "calm"
 	_seed = seed_value
 	_rng.seed = seed_value
+	_wave_sources.configure(seed_value)
 	_side = simulation_radius * 2 + 1
 	_origin = Vector2i(-simulation_radius, -simulation_radius)
 	_player = Vector2.ZERO
@@ -297,6 +300,7 @@ func restore(data: Dictionary) -> bool:
 	day_period_s = data.day_period_s
 	day_phase = data.day_phase
 	_seed = int(data.seed)
+	_wave_sources.configure(_seed)
 	_rng.seed = _seed
 	_rng.state = int(data.rng_state)
 	_origin = data.origin
@@ -389,8 +393,10 @@ func _wind_target(influence: float) -> Vector2:
 	return baseline.lerp(_direction * float(WIND_PROFILES[_wind].strength), influence)
 
 func _wave(point: Vector2, amplitude: float) -> float:
-	# Fixed world basis avoids an instantaneous wave rotation when a new front arrives.
-	return amplitude * (0.78 * sin(TAU * (point.x + point.y * 0.28) / WAVE_LENGTH - _phase) + 0.22 * sin(TAU * (point.y - point.x * 0.17) / (WAVE_LENGTH * 0.71) - _phase * 1.19))
+	# Signed independent swell sources interfere before the connected spring solve.
+	# Residual amplitude keeps crossing seas alive while weather clears; physical
+	# wind strength and chance eligibility remain independent of cancellation.
+	return _wave_sources.sample_height(point, amplitude, _phase, _clock)
 
 func _influence(point: Vector2) -> float:
 	if not _active:

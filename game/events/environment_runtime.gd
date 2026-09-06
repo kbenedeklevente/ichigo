@@ -4,8 +4,10 @@ const Scheduler = preload("res://game/events/environment_scheduler.gd")
 const Catalog = preload("res://game/events/event_catalog.gd")
 const Weather = preload("res://game/world/weather_simulation.gd")
 const Encounters = preload("res://game/events/encounter_runtime.gd")
+const Breakers = preload("res://game/world/storm_breakers.gd")
 const STEP: float = 1.0 / 30.0
 
+var breakers = Breakers.new()
 var scheduler = Scheduler.new()
 var weather = Weather.new()
 var encounters = Encounters.new()
@@ -21,6 +23,7 @@ var weather_change_mode: WeatherChangeMode = WeatherChangeMode.TRANSITIONS
 var _accumulator: float = 0.0
 
 func configure(seed_value: int = 15, enable_encounters: bool = false) -> void:
+	breakers.configure(seed_value + 65537)
 	scheduler.configure(Catalog.scheduler_definitions(), seed_value)
 	weather.configure(seed_value + 104729)
 	encounters.configure(seed_value + 7919)
@@ -45,6 +48,7 @@ func trigger_weather(axis: String, condition: String) -> bool:
 	if weather_change_mode == WeatherChangeMode.REPLACE_NOW:
 		scheduler.interrupt_weather_for_testing()
 		weather.set_baseline_instantly(sky, wind)
+		breakers.active.clear() # Immediate laboratory replacement clears transient foam/growth too.
 		active_weather_id = ""
 		last_event_id = "weather.mix.%s.%s" % [sky, wind]
 		last_source = "trigger"
@@ -97,12 +101,13 @@ func advance(delta: float, player_position: Vector2, flags: Array[String] = []) 
 		weather.set_event_modifiers(encounters.get_modifiers() if encounters_enabled else [])
 		weather.set_transition_hold(encounters.get_active() != null)
 		weather.advance(STEP, player_position)
+		breakers.advance(weather, player_position)
 		if not active_weather_id.is_empty() and not weather.get_status().active:
 			scheduler.finish_weather()
 			active_weather_id = ""
 
 func snapshot() -> Dictionary:
-	return {"version": 3, "scheduler": scheduler.snapshot(), "weather": weather.snapshot(),
+	return {"version": 4, "breakers": breakers.snapshot(), "scheduler": scheduler.snapshot(), "weather": weather.snapshot(),
 		"encounters": encounters.snapshot(), "encounters_enabled": encounters_enabled,
 		"active_weather_id": active_weather_id, "last_source": last_source,
 		"last_event_id": last_event_id, "selected_sky": selected_sky,
@@ -111,8 +116,14 @@ func snapshot() -> Dictionary:
 func restore(data: Dictionary) -> bool:
 	# This study format deliberately rejects v2 rather than silently losing an
 	# old director queue. Native Variant snapshots are not released player saves.
-	if data.get("version") != 3 or not data.get("scheduler") is Dictionary or not data.get("weather") is Dictionary or not data.get("encounters") is Dictionary:
+	if data.get("version") not in [3, 4] or not data.get("scheduler") is Dictionary or not data.get("weather") is Dictionary or not data.get("encounters") is Dictionary:
 		return false
+	var restored_breakers = Breakers.new()
+	if data.version == 4:
+		if not data.get("breakers") is Dictionary or not restored_breakers.restore(data.breakers):
+			return false
+	else:
+		restored_breakers.configure(int(data.weather.get("seed", 104744)) - 104729 + 65537)
 	var restored_scheduler = Scheduler.new()
 	restored_scheduler.configure(Catalog.scheduler_definitions(), 15)
 	var restored_weather = Weather.new()
@@ -152,6 +163,11 @@ func restore(data: Dictionary) -> bool:
 	# Managed handlers have no independent pending work or chance/quiet timers.
 	if not data.encounters.pending.is_empty() or data.encounters.chance_steps != 0 or data.encounters.quiet_remaining != 0.0:
 		return false
+	if data.version == 4 and not is_equal_approx(float(data.breakers.clock), float(data.weather.clock)):
+		return false
+	if data.version == 3:
+		restored_breakers._clock = float(data.weather.clock)
+	breakers = restored_breakers
 	scheduler = restored_scheduler
 	weather = restored_weather
 	encounters = restored_encounters

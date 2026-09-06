@@ -1,5 +1,9 @@
 # Visual engine experimentation roadmap
 
+## Finer sea and retained storm artwork — 6 September 2026
+
+The user reverted the staged Hokusai SVG study, then selected standalone generated sprite A for maximum-storm crests. Ordinary Quiet Cut remains the baseline. See [storm breakers](../experiments/storm_breakers.md). Lower panels still start at 4× detail and can be tested up to 16× per side, preserving the logical field, crest anchors and splash footprint. This supersedes the earlier 2× default/8× limit below. The independently requested [five-source motion](../experiments/multisource_wave_motion.md) is retained. Fresh rendered measurements are required for the new upper limit.
+
 ## Five-level crest-height study — 6 September 2026
 
 See [five-level weather](five_level_weather.md) for the added Tempest sky/wind tiers and lower calm crests with a reversed-logarithmic 0.35×–2× height curve. The lower-water panels retain their existing coverage and height response.

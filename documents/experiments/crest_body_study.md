@@ -1,6 +1,6 @@
 # Three lower-crest artwork studies
 
-6 September 2026. The user requested three more restrained lower-body designs while preserving the upper curl they liked. The preceding complete game state is committed and pushed as **`acf75b7`** on `codex/full-size-wave-crests`. These proposals live on **`codex/crest-body-studies`**; no winner has been selected.
+6 September 2026. The user requested three more restrained lower-body designs while preserving the upper curl they liked. The preceding complete game state is committed and pushed as **`acf75b7`** on `codex/full-size-wave-crests`. These proposals live on **`codex/crest-body-studies`**; the user has now selected **Quiet Cut** as the normal crest family.
 
 ## Comparison
 
@@ -24,7 +24,7 @@ For the live study:
 ./scripts/run_game.sh --resolution 1280x800 -- --crest-study
 ```
 
-The additional **Crest** selector offers saved original, Quiet Cut, Ink Wash and Long Current. It works during pause and does not advance physics. The ordinary game launch still uses the saved original and does not display the study selector. Use the existing weather replacement mode and controls to compare other conditions in motion.
+The additional **Crest** selector offers saved original, Quiet Cut, Ink Wash and Long Current. It works during pause and does not advance physics. The ordinary game launch now uses Quiet Cut and does not display the study selector. The study selector also starts on Quiet Cut; the original remains available for comparison. Use the existing weather replacement mode and controls to compare other conditions in motion.
 
 Regenerate the SVGs, import them, then regenerate the matched captures:
 
@@ -40,4 +40,4 @@ The initial pass exposed abrupt truncation of interior lines. That pass was refi
 
 Captured and inspected individual artwork and in-game views; this is sampled visual verification, not acceptance across every animation phase. Quiet Cut and Long Current shorten the lower apron; their existing row overlap should be reviewed in motion, particularly in stronger weather. The background sea continues to provide its existing illustrated coverage.
 
-Next step: the user compares these three proposals and chooses one or identifies features to combine. Do not replace the accepted crest assets until that review.
+The [storm breaker follow-up](storm_breakers.md) now implements the alternate family, crest growth, a quick crash and surface foam for visual review. The original matched screenshots on this page remain the pre-breaker artwork comparison.

@@ -61,3 +61,7 @@ Validation: 122 five-level checks, 137 weather checks, 108 scheduler/chance chec
 Review the calm baseline and Tempest in motion before further art tuning. Fifth-tier automatic probabilities remain a separate design choice. No change to chance timing, event locks, day/night behavior or the pending lateral-motion design is included.
 
 [Calm preview](../experiments/five-level-weather/calm-paused.png) · [Tempest preview](../experiments/five-level-weather/tempest-52.png)
+
+## Storm breaker follow-up
+
+The selected [Quiet Cut storm breaker experiment](../experiments/storm_breakers.md) adds a temporary 2.35× gain to individual maximum-weather crests, followed by a crash and foam. The 2× cap above remains the ordinary weather-height baseline, not a cap on this newly requested transient. The fixed weather grid, profile values and automatic Tempest probabilities are unchanged. Joint runtime saves now include breakers in version 4, with migration from version 3.

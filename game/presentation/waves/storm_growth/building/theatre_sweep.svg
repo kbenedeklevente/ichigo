@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 800 400">
+<!-- Editable original vector art. Hokusai-reference storm growth: building / sweep. Upper crest is ivory branching foam over indigo engraved water; original shallow Quiet Cut root and canvas retained. -->
+<defs><clipPath id="tile"><rect x="8" y="8" width="784" height="320"/></clipPath></defs>
+<g clip-path="url(#tile)"><g id="building_sweep">
+<path d="M8 278 C110 271 190 256 260 260 C407 255 586 263 792 252 L792 310 C648 321 545 298 397 309 C230 319 117 320 8 315Z" fill="#294b5b"/>
+<g id="building_sweep_main" transform="translate(174 39) scale(1.08 0.90)">
+<defs><clipPath id="building_sweep_main_water"><path d="M-160 268 C-38 266 22 247 71 201 C110 162 112 121 144 84 C175 48 216 28 257 31 C299 32 327 51 326 79 C325 103 312 117 295 126 C307 107 302 94 287 92 C288 112 278 126 266 124 C278 111 276 97 262 94 C242 89 232 107 237 130 C248 184 286 217 348 239 C401 258 472 264 620 268 L620 296 C496 304 388 287 230 296 C102 306 -24 303 -160 299 Z"/></clipPath></defs>
+<path d="M-160 268 C-38 266 22 247 71 201 C110 162 112 121 144 84 C175 48 216 28 257 31 C299 32 327 51 326 79 C325 103 312 117 295 126 C307 107 302 94 287 92 C288 112 278 126 266 124 C278 111 276 97 262 94 C242 89 232 107 237 130 C248 184 286 217 348 239 C401 258 472 264 620 268 L620 296 C496 304 388 287 230 296 C102 306 -24 303 -160 299 Z" fill="#30647b" stroke="#173e52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<g clip-path="url(#building_sweep_main_water)" id="building_sweep_main_rising_ribbons">
+<path d="M-150 279 C15 285 82 246 112 198 C146 146 135 102 173 66 C204 34 259 29 294 47 L335 68 C316 96 303 112 296 135 C284 169 320 221 359 247 C404 277 493 286 629 285 L629 310 H-170Z" fill="#173e52"/>
+<path d="M-68 289 C68 275 114 235 130 175 C148 112 154 94 182 68 C191 60 198 55 207 54 C169 91 167 125 157 178 C144 245 87 289 -68 297Z" fill="#5b858d"/>
+<path d="M24 296 C121 266 155 226 164 174 C172 129 180 102 203 82 C214 72 225 67 236 66 C205 90 198 121 192 168 C184 231 149 276 24 301Z" fill="#30647b"/>
+<path d="M117 303 C181 276 202 239 202 191 C201 151 202 114 224 92 C237 81 248 80 259 84 C233 102 226 130 228 170 C231 241 221 272 178 300Z" fill="#30647b"/>
+<path d="M232 300 C257 265 251 235 241 200 C232 171 231 141 240 124 C239 158 252 183 267 203 C289 238 291 269 280 299Z" fill="#5b858d"/>
+<path d="M316 299 C320 268 304 242 285 219 C270 199 259 182 255 167 C269 188 288 202 308 218 C336 242 347 267 352 297Z" fill="#30647b"/>
+<path d="M375 296 C368 269 354 252 337 239 C369 253 396 272 409 297Z" fill="#5b858d"/>
+<path d="M-40 278 C63 265 106 225 117 174 C130 117 141 90 170 66" fill="none" stroke="#bdcaba" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+<path d="M94 285 C143 257 172 220 178 165 C182 128 190 105 208 88" fill="none" stroke="#bdcaba" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+<path d="M186 288 C214 259 216 231 214 187 C211 147 215 119 229 102" fill="none" stroke="#bdcaba" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+<path d="M268 291 C277 266 268 239 254 216" fill="none" stroke="#bdcaba" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+<path d="M331 285 C330 265 316 244 302 231" fill="none" stroke="#bdcaba" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+<path d="M190.8 241.9 l1.5 -1.9 l1.2 2.2 l-1.6 1.5Z" fill="#eee6cd"/>
+<path d="M304.4 257.1 l1.4 -1.8 l1.1 2.0 l-1.5 1.4Z" fill="#eee6cd"/>
+<path d="M287.9 215.2 l0.9 -1.1 l0.7 1.3 l-0.9 0.9Z" fill="#eee6cd"/>
+<path d="M183.5 233.5 l1.3 -1.7 l1.0 1.9 l-1.4 1.3Z" fill="#eee6cd"/>
+<path d="M243.9 184.0 l0.8 -1.0 l0.6 1.2 l-0.9 0.8Z" fill="#eee6cd"/>
+<path d="M167.4 234.3 l1.7 -2.2 l1.3 2.5 l-1.9 1.7Z" fill="#eee6cd"/>
+<path d="M152.3 184.4 l1.4 -1.9 l1.1 2.2 l-1.6 1.4Z" fill="#eee6cd"/>
+<path d="M138.8 165.9 l1.6 -2.0 l1.3 2.4 l-1.7 1.6Z" fill="#eee6cd"/>
+<path d="M242.3 176.8 l1.2 -1.6 l1.0 1.8 l-1.3 1.2Z" fill="#eee6cd"/>
+<path d="M164.5 222.8 l1.4 -1.8 l1.1 2.1 l-1.5 1.4Z" fill="#eee6cd"/>
+<path d="M192.7 197.9 l1.8 -2.3 l1.4 2.7 l-2.0 1.8Z" fill="#eee6cd"/>
+<path d="M242.4 199.4 l1.8 -2.3 l1.4 2.6 l-1.9 1.8Z" fill="#eee6cd"/>
+<path d="M140.2 154.9 l1.6 -2.0 l1.2 2.3 l-1.7 1.6Z" fill="#eee6cd"/>
+<path d="M157.1 203.6 l1.4 -1.8 l1.1 2.0 l-1.5 1.4Z" fill="#eee6cd"/>
+<path d="M297.0 236.3 l0.8 -1.0 l0.6 1.1 l-0.8 0.8Z" fill="#eee6cd"/>
+<path d="M130.0 126.0 l1.6 -2.0 l1.2 2.3 l-1.7 1.6Z" fill="#eee6cd"/>
+<path d="M239.6 181.8 l1.0 -1.3 l0.8 1.5 l-1.1 1.0Z" fill="#eee6cd"/>
+<path d="M288.8 217.7 l1.2 -1.5 l0.9 1.7 l-1.3 1.2Z" fill="#eee6cd"/>
+<path d="M142.8 161.3 l1.5 -1.9 l1.2 2.2 l-1.6 1.5Z" fill="#eee6cd"/>
+<path d="M298.2 251.6 l1.7 -2.2 l1.4 2.6 l-1.9 1.7Z" fill="#eee6cd"/>
+<path d="M235.8 225.8 l1.6 -2.0 l1.3 2.4 l-1.7 1.6Z" fill="#eee6cd"/>
+<path d="M161.2 227.9 l1.0 -1.3 l0.8 1.5 l-1.1 1.0Z" fill="#eee6cd"/>
+<path d="M193.2 230.2 l1.2 -1.5 l0.9 1.7 l-1.3 1.2Z" fill="#eee6cd"/>
+<path d="M160.0 230.6 l1.7 -2.2 l1.3 2.5 l-1.8 1.7Z" fill="#eee6cd"/>
+<path d="M136.6 136.4 l0.9 -1.2 l0.7 1.3 l-1.0 0.9Z" fill="#eee6cd"/>
+<path d="M194.2 150.6 l1.0 -1.3 l0.8 1.5 l-1.1 1.0Z" fill="#eee6cd"/>
+<path d="M287.5 224.3 l0.8 -1.0 l0.6 1.1 l-0.8 0.8Z" fill="#eee6cd"/>
+<path d="M238.7 221.5 l1.3 -1.7 l1.1 2.0 l-1.4 1.3Z" fill="#eee6cd"/>
+<path d="M184.9 223.7 l1.0 -1.3 l0.8 1.5 l-1.1 1.0Z" fill="#eee6cd"/>
+<path d="M246.0 196.4 l1.3 -1.6 l1.0 1.9 l-1.4 1.3Z" fill="#eee6cd"/>
+<path d="M237.6 227.4 l1.2 -1.6 l1.0 1.9 l-1.4 1.2Z" fill="#eee6cd"/>
+<path d="M243.0 196.7 l1.5 -2.0 l1.2 2.3 l-1.7 1.5Z" fill="#eee6cd"/>
+<path d="M248.6 171.1 l1.3 -1.7 l1.1 2.0 l-1.5 1.3Z" fill="#eee6cd"/>
+</g>
+<g clip-path="url(#building_sweep_main_water)">
+<path d="M-170 275 C-44 291 102 278 206 276 C348 268 452 291 630 274 L630 320 H-170Z" fill="#294b5b"/>
+<path d="M-142 287 C-33 290 37 285 83 276 M370 284 C446 292 524 288 602 283" fill="none" stroke="#63858a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path d="M126 113 C133 91 151 72 166 60 C193 39 225 28 254 28 C286 26 312 39 329 55 C339 68 342 84 337 98 C335 109 329 119 321 123 C326 115 323 107 317 105 C314 111 316 120 310 125 C305 127 301 125 302 121 C307 121 306 115 304 112 C300 107 304 102 306 99 C302 94 297 96 295 101 C292 108 287 113 282 110 C279 108 281 105 284 104 C286 100 283 96 287 92 C285 86 279 85 275 89 C270 94 270 100 265 102 C260 103 257 99 260 96 C265 96 264 89 262 86 C257 83 253 88 251 92 C248 99 242 101 239 96 C237 93 241 91 242 89 C245 84 240 79 244 75 C237 72 230 77 227 83 C224 91 218 93 215 89 C212 85 218 85 216 80 C215 76 216 74 218 71 C211 68 205 75 203 82 C201 87 197 89 193 86 C190 83 195 80 194 77 C187 78 184 82 181 88 C179 95 172 97 170 92 C169 89 173 87 173 84 C164 90 163 98 157 102 C153 105 149 103 150 99 C140 106 137 114 130 116Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="building_sweep_main_hooked_foam">
+<g transform="translate(178 78) rotate(-26) scale(0.62)"><path d="M-4 15 C-3 10 -8 8 -9 4 C-11 -1 -7 -4 -4 -2 C-1 0 -6 1 -4 4 C-2 7 2 8 4 4 C7 -1 2 -5 5 -8 C8 -11 12 -8 11 -5 C10 -2 7 -2 9 2 C12 5 17 2 17 -1 C17 -4 20 -6 23 -4 C26 -1 23 3 21 5 C17 10 12 9 12 16 C5 19 0 18 -4 15Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(219 55) rotate(-5) scale(0.57)"><path d="M-8 21 C-9 14 -13 12 -15 8 C-17 3 -13 0 -10 2 C-7 4 -12 6 -9 9 C-6 13 -2 9 -5 5 C-8 1 -9 -3 -6 -6 C-3 -9 1 -8 2 -4 C3 -1 -1 -1 0 3 C1 7 6 8 7 4 C9 0 3 -4 5 -8 C7 -12 12 -12 14 -8 C16 -4 11 -5 12 -1 C13 4 17 4 18 0 C19 -3 17 -8 21 -9 C25 -11 29 -7 27 -3 C25 0 23 -2 23 2 C23 7 18 9 18 13 C20 15 24 13 25 10 C27 6 31 7 31 10 C31 14 26 16 22 19 C19 22 19 25 19 27 C9 31 0 27 -8 21Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(257 54) rotate(20) scale(0.65)"><path d="M-8 21 C-9 14 -13 12 -15 8 C-17 3 -13 0 -10 2 C-7 4 -12 6 -9 9 C-6 13 -2 9 -5 5 C-8 1 -9 -3 -6 -6 C-3 -9 1 -8 2 -4 C3 -1 -1 -1 0 3 C1 7 6 8 7 4 C9 0 3 -4 5 -8 C7 -12 12 -12 14 -8 C16 -4 11 -5 12 -1 C13 4 17 4 18 0 C19 -3 17 -8 21 -9 C25 -11 29 -7 27 -3 C25 0 23 -2 23 2 C23 7 18 9 18 13 C20 15 24 13 25 10 C27 6 31 7 31 10 C31 14 26 16 22 19 C19 22 19 25 19 27 C9 31 0 27 -8 21Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(292 65) rotate(48) scale(0.68)"><path d="M-4 15 C-3 10 -8 8 -9 4 C-11 -1 -7 -4 -4 -2 C-1 0 -6 1 -4 4 C-2 7 2 8 4 4 C7 -1 2 -5 5 -8 C8 -11 12 -8 11 -5 C10 -2 7 -2 9 2 C12 5 17 2 17 -1 C17 -4 20 -6 23 -4 C26 -1 23 3 21 5 C17 10 12 9 12 16 C5 19 0 18 -4 15Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(315 88) rotate(76) scale(0.7)"><path d="M-8 21 C-9 14 -13 12 -15 8 C-17 3 -13 0 -10 2 C-7 4 -12 6 -9 9 C-6 13 -2 9 -5 5 C-8 1 -9 -3 -6 -6 C-3 -9 1 -8 2 -4 C3 -1 -1 -1 0 3 C1 7 6 8 7 4 C9 0 3 -4 5 -8 C7 -12 12 -12 14 -8 C16 -4 11 -5 12 -1 C13 4 17 4 18 0 C19 -3 17 -8 21 -9 C25 -11 29 -7 27 -3 C25 0 23 -2 23 2 C23 7 18 9 18 13 C20 15 24 13 25 10 C27 6 31 7 31 10 C31 14 26 16 22 19 C19 22 19 25 19 27 C9 31 0 27 -8 21Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(309 110) rotate(106) scale(0.55)"><path d="M-8 21 C-9 14 -13 12 -15 8 C-17 3 -13 0 -10 2 C-7 4 -12 6 -9 9 C-6 13 -2 9 -5 5 C-8 1 -9 -3 -6 -6 C-3 -9 1 -8 2 -4 C3 -1 -1 -1 0 3 C1 7 6 8 7 4 C9 0 3 -4 5 -8 C7 -12 12 -12 14 -8 C16 -4 11 -5 12 -1 C13 4 17 4 18 0 C19 -3 17 -8 21 -9 C25 -11 29 -7 27 -3 C25 0 23 -2 23 2 C23 7 18 9 18 13 C20 15 24 13 25 10 C27 6 31 7 31 10 C31 14 26 16 22 19 C19 22 19 25 19 27 C9 31 0 27 -8 21Z" fill="#eee6cd" stroke="#173e52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+</g>
+<g transform="translate(190 61) rotate(-25)"><path d="M-8 6 C-9 1 -5 -2 -2 0 C2 3 -3 5 -1 8 C2 12 8 7 6 3 C4 -1 8 -5 11 -3 C14 0 9 1 11 5" fill="none" stroke="#173e52" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(229 44) rotate(-8)"><path d="M-8 6 C-9 1 -5 -2 -2 0 C2 3 -3 5 -1 8 C2 12 8 7 6 3 C4 -1 8 -5 11 -3 C14 0 9 1 11 5" fill="none" stroke="#173e52" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(273 49) rotate(23)"><path d="M-8 6 C-9 1 -5 -2 -2 0 C2 3 -3 5 -1 8 C2 12 8 7 6 3 C4 -1 8 -5 11 -3 C14 0 9 1 11 5" fill="none" stroke="#173e52" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(309 69) rotate(49)"><path d="M-8 6 C-9 1 -5 -2 -2 0 C2 3 -3 5 -1 8 C2 12 8 7 6 3 C4 -1 8 -5 11 -3 C14 0 9 1 11 5" fill="none" stroke="#173e52" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<path d="M332 140 q1.7 -2.72 3.4 0 q-0.85 3.4 -3.4 0Z" fill="#eee6cd"/>
+<path d="M343 158 q1.1 -1.7600000000000002 2.2 0 q-0.55 2.2 -2.2 0Z" fill="#eee6cd"/>
+<path d="M316 152 q1.2 -1.92 2.4 0 q-0.6 2.4 -2.4 0Z" fill="#eee6cd"/>
+</g>
+<path d="M8 301 C125 298 206 293 295 294 C419 286 546 300 652 299 C708 299 751 296 792 295 L792 310 C648 321 545 298 397 309 C230 319 117 320 8 315Z" fill="#294b5b"/>
+</g></g>
+</svg>

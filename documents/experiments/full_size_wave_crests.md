@@ -39,3 +39,7 @@ Godot imported the edited SVG successfully. Eight rendered captures cover calm/s
 ## Next review
 
 Compare the lower-panel detail in motion while the large crests remain consistent. Keep the existing 2× starting preview until the user selects another value. Further changes to artwork scale, repetition or density defaults require visual feedback.
+
+## Twice-finer lower sea follow-up — 6 September 2026
+
+The Hokusai growth-art experiment raises the starting detail from 2× to 4× per side and extends the slider from 8× to 16×. These changes halve panel side length relative to the previous starting and maximum settings and quadruple their counts. At 16× the lower sea contains 73,984 panels at 0.25 m spacing, plus the unchanged 289 crest anchors. The 33×33 simulation and 68 m rendered footprint are unchanged. Earlier benchmark results do not establish performance at this new limit. See [storm breakers](storm_breakers.md) for the new artwork switching and review status.
