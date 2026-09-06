@@ -1,5 +1,9 @@
 # Asset cohesion and production plan
 
+## Current crest proportions — 6 September 2026
+
+See [five-level weather](five_level_weather.md) for the added Tempest sky/wind tiers and lower calm crests with a reversed-logarithmic 0.35×–2× height curve. The lower-water panels retain their existing coverage and height response.
+
 ## Selected direction — Paper Theatre, 6 September 2026
 
 The user chose Paper Theatre from the five art studies. It is merged into main at `1622c52`: independent upright illustrated crest cards plus separate reclining ribbon cards, weather-driven cell motion, and an ink-colored backdrop. There is no shared visible water mesh. Older requirements below for a matching visible substrate are superseded by this choice. The existing invisible gameplay sampler is retained as a documented approximation; fish and fishing integration are secondary now.

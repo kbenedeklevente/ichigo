@@ -2,6 +2,10 @@
 
 6 September 2026. Vertical-motion gain and weather-driven drawing height are implemented. Lateral oscillation still awaits clarification. Saved baseline: commit `9c01864`, pushed tag `paper-theatre-before-wind-motion`.
 
+## Current crest curve and weather tiers — 6 September 2026
+
+The [five-level weather amendment](five_level_weather.md) supersedes the linear crest curve below: five levels per axis, 0.35× calm crests and a reversed-logarithmic rise to 2× at the new combined maximum. Ribbon coverage and doubled spring motion remain unchanged.
+
 ## Current vertical-motion adjustment
 
 The user confirmed doubling upward and downward movement around the existing resting position. `weather_presentation.gd` now multiplies the signed spring height by 2 for both crest and ribbon roots. This motion gain preserves rocking, animation phase/speed and physical weather fields. The subsequent drawing-size adjustment below independently scales the art and its submerged offsets. This is a presentation gain, not the pending lateral oscillator or a new wind profile. The invisible gameplay surface remains the existing approximation; the bucket’s physical bob is not doubled. Verification: the existing rendered weather-scene suite passed 19 checks including three captures. Root inspected strong-weather captures at 20° and 52° for layer coverage and bucket readability; this is a sampled visual check, not acceptance of every animation phase.

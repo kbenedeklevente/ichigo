@@ -30,7 +30,7 @@ func _context(stage: String = "idle") -> Dictionary:
 
 func _definition(id: String, domain: String, rate: float = 0.0) -> Dictionary:
 	return {"id": id, "domain": domain, "activation": "both", "base_rate_per_second": rate,
-		"wind_time_weights": Chance.uniform_table(), "sky_weights": {"sunny": 1.0, "cloudy": 1.0, "raincloud": 1.0, "storm": 1.0},
+		"wind_time_weights": Chance.uniform_table(), "sky_weights": {"sunny": 1.0, "cloudy": 1.0, "raincloud": 1.0, "storm": 1.0, "tempest": 1.0},
 		"eligibility": {}, "payload": {"sky": "cloudy", "wind": "breeze"} if domain == "weather" else {"handler": "salvage"}}
 
 func _scheduler():
@@ -40,7 +40,7 @@ func _scheduler():
 
 func _rates() -> void:
 	var definition: Dictionary = _definition("example", "encounter", 0.001)
-	definition.wind_time_weights = [[0.0, 1.0, 2.0, 3.0], [1.0, 2.0, 3.0, 4.0], [2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0]]
+	definition.wind_time_weights = [[0.0, 1.0, 2.0, 3.0], [1.0, 2.0, 3.0, 4.0], [2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [3.0, 4.0, 5.0, 6.0]]
 	var context: Dictionary = _context()
 	context.wind_intensity = 1.5
 	context.day_phase = 0.375

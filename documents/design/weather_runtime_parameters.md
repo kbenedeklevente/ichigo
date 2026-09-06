@@ -1,5 +1,9 @@
 # Weather runtime parameters and first study
 
+## Five-level profile amendment — 6 September 2026
+
+See [five-level weather](five_level_weather.md) for the added Tempest sky/wind tiers and lower calm crests with a reversed-logarithmic 0.35×–2× height curve. The lower-water panels retain their existing coverage and height response.
+
 Status: implemented study parameters, 5 September 2026. The user authorized initial parameter definition. These values are editable art/game tuning, not measured real-world forecasts or final pacing.
 
 ## Current weather change controls — 6 September 2026

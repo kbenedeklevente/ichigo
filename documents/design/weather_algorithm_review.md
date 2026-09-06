@@ -2,6 +2,10 @@
 
 6 September 2026. Code review of the current Ichigo branch, including the user-requested three-mode weather setting. This describes implemented behavior, distinguishes mathematical estimates from measurements, and records proposals without selecting new weather balance.
 
+## Fifth-tier update
+
+The [five-level amendment](five_level_weather.md) adds Tempest on both axes: five sky and five wind levels, 25 combinations. Nine new combinations are trigger-only, so the 16-candidate automatic-weather probability analysis below remains applicable. Chance tables now have five wind rows and five sky weights, and sky mixture comes from an independent 0–4 field instead of cloud coverage. The new crest-height range is 0.35×–2× with a reversed-logarithmic curve. Keys 9/0 select Tempest sky/wind; earlier 1–8 instructions still cover the original tiers.
+
 ## Three change modes
 
 The study HUD has a **Weather** selector. It defaults to **transitions** on launch. Changing the selector alone does not interrupt an existing front. The chosen mode is a laboratory preference, not a world-save field; an active event's actual instant/gradual execution policy is saved with the weather simulator.

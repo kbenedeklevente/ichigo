@@ -11,6 +11,8 @@ var _fallback_surface
 const VERTICAL_MOTION_SCALE := 2.0
 const CALM_HEIGHT_SCALE := 0.5
 const MAX_HEIGHT_SCALE := 2.0
+const CALM_CREST_HEIGHT_SCALE := 0.35
+const CREST_CURVE_SHAPE := 9.0
 const MIN_VISUAL_DENSITY := 1
 const MAX_VISUAL_DENSITY := 8
 var visual_density: int = 1
@@ -106,6 +108,8 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 	_panel_material.set_shader_parameter("visual_center_offset", (_visual_spacing - cell_size) * 0.5)
 	_panel_material.set_shader_parameter("vertical_motion_scale", VERTICAL_MOTION_SCALE)
 	_panel_material.set_shader_parameter("height_range", Vector2(CALM_HEIGHT_SCALE, MAX_HEIGHT_SCALE))
+	_panel_material.set_shader_parameter("crest_height_range", Vector2(CALM_CREST_HEIGHT_SCALE, MAX_HEIGHT_SCALE))
+	_panel_material.set_shader_parameter("crest_curve_shape", CREST_CURVE_SHAPE)
 	# Shader motion is absent from static MultiMesh transforms: include actual
 	# field extrema and the largest artwork in explicit conservative bounds.
 	var y_min: float = float(parameters.minimum_height) * VERTICAL_MOTION_SCALE - 12.0

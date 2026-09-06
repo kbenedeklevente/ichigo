@@ -6,6 +6,8 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
+The [five-level weather study](five_level_weather.md) implements ten levels total (five sky and five wind), lower calm crests and a reversed-logarithmic rise to a 2× maximum. Tempest combinations are manually triggerable; their automatic probabilities remain unselected.
+
 Three weather change modes are implemented for review: normal transitions, queued instant execution, and immediate laboratory replacement. The [weather algorithm review](weather_algorithm_review.md) documents the controls, reusable event policy and current automatic selection/pacing; proposed balance changes remain unselected.
 
 The user retained the [visual-density slider iteration](../experiments/visual_water_density.md). Its [full-size crest follow-up](../experiments/full_size_wave_crests.md) is implemented on a separate branch: only lower water panels become smaller and denser; curling crests retain their original size and spacing. Logical grid size and weather/event physics remain unchanged. The lower-panel artwork has also been simplified at the user’s request to reduce repeated ornament. Next: user review of the quieter base water in motion.

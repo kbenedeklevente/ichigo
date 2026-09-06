@@ -283,6 +283,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			if active_event != null:
 				active_event.resolve("abandoned")
 			return
+		if event.physical_keycode in [KEY_9, KEY_0] and (not paused or weather_runtime.weather_change_mode == EnvironmentRuntime.WeatherChangeMode.REPLACE_NOW):
+			weather_runtime.trigger_weather("sky" if event.physical_keycode == KEY_9 else "wind", "tempest")
+			_update_scene(0.0)
+			_update_hud()
+			return
 		var key_index: int = event.physical_keycode - KEY_1
 		if key_index >= 0 and key_index < 8 and (not paused or weather_runtime.weather_change_mode == EnvironmentRuntime.WeatherChangeMode.REPLACE_NOW):
 			var conditions := ["sunny", "cloudy", "raincloud", "storm", "calm", "breeze", "strong", "storm"]
@@ -479,7 +484,7 @@ func _build_hud() -> void:
 		density_stats.add_theme_font_size_override("font_size", 12)
 		density_row.add_child(density_stats)
 		var weather_hint := Label.new()
-		weather_hint.text = "LAB · 1–4 sky · 5–8 wind · I request salvage · O send salvage away"
+		weather_hint.text = "LAB · 1–4 sky · 5–8 wind · 9 tempest sky · 0 tempest wind · I / O salvage"
 		weather_hint.add_theme_font_size_override("font_size", 12)
 		weather_hint.modulate = Color("b2c4c0")
 		var weather_row := HBoxContainer.new()
@@ -491,7 +496,7 @@ func _build_hud() -> void:
 		weather_mode_select.add_item("Weather: replace now (lab)", EnvironmentRuntime.WeatherChangeMode.REPLACE_NOW)
 		for state: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
 			weather_mode_select.add_theme_color_override(state, Color("183e57"))
-		weather_mode_select.tooltip_text = "Transitions: normal queue. Skip transitions: queue and locks remain; admitted fronts snap on/off. Replace now: 1–8 replace active and queued weather, even paused, and set the baseline. Modes affect future requests; changing this selector alone leaves current weather running."
+		weather_mode_select.tooltip_text = "Transitions: normal queue. Skip transitions: queue and locks remain; admitted fronts snap on/off. Replace now: 1–0 replace active and queued weather, even paused, and set the baseline. Modes affect future requests; changing this selector alone leaves current weather running."
 		weather_mode_select.item_selected.connect(func(index: int): weather_runtime.weather_change_mode = weather_mode_select.get_item_id(index))
 		weather_row.add_child(weather_mode_select)
 		weather_row.add_child(weather_hint)

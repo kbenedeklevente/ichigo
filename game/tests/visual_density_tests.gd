@@ -74,7 +74,7 @@ func _run() -> void:
 	for point: Vector2 in [Vector2(0.5, -0.75), Vector2(-3.75, -4.25), Vector2(16.3, -18.6)]:
 		var actual: Dictionary = runtime.weather.sample(point)
 		var packed: Vector4 = _sample_texture(surface, point)
-		_check(absf(actual.height - packed.x) < 0.000001 and absf(actual.wind_strength - packed.z) < 0.000001 and absf(actual.cloud_cover - packed.w) < 0.000001, "GPU source interpolation matches base fields at %s." % point)
+		_check(absf(actual.height - packed.x) < 0.000001 and absf(actual.wind_strength - packed.z) < 0.000001 and absf(actual.sky_strength - packed.w) < 0.000001, "GPU source interpolation matches base fields at %s." % point)
 	# Rebase into negative logical coordinates; shared world anchors must retain
 	# their artwork instead of shuffling when the visible window scrolls.
 	scene.density_slider.value = 4

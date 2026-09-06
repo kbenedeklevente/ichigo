@@ -5,7 +5,7 @@ uniform sampler2D curl_art : source_color, filter_linear_mipmap, repeat_disable;
 uniform sampler2D double_art : source_color, filter_linear_mipmap, repeat_disable;
 uniform sampler2D sweep_art : source_color, filter_linear_mipmap, repeat_disable;
 uniform sampler2D ribbon_art : source_color, filter_linear_mipmap, repeat_disable;
-// Fixed logical field: RGBA = spring height, amplitude, wind strength, clouds.
+// Fixed logical field: RGBA = spring height, amplitude, wind strength, sky strength (0–4).
 // Explicit four-texel interpolation also works when float linear filtering is
 // unavailable on a compatibility backend.
 uniform sampler2D weather_fields : filter_nearest, repeat_disable;
@@ -16,6 +16,9 @@ uniform float visual_spacing = 4.0;
 uniform float visual_center_offset = 0.0;
 uniform float vertical_motion_scale = 2.0;
 uniform vec2 height_range = vec2(0.5, 2.0);
+uniform vec2 crest_height_range = vec2(0.35, 2.0);
+uniform float crest_curve_shape = 9.0;
+uniform float extreme_wind_strength = 12.0;
 uniform vec2 bucket_center;
 uniform float illumination = 1.0;
 varying vec3 world_position;
@@ -52,8 +55,9 @@ void vertex() {
     float dz = mix(c.r - a.r, d.r - b.r, f.x) / logical_cell_size;
     vec2 tilt = vec2(atan(-dz), atan(dx));
     float wind = profile_coordinate(field.b, vec4(0.12, 1.8, 5.0, 9.0));
-    float sky = profile_coordinate(field.a, vec4(0.12, 0.65, 0.88, 1.0));
-    float height_scale = mix(height_range.x, height_range.y, clamp((wind + sky) / 6.0, 0.0, 1.0));
+    if (field.b > 9.0) { wind = 3.0 + clamp((field.b - 9.0) / (extreme_wind_strength - 9.0), 0.0, 1.0); }
+    float sky = clamp(field.a, 0.0, 4.0);
+    float height_scale = mix(height_range.x, height_range.y, clamp((min(wind, 3.0) + min(sky, 3.0)) / 6.0, 0.0, 1.0));
     float seed_value = card_data.g;
     // Density affects only the reclining lower-water panels. Curling crests
     // keep original size, spacing and seed identity at every slider value.
@@ -65,6 +69,11 @@ void vertex() {
     vec3 vertex = VERTEX * ratio;
     vec3 offset;
     if (card_data.a > 0.5) {
+        // Reversed normalized logarithm: low longer, steeper near maximum.
+        // Five levels per axis means coordinates 0..4, combined maximum 8.
+        float strength = clamp((wind + sky) / 8.0, 0.0, 1.0);
+        float curve = 1.0 - log(1.0 + crest_curve_shape * (1.0 - strength)) / log(1.0 + crest_curve_shape);
+        height_scale = mix(crest_height_range.x, crest_height_range.y, curve);
         // Match Godot's YXZ Euler order and the existing world-Y art scale.
         vertex = rotate_y((seed_value - 0.5) * 0.12) * rotate_x(-0.18 + tilt.x * 0.45) * rotate_z(tilt.y * 0.6) * vertex;
         vertex.y *= mix(0.70, 0.85, seed_value) * height_scale;

@@ -37,7 +37,7 @@ func _test_profiles_and_validation() -> void:
 	for sky: String in Weather.SKY_PROFILES:
 		for wind: String in Weather.WIND_PROFILES:
 			var weather = _new_weather()
-			_check(weather.start_event({"sky": sky, "wind": wind}), "All 16 independent sky/wind combinations accepted: %s / %s" % [sky, wind])
+			_check(weather.start_event({"sky": sky, "wind": wind}), "All 25 independent sky/wind combinations accepted: %s / %s" % [sky, wind])
 	var weather = _new_weather()
 	var original: Dictionary = weather.snapshot()
 	_check(not weather.start_event({"sky": "unknown"}), "Unknown profiles rejected")

@@ -2,24 +2,30 @@ extends RefCounted
 ## Buffered square weather field. X/Y here map to world X/Z.
 ## Dynamics are stylized, connected paper springs, not an ocean forecasting model.
 
+const SKY_NAMES := ["sunny", "cloudy", "raincloud", "storm", "tempest"]
+const WIND_NAMES := ["calm", "breeze", "strong", "storm", "tempest"]
+const WIND_ANCHORS := [0.12, 1.8, 5.0, 9.0, 12.0]
+const MAX_STRENGTH := 4.0
 const SKY_PROFILES := {
-	"sunny": {"cloud_cover": 0.12, "rain": 0.0, "light": 1.0},
-	"cloudy": {"cloud_cover": 0.65, "rain": 0.0, "light": 0.73},
-	"raincloud": {"cloud_cover": 0.88, "rain": 0.58, "light": 0.49},
-	"storm": {"cloud_cover": 1.0, "rain": 1.0, "light": 0.26},
+	"sunny": {"sky_strength": 0.0, "cloud_cover": 0.12, "rain": 0.0, "light": 1.0},
+	"cloudy": {"sky_strength": 1.0, "cloud_cover": 0.65, "rain": 0.0, "light": 0.73},
+	"raincloud": {"sky_strength": 2.0, "cloud_cover": 0.88, "rain": 0.58, "light": 0.49},
+	"storm": {"sky_strength": 3.0, "cloud_cover": 1.0, "rain": 1.0, "light": 0.26},
+	"tempest": {"sky_strength": 4.0, "cloud_cover": 1.0, "rain": 1.0, "light": 0.14},
 }
 const WIND_PROFILES := {
 	"calm": {"strength": 0.12, "wave_amplitude": 0.12, "wave_speed": 0.65},
 	"breeze": {"strength": 1.8, "wave_amplitude": 0.24, "wave_speed": 1.0},
 	"strong": {"strength": 5.0, "wave_amplitude": 0.48, "wave_speed": 1.7},
 	"storm": {"strength": 9.0, "wave_amplitude": 0.78, "wave_speed": 2.5},
+	"tempest": {"strength": 12.0, "wave_amplitude": 1.05, "wave_speed": 3.2},
 }
 const FIXED_STEP := 1.0 / 30.0
 const WAVE_LENGTH := 24.0
 const SPRING_STIFFNESS := 12.0
 const SPRING_DAMPING := 6.0
 const NEIGHBOR_STIFFNESS := 1.2
-const FIELD_NAMES := ["height", "velocity", "amplitude", "wind_strength", "wind_x", "wind_z", "cloud_cover", "rain", "light"]
+const FIELD_NAMES := ["height", "velocity", "amplitude", "wind_strength", "wind_x", "wind_z", "cloud_cover", "rain", "light", "sky_strength"]
 
 var cell_size: float = 4.0
 var render_radius: int = 8
@@ -238,12 +244,12 @@ func get_panel_states() -> Array[Dictionary]:
 			var normal: Vector3 = value.normal
 			result.append({"cell_id": cell, "position": point, "height": value.height, "tilt": Vector2(atan2(normal.z, normal.y), -atan2(normal.x, normal.y)),
 				"normal": normal, "size": cell_size, "rain": value.rain, "cloud_cover": value.cloud_cover, "light": value.light,
-				"wind_intensity": profile_coordinate(float(value.wind_strength), [0.12, 1.8, 5.0, 9.0]),
-				"sky_strength": profile_coordinate(float(value.cloud_cover), [0.12, 0.65, 0.88, 1.0])})
+				"wind_intensity": profile_coordinate(float(value.wind_strength), WIND_ANCHORS),
+				"sky_strength": float(value.sky_strength)})
 	return result
 
 func snapshot() -> Dictionary:
-	return {"version": 1, "seed": str(_seed), "rng_state": str(_rng.state), "cell_size": cell_size, "render_radius": render_radius,
+	return {"version": 2, "seed": str(_seed), "rng_state": str(_rng.state), "cell_size": cell_size, "render_radius": render_radius,
 		"simulation_radius": simulation_radius, "baseline_sky": baseline_sky, "baseline_wind": baseline_wind,
 		"day_period_s": day_period_s, "day_phase": day_phase, "origin": _origin, "player": _player,
 		"clock": _clock, "remainder": _remainder, "phase": _phase, "wave_speed": _wave_speed,
@@ -256,7 +262,7 @@ func restore(data: Dictionary) -> bool:
 	if not data.get("instant", false) is bool:
 		return false
 	var required := ["seed", "rng_state", "cell_size", "render_radius", "simulation_radius", "baseline_sky", "baseline_wind", "day_period_s", "day_phase", "origin", "player", "clock", "remainder", "phase", "wave_speed", "active", "complete", "elapsed", "approach_s", "hold_s", "clearing_s", "sky", "wind", "direction", "center", "fields"]
-	if data.get("version", 0) != 1:
+	if data.get("version", 0) != 2:
 		return false
 	for key in required:
 		if not data.has(key):
@@ -342,7 +348,7 @@ func _step(dt: float) -> void:
 			var index := y * _side + x
 			var point := Vector2(_origin + Vector2i(x, y)) * cell_size
 			var influence := _influence(point)
-			for name in ["cloud_cover", "rain", "light"]:
+			for name in ["cloud_cover", "rain", "light", "sky_strength"]:
 				var target := lerpf(float(SKY_PROFILES[baseline_sky][name]), float(SKY_PROFILES[_sky][name]), influence)
 				_fields[name][index] = lerpf(_fields[name][index], target, sky_mix)
 			var wind_target := lerpf(float(WIND_PROFILES[baseline_wind].strength), float(WIND_PROFILES[_wind].strength), influence)
@@ -462,34 +468,29 @@ func _initialize_cell(index: int, cell: Vector2i) -> void:
 	var target_vector := _wind_target(influence)
 	_fields.wind_x[index] = target_vector.x
 	_fields.wind_z[index] = target_vector.y
-	for name in ["cloud_cover", "rain", "light"]:
+	for name in ["cloud_cover", "rain", "light", "sky_strength"]:
 		_fields[name][index] = lerpf(float(SKY_PROFILES[baseline_sky][name]), float(SKY_PROFILES[_sky][name]), influence)
 
 
 ## Scheduling reads base scalar fields, never event-local departure gusts.
-## Physical wind strength remains unchanged; 0–3 is a derived authoring coordinate.
+## Physical wind strength remains unchanged; 0–4 is a derived authoring coordinate.
 func chance_context(point: Vector2) -> Dictionary:
 	var local: Dictionary = sample(point)
-	var intensity: float = profile_coordinate(float(local.wind_strength), [0.12, 1.8, 5.0, 9.0])
-	var names := ["sunny", "cloudy", "raincloud", "storm"]
-	var clouds := [0.12, 0.65, 0.88, 1.0]
-	var mix: Dictionary = {"storm": 1.0}
-	var sky: String = "storm"
-	for index: int in range(3):
-		if float(local.cloud_cover) <= clouds[index + 1]:
-			var fraction: float = clampf(inverse_lerp(clouds[index], clouds[index + 1], float(local.cloud_cover)), 0.0, 1.0)
-			mix = {names[index]: 1.0 - fraction, names[index + 1]: fraction}
-			sky = names[index] if fraction < 0.5 else names[index + 1]
-			break
+	var intensity: float = profile_coordinate(float(local.wind_strength), WIND_ANCHORS)
+	var severity := clampf(float(local.sky_strength), 0.0, MAX_STRENGTH)
+	var low := mini(floori(severity), SKY_NAMES.size() - 2)
+	var fraction := severity - float(low)
+	var mix: Dictionary = {SKY_NAMES[low]: 1.0 - fraction, SKY_NAMES[low + 1]: fraction}
+	var sky: String = SKY_NAMES[low] if fraction < 0.5 else SKY_NAMES[low + 1]
 	return {"wind_intensity": intensity, "sky": sky, "sky_mix": mix,
 		"day_phase": fposmod(day_phase + (_clock / day_period_s if day_period_s > 0.0 else 0.0), 1.0),
 		"weather_stage": _stage()}
 
 
-## Continuous 0–3 profile coordinate from a scalar field; opposing wind vectors
+## Continuous profile coordinate from a scalar field; opposing wind vectors
 ## cannot cancel this strength. Shared by chance authoring and paper size.
 static func profile_coordinate(value: float, anchors: Array) -> float:
-	for index: int in range(3):
+	for index: int in range(anchors.size() - 1):
 		if value <= float(anchors[index + 1]):
 			return index + clampf(inverse_lerp(float(anchors[index]), float(anchors[index + 1]), value), 0.0, 1.0)
-	return 3.0
+	return float(anchors.size() - 1)

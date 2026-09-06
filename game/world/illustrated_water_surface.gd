@@ -57,7 +57,7 @@ func update() -> void:
 		pixels[i * 4] = _heights[i]
 		pixels[i * 4 + 1] = _amplitudes[i]
 		pixels[i * 4 + 2] = _snapshot.fields.wind_strength[i]
-		pixels[i * 4 + 3] = _snapshot.fields.cloud_cover[i]
+		pixels[i * 4 + 3] = _snapshot.fields.sky_strength[i]
 	var image := Image.create_from_data(_side, _side, false, Image.FORMAT_RGBAF, pixels.to_byte_array())
 	_field_image = image
 	if _texture == null or _texture.get_width() != _side:

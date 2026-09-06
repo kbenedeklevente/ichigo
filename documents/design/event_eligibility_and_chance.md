@@ -2,6 +2,10 @@
 
 6 September 2026. Implemented at the user’s request before starter-content work. `event_chance.gd` validates/evaluates definitions; `environment_scheduler.gd` owns chance admission. Illustrative content weights below remain unselected. Existing salvage balance is preserved at profile anchors and existing approved pacing remains in force.
 
+## Fifth-tier amendment — 6 September 2026
+
+The current schema is five wind rows by four time columns, plus five sky weights. Strength ranges from 0 to 4. See [five-level weather](five_level_weather.md) for Tempest, the independent sky-strength field, persistence changes and the trigger-only new combinations. Four-tier examples below are historical; new definitions require the fifth row and sky weight.
+
 ## Three separate questions
 
 1. **May this event happen?** Eligibility predicates give a yes/no answer: prerequisites, tools if actually available, story flags, completion/repetition policy, cooldowns and hard environmental exclusions.

@@ -1,6 +1,9 @@
 extends RefCounted
 ## Pure authoring validation/evaluation. Weights are relative hazards, not percents.
-const SKIES := ["sunny", "cloudy", "raincloud", "storm"]
+const Weather = preload("res://game/world/weather_simulation.gd")
+const SKIES := Weather.SKY_NAMES
+const WINDS := Weather.WIND_NAMES
+const MAX_WIND := Weather.MAX_STRENGTH
 const TIME_ANCHORS := [0.0, 0.25, 0.5, 0.75] # dawn, day, dusk, night; matches weather daylight
 
 static func valid_number(value: Variant, minimum: float = 0.0) -> bool:
@@ -10,7 +13,7 @@ static func validate(definition: Dictionary) -> bool:
 	if not valid_number(definition.get("base_rate_per_second", 0.0)):
 		return false
 	var table: Variant = definition.get("wind_time_weights", [])
-	if not table is Array or table.size() != 4:
+	if not table is Array or table.size() != WINDS.size():
 		return false
 	for row: Variant in table:
 		if not row is Array or row.size() != 4:
@@ -19,7 +22,7 @@ static func validate(definition: Dictionary) -> bool:
 			if not valid_number(weight):
 				return false
 	var sky: Variant = definition.get("sky_weights", {})
-	if not sky is Dictionary or sky.size() != 4:
+	if not sky is Dictionary or sky.size() != SKIES.size():
 		return false
 	for name: String in SKIES:
 		if not valid_number(sky.get(name)):
@@ -37,9 +40,9 @@ static func validate(definition: Dictionary) -> bool:
 			if not entry is String or entry.is_empty() or (key == "excluded_skies" and entry not in SKIES):
 				return false
 	for key: String in ["wind_min", "wind_max"]:
-		if rules.has(key) and (not valid_number(rules[key]) or rules[key] > 3):
+		if rules.has(key) and (not valid_number(rules[key]) or rules[key] > MAX_WIND):
 			return false
-	if rules.get("wind_min", 0.0) > rules.get("wind_max", 3.0):
+	if rules.get("wind_min", 0.0) > rules.get("wind_max", MAX_WIND):
 		return false
 	if not rules.get("excluded_time_ranges", []) is Array:
 		return false
@@ -65,9 +68,9 @@ static func exclusion(definition: Dictionary, context: Dictionary) -> String:
 	var wind: float = float(context.get("wind_intensity", -1.0))
 	var phase: float = float(context.get("day_phase", -1.0))
 	var sky: String = str(context.get("sky", ""))
-	if not is_finite(wind) or wind < 0 or wind > 3 or not is_finite(phase) or phase < 0 or phase >= 1 or sky not in SKIES:
+	if not is_finite(wind) or wind < 0 or wind > MAX_WIND or not is_finite(phase) or phase < 0 or phase >= 1 or sky not in SKIES:
 		return "invalid_environment"
-	if wind < float(rules.get("wind_min", 0.0)) or wind > float(rules.get("wind_max", 3.0)):
+	if wind < float(rules.get("wind_min", 0.0)) or wind > float(rules.get("wind_max", MAX_WIND)):
 		return "wind"
 	if sky in rules.get("excluded_skies", []):
 		return "sky"
@@ -83,14 +86,14 @@ static func evaluate(definition: Dictionary, context: Dictionary) -> Dictionary:
 		return {"rate": 0.0, "reason": reason}
 	var wind: float = float(context.wind_intensity)
 	var time: float = float(context.day_phase) * 4.0
-	var w0: int = mini(floori(wind), 3)
-	var w1: int = mini(w0 + 1, 3)
+	var w0: int = mini(floori(wind), WINDS.size() - 1)
+	var w1: int = mini(w0 + 1, WINDS.size() - 1)
 	var t0: int = floori(time) % 4
 	var t1: int = (t0 + 1) % 4
 	var table: Array = definition.wind_time_weights
 	var weight: float = lerpf(lerpf(table[w0][t0], table[w0][t1], time - floor(time)), lerpf(table[w1][t0], table[w1][t1], time - floor(time)), wind - w0)
 	var sky_weight: float = 0.0
-	# Interpolated local cloud-cover mixture, independent of wind. Categorical
+	# Interpolated local sky-strength mixture, independent of wind. Categorical
 	# sky remains available for explicit hard exclusions.
 	var mix: Dictionary = context.get("sky_mix", {context.sky: 1.0})
 	for sky: String in SKIES:
@@ -103,4 +106,7 @@ static func probability(rate: float, dt: float) -> float:
 	return 1.0 - exp(-rate * dt) if is_finite(rate) and is_finite(dt) and rate > 0 and dt > 0 else 0.0
 
 static func uniform_table(weight: float = 1.0) -> Array:
-	return [[weight, weight, weight, weight], [weight, weight, weight, weight], [weight, weight, weight, weight], [weight, weight, weight, weight]]
+	var table: Array = []
+	for _wind in WINDS:
+		table.append([weight, weight, weight, weight])
+	return table

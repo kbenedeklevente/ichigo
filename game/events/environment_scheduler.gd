@@ -42,7 +42,7 @@ func configure(definitions: Array[Dictionary], seed_value: int = 15) -> bool:
 		if definition.domain == "weather":
 			if not payload.get("instant", false) is bool:
 				return false
-			if payload.get("sky", "sunny") not in Chance.SKIES or payload.get("wind", "calm") not in ["calm", "breeze", "strong", "storm"]:
+			if payload.get("sky", "sunny") not in Chance.SKIES or payload.get("wind", "calm") not in Chance.WINDS:
 				return false
 			for key: String in ["approach_s", "hold_s", "clearing_s"]:
 				if payload.has(key) and (not Chance.valid_number(payload[key]) or payload[key] <= 0):
@@ -157,7 +157,7 @@ func _can_start(record: Dictionary, context: Dictionary) -> bool:
 		var destination: Dictionary = context.duplicate(true)
 		var payload: Dictionary = _definitions[record.weather].payload
 		destination.sky = payload.get("sky", "sunny")
-		destination.wind_intensity = float(["calm", "breeze", "strong", "storm"].find(payload.get("wind", "calm")))
+		destination.wind_intensity = float(Chance.WINDS.find(payload.get("wind", "calm")))
 		if not _eligible(record.encounter, destination):
 			return false
 	return true
@@ -169,7 +169,7 @@ func _story_barrier(context: Dictionary) -> bool:
 			# starve ordinary work indefinitely.
 			var hypothetical: Dictionary = context.duplicate(true)
 			hypothetical.sky = _definitions[record.weather].payload.get("sky", "sunny")
-			hypothetical.wind_intensity = float(["calm", "breeze", "strong", "storm"].find(_definitions[record.weather].payload.get("wind", "calm")))
+			hypothetical.wind_intensity = float(Chance.WINDS.find(_definitions[record.weather].payload.get("wind", "calm")))
 			if _eligible(record.weather, context) and _eligible(record.encounter, hypothetical):
 				return true
 	return false
