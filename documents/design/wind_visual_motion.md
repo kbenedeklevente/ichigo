@@ -2,6 +2,10 @@
 
 6 September 2026. User-directed next study; technical audits completed, animation implementation pending clarification. Saved baseline: commit `9c01864`, pushed tag `paper-theatre-before-wind-motion`.
 
+## Current vertical-motion adjustment
+
+The user confirmed doubling upward and downward movement around the existing resting position. `weather_presentation.gd` now multiplies the signed spring height by 2 for both crest and ribbon roots. Static offsets, artwork size, rocking, animation phase/speed and physical weather fields are unchanged. This is a presentation gain, not the pending lateral oscillator or a new wind profile. The invisible gameplay surface remains the existing approximation; the bucket’s physical bob is not doubled. Verification: the existing rendered weather-scene suite passed 19 checks including three captures. Root inspected strong-weather captures at 20° and 52° for layer coverage and bucket readability; this is a sampled visual check, not acceptance of every animation phase.
+
 ## Accepted intent
 
 - Preserve Paper Theatre. Its current curling-wave appearance is the reference for wind intensity **2**, a turbulent sea.
@@ -13,7 +17,7 @@
 
 ## What exists now
 
-The renderer updates 289 upright crest cards and 289 reclining ribbon cards from the surrounding 33×33 weather simulation. There is no shared visible ocean mesh. Crest/ribbon X/Z anchors are currently fixed within their world cells; vertical positions and rocking follow the existing spring field. The shader masks drawings inside the bucket.
+The renderer updates 289 upright crest cards and 289 reclining ribbon cards from the surrounding 33×33 weather simulation. There is no shared visible ocean mesh. Crest/ribbon X/Z anchors are currently fixed within their world cells; vertical positions follow the existing spring field with a 2× presentation gain, while rocking retains its original response. The shader masks drawings inside the bucket.
 
 The current runtime starts with calm wind despite the visually turbulent artwork. Calm still uses strength 0.12, target amplitude 0.12 m and phase speed 0.65 m/s. Therefore the new appearance/intensity mapping and stillness at level 0 are changes, not descriptions of current behavior.
 

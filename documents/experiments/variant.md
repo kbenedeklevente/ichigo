@@ -4,7 +4,7 @@ Selected by the user on 6 September 2026 and merged into main at `1622c52`. This
 
 Three original SVG drawings explore a hooked breaker, paired curls, and a long sweeping crest. Their indigo shadows, ivory foam outlines, small spiral foam marks, and parallel engraved flow lines are authored in the artwork. Row overlap, asymmetry, occasional reflected drawings, and restrained changes in scale make a puppet-stage arrangement. Alpha scissor and opaque depth drawing remove transparent rectangular sorting artifacts. The cards receive weather illumination without atmospheric haze washing out their ink.
 
-Each foot follows its own cell's spring height, with its pivot driven by that cell's simulated slope. Neighbor coupling and incoming fronts remain owned by the existing 33 × 33 weather simulation. Artwork never slides through a shared displacement field. Rain, encounter logic, pause, replay, and the 12°–52° camera (20° default) remain operational. The child with oversized number-15 jersey, no hat, and brown open bucket remains a matching layered-illustration study.
+Each foot follows twice its own cell's signed spring height after the user's vertical-motion adjustment, with its pivot driven by that cell's simulated slope. Neighbor coupling and incoming fronts remain owned by the existing 33 × 33 weather simulation. Artwork never slides through a shared displacement field. Rain, encounter logic, pause, replay, and the 12°–52° camera (20° default) remain operational. The child with oversized number-15 jersey, no hat, and brown open bucket remains a matching layered-illustration study.
 
 ## References and decisions
 
