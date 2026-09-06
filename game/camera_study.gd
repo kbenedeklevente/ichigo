@@ -465,14 +465,14 @@ func _build_hud() -> void:
 		density_slider.value = weather_presentation.visual_density
 		density_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		density_slider.custom_minimum_size.x = 180
-		density_slider.tooltip_text = "Smaller visual tiles; the logical water simulation stays the same. Works while paused."
+		density_slider.tooltip_text = "Smaller lower-water panels; large curling crests and the logical simulation keep their size. Works while paused."
 		density_slider.value_changed.connect(func(value: float):
 			weather_presentation.set_visual_density(roundi(value))
 			_update_scene(0.0)
 			_update_hud())
 		density_row.add_child(density_slider)
 		density_stats = Label.new()
-		density_stats.custom_minimum_size.x = 310
+		density_stats.custom_minimum_size.x = 355
 		density_stats.add_theme_font_size_override("font_size", 12)
 		density_row.add_child(density_stats)
 		var weather_hint := Label.new()
@@ -487,8 +487,8 @@ func _update_hud() -> void:
 	mode_label.text = "PAUSED" if paused else "PROVISIONAL FORMS"
 	if density_label != null:
 		var density: Dictionary = weather_presentation.get_density_status()
-		density_label.text = "Wave density  %d×" % density.density
-		density_stats.text = "%.2f m · %s tiles · %d FPS" % [density.spacing, str(density.tiles), Engine.get_frames_per_second()]
+		density_label.text = "Water detail  %d×" % density.density
+		density_stats.text = "%.2f m · %s tiles + %d crests · %d FPS" % [density.spacing, str(density.tiles), density.crest_drawings, Engine.get_frames_per_second()]
 	if weather_runtime != null and not paused:
 		var status: Dictionary = weather_runtime.weather.get_status()
 		mode_label.text = "%s · %s" % [weather_runtime.last_source.to_upper(), status.stage.to_upper()]

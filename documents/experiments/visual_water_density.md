@@ -46,4 +46,4 @@ The MultiMesh geometry checks require the actual renderer, not Godot's headless 
 
 ## Next branch
 
-Retain this complete iteration. The next branch will separate crest size/density from the lower water tiles. The user confirmed that curling crests should retain their original size and spacing; only the lower water panels should become smaller and denser.
+Retain this complete iteration. The next branch will separate crest size/density from the lower water tiles. The user confirmed that curling crests should retain their original size and spacing; only the lower water panels should become smaller and denser. This is now implemented in the separate [full-size crest follow-up](full_size_wave_crests.md).

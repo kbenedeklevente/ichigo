@@ -16,6 +16,8 @@ const MAX_VISUAL_DENSITY := 8
 var visual_density: int = 1
 var _layout_key: Array = []
 var _layout_rebuilds: int = 0
+var _crest_layout_key: Array = []
+var _crest_layout_rebuilds: int = 0
 var _visual_side: int = 17
 var _visual_spacing: float = 4.0
 var _visual_origin := Vector2.ZERO
@@ -132,7 +134,9 @@ func set_visual_density(value: int) -> void:
 
 func get_density_status() -> Dictionary:
 	return {"density": visual_density, "spacing": _visual_spacing,
-		"tiles": _visual_side * _visual_side, "drawings": 2 * _visual_side * _visual_side,
+		"tiles": _visual_side * _visual_side, "crest_drawings": _panels.multimesh.instance_count,
+		"drawings": _panels.multimesh.instance_count + _ribbons.multimesh.instance_count,
+		"crest_layout_rebuilds": _crest_layout_rebuilds,
 		"field_samples": _field_side * _field_side, "layout_rebuilds": _layout_rebuilds,
 		"layout_ms": _layout_ms, "update_ms": _update_ms}
 
@@ -143,22 +147,26 @@ func _rebuild_layout(center: Vector2i, radius: int, cell_size: float) -> void:
 	var first_cell := (center - Vector2i.ONE * radius) * visual_density
 	var offset := Vector2.ONE * (_visual_spacing - cell_size) * 0.5
 	_visual_origin = Vector2(first_cell) * _visual_spacing + offset
-	var count := _visual_side * _visual_side
-	# Static anchor + artwork choice only. No per-drawing spring, velocity or
-	# accumulated state. Rebuild only on density changes or logical-grid travel.
-	_panels.multimesh.instance_count = count
-	_ribbons.multimesh.instance_count = count
-	for y in range(_visual_side):
-		for x in range(_visual_side):
-			var index := y * _visual_side + x
+	# Large curling crests retain their original logical-cell anchors and size.
+	# Slider changes rebuild only the denser lower-water drawings.
+	var crest_key: Array = [center, radius, cell_size]
+	if crest_key != _crest_layout_key:
+		_fill_grid(_panels.multimesh, center - Vector2i.ONE * radius, radius * 2 + 1, cell_size, Vector2.ZERO, true)
+		_crest_layout_key = crest_key
+		_crest_layout_rebuilds += 1
+	_fill_grid(_ribbons.multimesh, first_cell, _visual_side, _visual_spacing, offset, false)
+	_layout_rebuilds += 1
+	_layout_ms = float(Time.get_ticks_usec() - started) / 1000.0
+
+func _fill_grid(mm: MultiMesh, first_cell: Vector2i, side: int, spacing: float, offset: Vector2, crest: bool) -> void:
+	mm.instance_count = side * side
+	for y in range(side):
+		for x in range(side):
+			var index := y * side + x
 			var cell := first_cell + Vector2i(x, y)
-			var point := Vector2(cell) * _visual_spacing + offset
+			var point := Vector2(cell) * spacing + offset
 			var transform := Transform3D(Basis.IDENTITY, Vector3(point.x, 0.0, point.y))
 			var seed_value := fposmod(float(cell.x * 17 + cell.y * 31), 13.0) / 13.0
 			var variant := float(posmod(cell.x + cell.y * 3, 3)) * 0.5
-			_panels.multimesh.set_instance_transform(index, transform)
-			_ribbons.multimesh.set_instance_transform(index, transform)
-			_panels.multimesh.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0))
-			_ribbons.multimesh.set_instance_custom_data(index, Color(0.0, seed_value, 0.0, 0.0))
-	_layout_rebuilds += 1
-	_layout_ms = float(Time.get_ticks_usec() - started) / 1000.0
+			mm.set_instance_transform(index, transform)
+			mm.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0) if crest else Color(0.0, seed_value, 0.0, 0.0))

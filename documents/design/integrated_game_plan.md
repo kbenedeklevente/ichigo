@@ -6,7 +6,7 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
-The user retained the [visual-density slider iteration](../experiments/visual_water_density.md) and requested a further branch to separate large curling crests from smaller background water tiles. Logical grid size and weather/event physics remain unchanged.
+The user retained the [visual-density slider iteration](../experiments/visual_water_density.md). Its [full-size crest follow-up](../experiments/full_size_wave_crests.md) is implemented on a separate branch: only lower water panels become smaller and denser; curling crests retain their original size and spacing. Logical grid size and weather/event physics remain unchanged. Next: user review of this separation in motion.
 
 The user prioritized scheduler/chance implementation before starter content. The [coordinator](weather_encounter_scheduler.md) and [chance tables](event_eligibility_and_chance.md) now drive existing weather and salvage, including atomic linked requests and a two-total weather capacity. See [implementation review](../work_packets/scheduler_chance_implementation.md). All [starter ideas](starter_event_ideas.md) remain unselected.
 

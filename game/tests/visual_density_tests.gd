@@ -28,6 +28,8 @@ func _run() -> void:
 	var height: float = surface.height_at(Vector2(0.4, -0.3))
 	var field_bytes: int = surface._field_image.get_data().size()
 	var original_bounds: Rect2
+	var original_crests: Dictionary = _anchors(renderer._panels.multimesh)
+	var crest_rebuilds: int = renderer.get_density_status().crest_layout_rebuilds
 	for density: int in range(1, 9):
 		scene.density_slider.value = density
 		scene._update_scene(0.0)
@@ -37,8 +39,9 @@ func _run() -> void:
 		_check(runtime.snapshot() == saved, "Density %d does not mutate simulation, scheduler, clock or RNG." % density)
 		_check(surface.height_at(Vector2(0.4, -0.3)) == height, "Density %d cannot change gameplay height." % density)
 		_check(status.field_samples == 1089 and surface._field_image.get_data().size() == field_bytes, "Density %d does not add field particles or texture samples." % density)
-		var mm: MultiMesh = renderer._panels.multimesh
-		_check(mm.instance_count == status.tiles and renderer._ribbons.multimesh.instance_count == status.tiles, "Crests/ribbons remain paired at density %d." % density)
+		var mm: MultiMesh = renderer._ribbons.multimesh
+		_check(mm.instance_count == status.tiles and renderer._panels.multimesh.instance_count == 289, "Only lower panels subdivide at density %d." % density)
+		_check(_anchors(renderer._panels.multimesh) == original_crests and renderer.get_density_status().crest_layout_rebuilds == crest_rebuilds, "Crest positions and artwork never rebuild when slider changes.")
 		var first: Vector3 = mm.get_instance_transform(0).origin
 		var last: Vector3 = mm.get_instance_transform(mm.instance_count - 1).origin
 		var bounds := Rect2(Vector2(first.x, first.z) - Vector2.ONE * status.spacing * 0.5, Vector2(last.x-first.x, last.z-first.z) + Vector2.ONE * status.spacing)
@@ -49,6 +52,23 @@ func _run() -> void:
 		var rebuilt: int = status.layout_rebuilds
 		scene._update_scene(0.0)
 		_check(renderer.get_density_status().layout_rebuilds == rebuilt, "Paused/frame updates do not rebuild density %d layout." % density)
+	# Hiding lower panels isolates the actual crest shader: density must leave
+	# rendered crests unchanged, not just their CPU anchors.
+	scene.hud.visible = false
+	renderer._ribbons.visible = false
+	scene.camera.set_pitch(20.0, true)
+	scene.density_slider.value = 1
+	for frame: int in range(3):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	var crest_pixels: PackedByteArray = root.get_texture().get_image().get_data()
+	scene.density_slider.value = 8
+	for frame: int in range(3):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	_check(root.get_texture().get_image().get_data() == crest_pixels, "Actual rendered crest geometry is pixel-identical between density 1 and 8.")
+	renderer._ribbons.visible = true
+	scene.hud.visible = true
 	# Verify field texture interpolation against the logical sampler, including
 	# non-grid coordinates. The shader uses these four texels and derivatives.
 	for point: Vector2 in [Vector2(0.5, -0.75), Vector2(-3.75, -4.25), Vector2(16.3, -18.6)]:
@@ -59,13 +79,13 @@ func _run() -> void:
 	# their artwork instead of shuffling when the visible window scrolls.
 	scene.density_slider.value = 4
 	scene._update_scene(0.0)
-	var before: Dictionary = _anchors(renderer._panels.multimesh)
+	var before: Dictionary = _anchors(renderer._ribbons.multimesh)
 	var rebuilt: int = renderer.get_density_status().layout_rebuilds
 	scene.bucket.position.x = -4.1
 	scene.bucket.position.z = -4.1
 	scene._update_scene(0.0)
 	_check(renderer.get_density_status().layout_rebuilds == rebuilt + 1, "Logical boundary travel rebuilds the static window once.")
-	var after: Dictionary = _anchors(renderer._panels.multimesh)
+	var after: Dictionary = _anchors(renderer._ribbons.multimesh)
 	var shared: int = 0
 	var stable: bool = true
 	for key: Vector3 in before:

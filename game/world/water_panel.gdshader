@@ -55,9 +55,13 @@ void vertex() {
     float sky = profile_coordinate(field.a, vec4(0.12, 0.65, 0.88, 1.0));
     float height_scale = mix(height_range.x, height_range.y, clamp((wind + sky) / 6.0, 0.0, 1.0));
     float seed_value = card_data.g;
-    float ratio = visual_spacing / 4.0;
-    float row = round((anchor.y - visual_center_offset) / visual_spacing);
-    float stagger = mod(row, 2.0) < 0.5 ? visual_spacing * 0.5 : 0.0;
+    // Density affects only the reclining lower-water panels. Curling crests
+    // keep original size, spacing and seed identity at every slider value.
+    float spacing = card_data.a > 0.5 ? logical_cell_size : visual_spacing;
+    float center_offset = card_data.a > 0.5 ? 0.0 : visual_center_offset;
+    float ratio = spacing / 4.0;
+    float row = round((anchor.y - center_offset) / spacing);
+    float stagger = mod(row, 2.0) < 0.5 ? spacing * 0.5 : 0.0;
     vec3 vertex = VERTEX * ratio;
     vec3 offset;
     if (card_data.a > 0.5) {

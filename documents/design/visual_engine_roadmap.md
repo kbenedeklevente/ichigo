@@ -2,7 +2,7 @@
 
 ## Retained visual-density study — 6 September 2026
 
-The user selected the [visual density iteration](../experiments/visual_water_density.md) to keep on its own branch. A 1–8× slider subdivides illustrated tiles and interpolates their movement on the GPU from the unchanged 4 m logical grid. The next branch addresses keeping the curling crests large while retaining smaller water tiles; follow the study for scope and the confirmed original crest spacing.
+The user selected the [visual density iteration](../experiments/visual_water_density.md) to keep on its own branch. A 1–8× slider subdivides illustrated tiles and interpolates their movement on the GPU from the unchanged 4 m logical grid. The [full-size crest follow-up](../experiments/full_size_wave_crests.md) now implements the confirmed separation on its own branch: the slider affects only lower panels, while 289 curling crests retain their original size and spacing. Its appearance is ready for user review.
 
 ## Selected direction — Paper Theatre, 6 September 2026
 

@@ -21,7 +21,7 @@ func _run() -> void:
 		_finish(scene)
 		return
 	scene._update_scene(0.0)
-	_check(scene.weather_presentation.get("_panels").multimesh.instance_count == 1156, "The 2x visual preview draws 1156 tiles over the unchanged logical region.")
+	_check(scene.weather_presentation.get("_panels").multimesh.instance_count == 289 and scene.weather_presentation.get("_ribbons").multimesh.instance_count == 1156, "The 2x preview subdivides lower panels while retaining 289 full-size crests.")
 	_check(scene.weather_runtime.weather.get_status().simulated_cells == 1089, "The simulation includes a larger1089-cell region.")
 	_check(not scene.ocean.get("_surface").visible and not scene.ocean.get("_far_surface").visible, "Both legacy continuous ocean meshes are hidden.")
 	var crest_point := Vector2.ZERO
