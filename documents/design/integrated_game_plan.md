@@ -6,6 +6,8 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
+The [three lower-crest studies](../experiments/crest_body_study.md) are ready for user comparison. The previous state is preserved at `acf75b7`; no redesigned family is selected yet.
+
 The [five-level weather study](five_level_weather.md) implements ten levels total (five sky and five wind), lower calm crests and a reversed-logarithmic rise to a 2× maximum. Tempest combinations are manually triggerable; their automatic probabilities remain unselected.
 
 Three weather change modes are implemented for review: normal transitions, queued instant execution, and immediate laboratory replacement. The [weather algorithm review](weather_algorithm_review.md) documents the controls, reusable event policy and current automatic selection/pacing; proposed balance changes remain unselected.

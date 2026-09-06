@@ -33,6 +33,7 @@ var fishing_line: MeshInstance3D
 var line_material: StandardMaterial3D
 var hud: CanvasLayer
 var pitch_slider: HSlider
+var crest_study_select: OptionButton
 var weather_mode_select: OptionButton
 var density_slider: HSlider
 var density_label: Label
@@ -500,6 +501,16 @@ func _build_hud() -> void:
 		weather_mode_select.item_selected.connect(func(index: int): weather_runtime.weather_change_mode = weather_mode_select.get_item_id(index))
 		weather_row.add_child(weather_mode_select)
 		weather_row.add_child(weather_hint)
+		if "--crest-study" in OS.get_cmdline_user_args():
+			panel.offset_top -= 48
+			crest_study_select = OptionButton.new()
+			crest_study_select.focus_mode = Control.FOCUS_NONE
+			for study_title: String in ["Crest: saved original", "Crest 1: Quiet Cut", "Crest 2: Ink Wash", "Crest 3: Long Current"]:
+				crest_study_select.add_item(study_title)
+			for state: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+				crest_study_select.add_theme_color_override(state, Color("183e57"))
+			crest_study_select.item_selected.connect(func(index: int): weather_presentation.set_crest_study(index))
+			column.add_child(crest_study_select)
 
 func _update_hud() -> void:
 	pitch_slider.set_value_no_signal(camera.pitch_degrees)

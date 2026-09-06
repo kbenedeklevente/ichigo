@@ -17,6 +17,8 @@ Use this index to retrieve the smallest useful design context. Start with the cu
 | Architecture, ownership, saves, performance, input, audio, accessibility, delegation | [execution_and_delegation.md](execution_and_delegation.md), [prototype contracts](../work_packets/prototype_contracts.md) | Specific affected system plan; [work packet index](../work_packets/README.md) | `game/tests/`, `scripts/`, affected runtime modules |
 | Development philosophy, workflow, documentation | [dev_philosophy.md](../dev_philosophy.md), [execution_and_delegation.md](execution_and_delegation.md), this map | Relevant system if applying the philosophy to a concrete task | `.codex/skills/ichigo-design-context/SKILL.md`, `AGENTS.md` |
 
+For the three unselected lower-crest artwork proposals and matched showcase, read [crest body study](../experiments/crest_body_study.md). The saved original remains the default.
+
 For visual tile size, density, GPU field interpolation and the slider limit study, read [visual water density](../experiments/visual_water_density.md). Its retained branch subdivides drawings without changing logical cells. For the current correction, read [full-size crests](../experiments/full_size_wave_crests.md): only lower panels subdivide; curling crests retain their original size and spacing.
 
 For the current five sky/five wind tiers and crest-height curve, read [five-level weather](five_level_weather.md). It supersedes earlier 0–3 severity and linear crest-height descriptions.

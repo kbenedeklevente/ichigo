@@ -174,3 +174,21 @@ func _fill_grid(mm: MultiMesh, first_cell: Vector2i, side: int, spacing: float, 
 			var variant := float(posmod(cell.x + cell.y * 3, 3)) * 0.5
 			mm.set_instance_transform(index, transform)
 			mm.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0) if crest else Color(0.0, seed_value, 0.0, 0.0))
+
+## Art-study selector only: material changes cannot advance or modify weather.
+func set_crest_study(index: int) -> bool:
+	var directories := ["", "quiet_cut", "ink_wash", "long_current"]
+	if index < 0 or index >= directories.size():
+		return false
+	var folder: String = "res://game/presentation/waves/"
+	if index > 0:
+		folder += "crest_studies/" + directories[index] + "/"
+	var textures: Array[Texture2D] = []
+	for shape: String in ["curl", "double", "sweep"]:
+		var texture := load(folder + "theatre_" + shape + ".svg") as Texture2D
+		if texture == null:
+			return false
+		textures.append(texture)
+	for i in range(3):
+		_panel_material.set_shader_parameter(["curl_art", "double_art", "sweep_art"][i], textures[i])
+	return true

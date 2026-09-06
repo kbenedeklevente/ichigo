@@ -1,5 +1,9 @@
 # Asset cohesion and production plan
 
+## Lower-crest proposals — 6 September 2026
+
+The user requested three redesigns of the lower crest body, preserving the upper curling silhouette and foam edge. [Quiet Cut, Ink Wash and Long Current](../experiments/crest_body_study.md) are implemented as switchable, unselected art families on their own branch. The saved original is retained as the normal default.
+
 ## Current crest proportions — 6 September 2026
 
 See [five-level weather](five_level_weather.md) for the added Tempest sky/wind tiers and lower calm crests with a reversed-logarithmic 0.35×–2× height curve. The lower-water panels retain their existing coverage and height response.
