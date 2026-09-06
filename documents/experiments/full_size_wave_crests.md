@@ -28,6 +28,14 @@ The rendered suites require the actual graphics backend; Godot's headless dummy 
 
 [Calm at 2×](full-size-wave-crests/calm-20-density-2.png) · [Storm at 8×](full-size-wave-crests/storm-52-density-8.png)
 
+## Quieter base artwork — 6 September 2026
+
+The user requested more homogeneous lower-water assets after reviewing the multiplied pattern. The preceding version is preserved at `6942a3a`. `theatre_ribbon.svg` now uses two closely related blue fills (`#294b5b` and `#305361`), with the repeated spirals, interior linework, pale rim and dark perimeter stroke removed. Its scalloped cutout contour remains. Crest artwork, rendering density, motion and simulation code are unchanged.
+
+Godot imported the edited SVG successfully. Eight rendered captures cover calm/storm, 12°/52° pitch and 2×/8× detail. Inspected calm 12°/2× and storm 52°/8×: the lower panels read more evenly while large crests remain distinct. Some repeated panel silhouettes remain visible by design. No new automated tests were added for this asset-only edit; the earlier code checks above belong to the preceding renderer change.
+
+[Quieter calm water](full-size-wave-crests/quiet-calm-12-density-2.png) · [Quieter storm water at 8×](full-size-wave-crests/quiet-storm-52-density-8.png)
+
 ## Next review
 
 Compare the lower-panel detail in motion while the large crests remain consistent. Keep the existing 2× starting preview until the user selects another value. Further changes to artwork scale, repetition or density defaults require visual feedback.
