@@ -40,7 +40,7 @@ func _run() -> void:
 	scene.bucket.position = Vector3.ZERO
 	scene._update_scene(0.0)
 	await _capture(scene, "calm")
-	_check(scene.weather_runtime.director.trigger("weather.mix.raincloud.strong"), "The scene admits a triggered mixed front.")
+	_check(scene.weather_runtime.scheduler.trigger("weather.mix.raincloud.strong"), "The scene admits a triggered mixed front.")
 	scene.weather_runtime.advance(20.0, Vector2.ZERO)
 	scene.simulation_time = 20.0
 	scene._update_scene(0.0)
@@ -63,7 +63,7 @@ func _run() -> void:
 	var before: Dictionary = scene.weather_runtime.snapshot()
 	await process_frame
 	await process_frame
-	_check(scene.weather_runtime.snapshot() == before, "Pausing the actual scene freezes director and panel/weather simulation.")
+	_check(scene.weather_runtime.snapshot() == before, "Pausing the actual scene freezes scheduler and panel/weather simulation.")
 	_finish(scene)
 
 func _capture(scene, name: String) -> void:

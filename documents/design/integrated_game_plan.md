@@ -6,6 +6,8 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
+The user prioritized scheduler/chance implementation before starter content. The [coordinator](weather_encounter_scheduler.md) and [chance tables](event_eligibility_and_chance.md) now drive existing weather and salvage, including atomic linked requests and a two-total weather capacity. See [implementation review](../work_packets/scheduler_chance_implementation.md). All [starter ideas](starter_event_ideas.md) remain unselected.
+
 The user selected **Paper Theatre** as the clear winner of the five art studies. It is merged into main at `1622c52`. Its ocean uses independent illustrated crest cards, separate reclining ribbon cards, and an ink-colored backdrop; the old shared visible water mesh is removed. The invisible gameplay sampler remains approximate and is a later integration concern.
 
 The authorized cohesion pass is implemented for visual review: the selected waves are unchanged and Ichigo/bucket use matching layered drawings. See [character art study](../experiments/paper_theatre_character.md). Preserve the young ungendered child, very oversized number-15 jersey, no hat, giant wooden bucket, 12–52° camera and existing physical anchors. Fish are secondary. The user now identifies the current wave artwork as turbulent wind level 2 and requests wind-driven horizontal/vertical visual motion. See [wind visual motion](wind_visual_motion.md) for the technical audit and pending frequency/travel clarification.

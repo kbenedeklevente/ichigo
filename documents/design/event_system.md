@@ -1,85 +1,56 @@
 # Shared triggered and chance event system
 
-Status: first executable foundation, 5 September 2026. This follows the user's decision to separate story-triggered events from chance-based side opportunities while allowing the same activation concepts in any domain. The weather handler is integrated; quest, achievement and story handlers remain to be authored.
+Status: integrated coordinator and chance authoring implemented, 6 September 2026. Weather and the existing salvage fixture use one scheduler. Authored wildlife, puzzles, inventory rewards and story content remain future work.
 
-## Pending scheduling proposal
+## Ownership and activation
 
-The user is reviewing a size-two weather queue and linked weather/encounter story requests. See [coordinator proposal](weather_encounter_scheduler.md). It is not implemented or approved and does not yet supersede the runtime rules below.
-
-The [eligibility and chance authoring model](event_eligibility_and_chance.md) documents hard prerequisites, base rates, wind × time-of-day weights, independent sky modifiers and aggregate pacing. The matrix schema remains planned. See [starter ideas](starter_event_ideas.md) for small, unselected weather and encounter proposals from the subagent review.
-
-## Latest encounter revision
-
-The user now requires no overlapping encounters and no weather transitions during an encounter, with weather-dependent chance rates and local event field modifiers. The [encounter-fields proposal](encounter_fields_and_pacing.md) defines that revision. Its global admission/transition gate supersedes the earlier future-concurrent-domain proposal below and is implemented for a salvage fixture. The user approved90s quiet and a240s minimum mean eligible wait, and declined protecting ordinary fishing fights. Remaining event families and their draft rate balance still need content work.
-
-## Activation and outcomes are separate
-
-An event definition describes **what can happen**. Its activation policy describes **why it starts**. Its handler controls **what happens during play**. Completion and rewards depend on the resulting outcome; dispatch alone does not complete a quest, solve a puzzle or grant an achievement.
+An event definition describes what can happen. Its activation policy describes why it starts. Its handler controls execution. Dispatch does not complete a quest, solve a puzzle or grant an achievement.
 
 | Activation | Source | Intended use |
 |---|---|---|
-| `trigger` | An explicit call after prerequisites are met | Main-story progression, player actions, scripted consequences |
-| `chance` | A seeded chance tick while eligible | Side encounters, discoveries, ambient activity, achievement opportunities |
-| `both` | Either path starts the same event handler | Weather and other reusable events that can serve story or incidental play |
+| `trigger` | Explicit request after prerequisites | Main-story progression, player actions and consequences |
+| `chance` | Seeded eligible-time roll | Side opportunities and weather |
+| `both` | Either path to the same handler | Reusable weather/encounter definitions |
 
-Main-story sequence and prerequisites are authored. Side-event availability may be random. Story-triggered weather still receives a random arrival direction. An achievement recognizes an actual feat/outcome; chance supplies its opportunity, not an unearned achievement. Local steering, fishing and puzzle decisions keep their consequences. What the player cannot avoid by simply choosing another heading is the arrival of a scheduled weather front.
+Main-story prerequisites remain authored; chance supplies opportunities, not unearned achievements. Local steering and interactions retain consequences. Story-triggered and chance-triggered weather both arrive from a seeded random direction and center over the player.
 
-## Definition contract
+The [coordinator](weather_encounter_scheduler.md) owns one pending request collection, weather/encounter track allocation, chance admission, cooldowns and quiet time. `environment_runtime.gd` routes commands and completions; weather owns front interpolation and physics, and encounter instances own local actors, modifiers and outcomes. Rendering never consumes chance RNG.
 
-Each definition has a stable `id`, a `domain`, an `activation` policy, `requires` flags, `rate_per_second`, `cooldown_seconds`, `once`, `priority`, `exclusive_group` and handler-specific `payload`.
+Weather capacity is **two total, including active**. Linked requests require both payloads and reserve both tracks atomically. An active encounter blocks new encounters and weather transitions through departure; a reserved encounter allows its required weather approach to run. Ordinary eligible requests can bypass blocked work safely, while viable story pairs drain tracks to prevent starvation.
 
-Example story-driven weather definition, an integration example rather than authored Ichigo plot:
+## Definition and request contracts
+
+See [eligibility/chance authoring](event_eligibility_and_chance.md) for the canonical schema, hard exclusions, wind × time weights, independent sky weights and tick conversion. `event_catalog.gd::scheduler_definitions()` supplies the enabled definitions. Configure before a run; configuration resets runtime state and is not a content-append API.
 
 ```gdscript
-{
-    "id": "story.example.weather", "domain": "weather", "activation": "trigger",
-    "requires": ["example_puzzle_solved"], "once": true, "priority": 100,
-    "exclusive_group": "weather", "rate_per_second": 0.0,
-    "cooldown_seconds": 0.0,
-    "payload": {"sky": "raincloud", "wind": "strong", "approach_s": 12.0,
-                "hold_s": 18.0, "clearing_s": 12.0}
-}
+# Existing fixtures, not authored story content:
+runtime.trigger_weather("sky", "cloudy")
+runtime.trigger_encounter("salvage")
+var result = runtime.submit_story(
+    "test.sequence.1", "weather.mix.cloudy.breeze", "salvage", flags)
 ```
 
-The story controller adds the milestone flag only after the player actually solves the puzzle, then calls `trigger(id, context)`. Pass current flags to subsequent `advance` calls too; queued events are rechecked before dispatch. Definitions must be registered when configuring the director. Runtime configuration resets its state, so do not use `configure` to append content mid-play.
+For explicit identity and optional tracks, use `scheduler.submit(request_id, weather_id, encounter_id, story, context)`. Its result is accepted/duplicate/full/invalid/ineligible. Submission validates both halves before mutation. Retain required story intent in its future owner when a queue is full; retry with the same ID and never treat queue admission as completion. A story pair requires both definitions. All requests recheck prerequisites before starting.
 
-Future wildlife/fishing/loot conditions should be translated into explicit eligibility flags by their owning systems, or extend the condition schema deliberately. The current engine does not parse an arbitrary scripting language for conditions. Camera orientation and frame rate are never eligibility inputs.
+Definitions supply `eligibility.requires` and `eligibility.excludes` flags. Pass current flags to each `runtime.advance(delta, player_position, flags)` so withdrawn prerequisites do not become stale authorization. Hard environmental exclusions also apply to triggers; chance weights do not. Completed request IDs deduplicate retries, and per-definition `once` and cooldown rules control repetition.
 
-## Lifecycle and conflicts
+## Pacing and execution
 
-`eligible → queued/proposed → active → finished(outcome) → cooldown/consumed`
+Physics/handler coordination runs at 30 Hz. The scheduler integrates eligible hazard and rolls at one-second intervals, separately for weather and encounters. Encounter aggregate hazard is capped at 1/240 eligible seconds with 90 seconds of guaranteed quiet after departure. Weather retains the existing sixteen-combination study rates with a separate 1/60 ceiling. Adding candidates cannot exceed those ceilings; below the ceiling, catalog size can still affect total frequency.
 
-- Triggered events are queued once, bounded to64 pending requests. Priority then FIFO determines dispatch. A queued story event waits for an occupied exclusive group; it does not interrupt a visible event.
-- Chance evaluation uses fixed one-second ticks and `1 - exp(-rate * tick_duration)` per eligible definition. With equal-priority simultaneous candidates, selection is randomized. Current exclusions/cooldowns alter the eligible distribution.
-- Chance proposals are not accumulated behind an occupied group. Waiting through a long story event does not cause a burst of backlogged random weather afterward.
-- One `weather` exclusive group serializes weather fronts. A future unrelated group can proceed concurrently. No global lock prevents every other domain from acting.
-- An active event stays active until its owner calls `finish(id, outcome)`. Weather calls this only after its complete approach/hold/clear lifecycle.
-- Cooldown begins at finish. A `once` event is consumed at dispatch, including a failed outcome. Retryable required story content must use an explicit retry policy or a repeatable opportunity definition; do not accidentally make a failed handler permanently block the story.
-- Failed admission returns false; no reward or world mutation should be committed before admission. Runtime weather-handler rejection finishes the event as failed.
+Explicit requests can wait; random opportunities do not accumulate behind locks. Ordinary fishing is not a protected scheduling gate, following the user's decision. Story requests currently respect post-encounter quiet time too.
 
-No actual main-story events or quest rewards are invented by this foundation. The [story plan](story_points.md) supplies the later authored milestone graph, and [encounter plan](encounters_puzzles.md) supplies outcome semantics.
+Weather retains approach/hold/clear defaults and response constants in [runtime parameters](weather_runtime_parameters.md). During an encounter the macro phase is held, while waves, clouds, wind, rain and local modifier physics keep advancing. Side-event departure remains governed by [encounter fields and pacing](encounter_fields_and_pacing.md). Offscreen/out-of-range retirement and successful interaction remain different outcomes.
 
-## Weather integration
+## Implementation and validation
 
-The study catalog has16 complete `weather.mix.<sky>.<wind>` combinations, all supporting both activation paths. Each has an idle rate of `1/960` per second and a120-second per-definition cooldown. With all16 eligible, aggregate hazard is approximately one event per60 seconds of eligible idle time; this is not a promise of an event every minute. Equal initial weights make the axes independent; cooldowns change the available set afterward.
+- [environment_scheduler.gd](../../game/events/environment_scheduler.gd): pending requests, atomic reservations, eligibility, budgets, selection and persistence.
+- [event_chance.gd](../../game/events/event_chance.gd): pure schema validation, interpolation and probability calculation.
+- [event_catalog.gd](../../game/events/event_catalog.gd): enabled weather/salvage definitions; neutral time columns preserve existing balance.
+- [environment_runtime.gd](../../game/events/environment_runtime.gd): synchronized stepping and handler routing.
+- [weather_simulation.gd](../../game/world/weather_simulation.gd): front lifecycle, fields and base-weather authoring sample.
+- [encounter_runtime.gd](../../game/events/encounter_runtime.gd): managed salvage handler, actors, visibility and departure.
 
-Eight single-axis trigger-only aliases remain available for code tests. Their omitted axis uses the weather baseline. The study's number keys instead assemble a full pair from the last selected sky and wind, so combinations can actually be previewed. Queued front requests do not skip the currently active front. Repeated requests for the same active, queued or cooling-down ID are rejected.
+See [scheduler implementation review](../work_packets/scheduler_chance_implementation.md) for tests and snapshot-version limits. The older `event_director.gd`, legacy catalog method and standalone salvage chance path remain tested study utilities; they are not parallel admission owners in the current game.
 
-Event activation and incoming-front direction have separate seeded RNG streams. The bridge runs at30Hz, forwards weather payloads to the handler, and releases the director's weather group when the handler finishes. Other domains use the generic director directly and supply their own handlers; the weather bridge does not auto-complete or award non-weather events.
-
-The detailed parameters, matrix layout and physical behavior are in [weather runtime parameters](weather_runtime_parameters.md).
-
-## Code and persistence
-
-- [event_director.gd](../../game/events/event_director.gd): admission, fixed chance ticks, queue, priority, lifecycle and cooldowns.
-- [event_catalog.gd](../../game/events/event_catalog.gd): editable weather definitions.
-- [environment_runtime.gd](../../game/events/environment_runtime.gd): director-to-weather bridge and synchronized stepping.
-- [weather_simulation.gd](../../game/world/weather_simulation.gd): fields, fronts and connected springs.
-
-Director snapshots preserve catalog fingerprint, RNG, time/remainder, queue order, active events, consumed IDs, cooldowns and outcomes. Combined runtime snapshots also preserve panel fields/velocities, weather phase, front direction/progress and both RNG states. The weather snapshot contains Godot vectors and packed arrays: use native Variant serialization, not plain JSON. This is an in-memory persistence contract, not a finished save menu or full-game save format. Rendering state and the player's world state still need to be included by the eventual save owner.
-
-## Validation and next content work
-
-Tests cover activation provenance, flags, once/cooldown behavior, queue conflicts, chance fairness, frame partitioning, blocked chance behavior, snapshot rejection/replay, actual weather-handler completion and active-front restore. Scene tests confirm that rainfall and lighting respond, the bucket and targeting sample the new water, and pause freezes both systems.
-
-Next, author a small story milestone with an explicit trigger and a side encounter with chance eligibility against this same interface. Decide their actual narrative and player outcomes with the user first. Keep the event system generic rather than encoding a story's meaning into the weather renderer.
+[Starter content ideas](starter_event_ideas.md) remain unselected. This scheduler work introduces no new wildlife, puzzle or story event.

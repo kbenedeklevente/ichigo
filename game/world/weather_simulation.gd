@@ -415,3 +415,28 @@ func _initialize_cell(index: int, cell: Vector2i) -> void:
 	_fields.wind_z[index] = target_vector.y
 	for name in ["cloud_cover", "rain", "light"]:
 		_fields[name][index] = lerpf(float(SKY_PROFILES[baseline_sky][name]), float(SKY_PROFILES[_sky][name]), influence)
+
+
+## Scheduling reads base scalar fields, never event-local departure gusts.
+## Physical wind strength remains unchanged; 0–3 is a derived authoring coordinate.
+func chance_context(point: Vector2) -> Dictionary:
+	var local: Dictionary = sample(point)
+	var strengths := [0.12, 1.8, 5.0, 9.0]
+	var intensity: float = 3.0
+	for index: int in range(3):
+		if float(local.wind_strength) <= strengths[index + 1]:
+			intensity = index + clampf(inverse_lerp(strengths[index], strengths[index + 1], float(local.wind_strength)), 0.0, 1.0)
+			break
+	var names := ["sunny", "cloudy", "raincloud", "storm"]
+	var clouds := [0.12, 0.65, 0.88, 1.0]
+	var mix: Dictionary = {"storm": 1.0}
+	var sky: String = "storm"
+	for index: int in range(3):
+		if float(local.cloud_cover) <= clouds[index + 1]:
+			var fraction: float = clampf(inverse_lerp(clouds[index], clouds[index + 1], float(local.cloud_cover)), 0.0, 1.0)
+			mix = {names[index]: 1.0 - fraction, names[index + 1]: fraction}
+			sky = names[index] if fraction < 0.5 else names[index + 1]
+			break
+	return {"wind_intensity": intensity, "sky": sky, "sky_mix": mix,
+		"day_phase": fposmod(day_phase + (_clock / day_period_s if day_period_s > 0.0 else 0.0), 1.0),
+		"weather_stage": _stage()}

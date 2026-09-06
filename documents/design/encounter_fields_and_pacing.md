@@ -2,6 +2,8 @@
 
 Status: design proposal following the working weather study. The user requested weather-dependent event chances, no overlapping events, no weather transitions during an encounter, off-screen retirement, and wind-driven departure for lingering side events. The user approved90 seconds of quiet, at least240 seconds mean eligible random wait, and180-second side-event departure. They explicitly declined protecting ordinary hooked-fish fights from weather/events. A salvage-only runtime, global encounter/transition gate, sparse bounds index and local modifier composition are now implemented. Other event families and their draft rates remain future content work. See [implementation review](../work_packets/p2_wave_encounter_review.md).
 
+The [scheduler](weather_encounter_scheduler.md) now owns integrated admission, chance rates, cooldowns and quiet time. Use [chance authoring](event_eligibility_and_chance.md) for current matrix evaluation; the draft content rates below are not newly enabled.
+
 ## The data model
 
 Separate an event's immutable definition, its live instance, its spatial index entry, and its optional influence on the world fields.
@@ -44,7 +46,7 @@ During an encounter, block all new encounter activations and all weather transit
 
 When the weather is already transitioning, delay encounter admission until conditions settle. When an encounter is active, retain triggered story/weather requests as pending and do not accumulate chance proposals. Do not interrupt an encounter just because a story trigger arrives. Finish departure and release the gate before dispatching the next eligible request.
 
-The existing director's `exclusive_group='weather'` only serializes weather handlers. It does not yet satisfy this global encounter rule. Add an admission/transition gate at the integration level, rather than treating every internal weather stage as a separate competing event. A stable established weather front may supply the backdrop to an encounter, with its outgoing transition held until the encounter ends.
+The integrated scheduler enforces this global gate; the older standalone director’s weather exclusive group is no longer the game’s admission path. A stable established weather front may supply the backdrop to an encounter, with its outgoing transition held until the encounter ends.
 
 The local departure gust belongs to the current encounter's modifier field. It does not start another event or switch the base weather preset. This reconciles the requested stable weather with the requested wind-driven exit.
 

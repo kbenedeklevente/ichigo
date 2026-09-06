@@ -10,10 +10,10 @@ func _initialize() -> void:
 	runtime.weather.render_radius = 1
 	runtime.weather.simulation_radius = 4
 	runtime.weather.configure(104744)
-	_check(runtime.director.trigger("weather.mix.raincloud.strong"), "Weather trigger accepted.")
+	_check(runtime.scheduler.trigger("weather.mix.raincloud.strong"), "Weather trigger accepted.")
 	runtime.advance(13.0, Vector2.ZERO)
 	_check(runtime.weather.get_status().stage == "hold", "Weather is established before encounter admission.")
-	_check(runtime.encounters.trigger("salvage"), "Salvage trigger accepted.")
+	_check(runtime.trigger_encounter("salvage"), "Salvage trigger accepted.")
 	runtime.advance(1.0 / 30.0, Vector2.ZERO)
 	_check(runtime.encounters.get_active() != null, "An encounter can use established weather as its backdrop.")
 	var frozen_elapsed: float = runtime.weather.get_status().elapsed
@@ -23,8 +23,8 @@ func _initialize() -> void:
 	_check(runtime.weather.get_status().transition_held, "The active encounter holds weather transitions.")
 	_check(is_equal_approx(runtime.weather.get_status().elapsed, frozen_elapsed), "The established front cannot enter clearing during the encounter.")
 	_check(runtime.weather.get_status().phase > phase_before, "Physical wave motion continues while the weather phase is held.")
-	_check(runtime.director.snapshot().pending.size() == 1, "Queued weather survives the lock without dispatch.")
-	_check(runtime.director.snapshot().active.size() == 1, "No second weather handler starts.")
+	_check(runtime.scheduler.snapshot().pending.size() == 1, "Queued weather survives the lock without dispatch.")
+	_check(runtime.scheduler.snapshot().active.values().filter(func(record: Dictionary) -> bool: return not record.weather.is_empty()).size() == 1, "No second weather handler starts.")
 	var event = runtime.encounters.get_active()
 	_check(event.resolve("abandoned"), "The fixture can enter departure without awarding completion.")
 	runtime.advance(8.0, Vector2.ZERO)
@@ -44,7 +44,7 @@ func _initialize() -> void:
 	runtime.encounters.report_visibility(false, false)
 	runtime.advance(3.1, Vector2.ZERO)
 	_check(runtime.encounters.get_active() == null, "Off-screen/out-of-range grace retires the actor.")
-	_check(runtime.encounters.get_status().quiet_remaining > 89.0, "Retirement starts the approved quiet interval.")
+	_check(runtime.scheduler.quiet_remaining > 89.0, "Retirement starts the approved quiet interval.")
 	_check(not runtime.weather.get_status().transition_held, "Retirement releases the weather hold.")
 	_check(runtime.weather.sample(at).current.is_zero_approx(), "Retirement removes the local current source.")
 	_check(runtime.encounters.get_status().outcomes[event.id].outcome == "abandoned", "Off-screen retirement does not grant a completed outcome.")

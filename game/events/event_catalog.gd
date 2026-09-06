@@ -29,3 +29,28 @@ static func _weather_definition(axis: String, value: String) -> Dictionary:
 		"cooldown_seconds": 120.0, "once": false, "requires": [],
 		"payload": {axis: value}, "priority": 0, "exclusive_group": "weather"
 	}
+
+
+## Runtime coordinator catalog. Legacy default_definitions remains for standalone
+## director studies; the game uses this schema and one scheduler instead.
+static func scheduler_definitions() -> Array[Dictionary]:
+	var Chance = preload("res://game/events/event_chance.gd")
+	var definitions: Array[Dictionary] = []
+	for original: Dictionary in default_definitions():
+		var definition: Dictionary = original.duplicate(true)
+		definition["base_rate_per_second"] = definition.rate_per_second
+		definition.erase("rate_per_second")
+		definition["wind_time_weights"] = Chance.uniform_table()
+		definition["sky_weights"] = {"sunny": 1.0, "cloudy": 1.0, "raincloud": 1.0, "storm": 1.0}
+		definition["eligibility"] = {"requires": definition.requires}
+		definitions.append(definition)
+	# Re-express the existing salvage P60 and wind multipliers exactly at profile
+	# anchors. All time columns are neutral until content/time balance is chosen.
+	var base: float = -log(0.95) / 60.0
+	definitions.append({"id": "salvage", "domain": "encounter", "activation": "both",
+		"base_rate_per_second": base, "cooldown_seconds": 0.0, "once": false, "priority": 0,
+		"eligibility": {}, "payload": {"handler": "salvage"},
+		"wind_time_weights": [[0.6, 0.6, 0.6, 0.6], [1.0, 1.0, 1.0, 1.0], [1.3, 1.3, 1.3, 1.3], [0.5, 0.5, 0.5, 0.5]],
+		"sky_weights": {"sunny": 1.0, "cloudy": (-log(0.93) / 60.0) / base,
+			"raincloud": (-log(0.91) / 60.0) / base, "storm": (-log(0.96) / 60.0) / base}})
+	return definitions

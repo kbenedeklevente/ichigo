@@ -12,7 +12,7 @@ Use [eligibility and chance authoring](event_eligibility_and_chance.md) for sele
 
 **One resting seabird** is a possible first wildlife art study after choosing and researching a regional species. It offers observation and a disturbance response without requiring fishing or inventory.
 
-The user chooses the first prototype before implementation. The weather preview can precede coordinator work; it does not require silently settling the pending queue capacity or wave oscillation questions.
+The user chooses the first prototype before implementation. The user subsequently prioritized implementing the coordinator and chances before any of these ideas. That infrastructure is now implemented; the queue capacity is confirmed as two total including active weather. Wave oscillation questions remain separate.
 
 ## Weather and ambient candidates
 
@@ -57,6 +57,6 @@ Current `game/events/encounter_runtime.gd`, `game/events/event_instance.gd` and 
 - Review artwork, occlusion and interaction readability at 12°, 20°, 38° and 52°. Verify the current approximate gameplay surface is adequate for its particular actors.
 - For encounters, show success/disruption explicitly before departure obscures the result. The current runtime initiates departure after resolution; retirement alone is never puzzle completion.
 - Reuse the approved 90-second quiet interval, total encounter hazard ceiling of 1/240 eligible seconds, and 180-second lingering departure. Keep weather transitions blocked through the active encounter/departure while physical animation continues.
-- After manual approval, add the chosen definition's hard exclusions and relative weights. Day-phase eligibility needs wiring; current chance logic reads only sky/wind categories. Verify saved interaction state and full actor bounds before enabling random admission.
+- After manual approval, add the chosen definition's hard exclusions and relative weights. Day-phase eligibility is wired in the scheduler, with the current day held fixed and neutral time columns. New content-specific time weights still need selection. Verify saved interaction state and full actor bounds before enabling random admission.
 
 Next decision: select one starter demonstration or encounter. Detailed rates, new verbs and artwork remain reviewable proposals until that choice.

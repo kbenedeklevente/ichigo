@@ -271,7 +271,7 @@ func _trace_raised_water(origin: Vector3, direction: Vector3, mean_distance: flo
 func _unhandled_input(event: InputEvent) -> void:
 	if weather_runtime != null and not paused and event is InputEventKey and event.pressed and not event.echo:
 		if event.physical_keycode == KEY_I:
-			weather_runtime.encounters.trigger("salvage")
+			weather_runtime.trigger_encounter("salvage")
 			return
 		if event.physical_keycode == KEY_O:
 			var active_event = weather_runtime.encounters.get_active()

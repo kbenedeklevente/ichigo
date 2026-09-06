@@ -1,14 +1,14 @@
 # Coordinating weather and encounters
 
-6 September 2026. Proposal requested by the user; not implemented or accepted yet. This replaces neither the current weather handler nor the encounter rules until reviewed.
+6 September 2026. Implemented at the user’s request. The user confirmed the weather capacity is **two total, including active weather**. The coordinator wraps the existing weather and salvage handlers; no starter content is enabled by this change.
 
 ## Problem and existing foundation
 
 Weather and encounters need independent scheduling, with linked story requests able to require both. Independent queue heads and partial allocation could leave weather waiting for an encounter while the encounter waits for weather. Ordinary eligible requests should be able to pass a blocked request without interrupting an active one.
 
-The current game already runs weather approach/hold/clear lifecycles and a salvage encounter fixture. `event_director.gd` has up to 64 pending explicit triggers and one weather exclusive group; chance proposals do not accumulate. `environment_runtime.gd` blocks weather transitions during an encounter and delays encounters during transitions. It does not yet implement a size-two weather queue or atomic weather/encounter pairs.
+The game runs weather approach/hold/clear lifecycles and a salvage encounter fixture through `environment_scheduler.gd`. `environment_runtime.gd` routes commands to handlers and reports completion. The older standalone `event_director.gd` and independent salvage chance path remain isolated study/test utilities; the integrated game no longer uses them for admission.
 
-## Recommended model
+## Implemented model
 
 One coordinator owns a pending request collection, ordering and two activity tracks:
 
@@ -27,7 +27,7 @@ Request variants:
 
 A `submit_story(weather, encounter)` convenience method validates both payloads and creates a linked, story-priority request. Keep story importance distinct from resource requirements internally; a non-story sequence could also need coordinated weather later.
 
-Submitting validates all payloads and capacity before recording anything. Return a clear accepted/duplicate/full/invalid result; never enqueue half of a pair. A required story intent that cannot yet be accepted remains pending in its story owner for later retry, rather than silently disappearing or being marked complete. Use stable request IDs to deduplicate retries.
+Submitting validates all payloads and capacity before recording anything. Return a clear accepted/duplicate/full/invalid/ineligible result; never enqueue half of a pair. A required story intent that cannot yet be accepted remains pending in its story owner for later retry, rather than silently disappearing or being marked complete. Use stable request IDs to deduplicate retries.
 
 ## Start and completion rules
 
@@ -39,22 +39,30 @@ Submitting validates all payloads and capacity before recording anything. Return
 
 ## Queue size, bypass and fairness
 
-User requirement: weather queue has a maximum size of two. **Pending clarification:** whether this means two waiting weather-bearing requests in addition to the active lifecycle, or two total including the active lifecycle. A linked request counts as one weather-bearing request. Encounter capacity is separately configurable; matching array indexes are unnecessary.
+Confirmed capacity: **two weather-bearing requests total**, counting the active lifecycle and waiting requests. Therefore one active front leaves room for one waiting front or pair. A linked request counts once. The single pending collection also has a 64-request bound; encountering a full queue leaves all state unchanged. Only one encounter can be active/reserved. Matching array indexes are unnecessary.
 
-Recommendation: permit bypass of blocked queued requests only when the candidate is safe under current activity and transition rules. It must not preempt an active encounter or force a weather transition through it. This distinguishes independent scheduling from permission to ignore the other system's locks.
+Permit bypass of blocked queued requests only when the candidate is safe under current activity and transition rules. It must not preempt an active encounter or force a weather transition through it. This distinguishes independent scheduling from permission to ignore the other system's locks.
 
-A linked story request must not starve while shorter ordinary requests keep refilling the available track. Once an eligible story request becomes the oldest highest-priority request, stop admitting new ordinary work that would delay its needed tracks; let existing activities finish. Then acquire both atomically. This temporary drain policy is part of the proposed priority behavior and needs review alongside the user's bypass preference.
+A linked story request must not starve while shorter ordinary requests keep refilling the available track. Once an eligible story request becomes the oldest highest-priority request, stop admitting new ordinary work that would delay its needed tracks; let existing activities finish. Then acquire both atomically. This drain policy is implemented for viable story pairs. A pair whose prerequisites or destination exclusions are currently impossible does not block ordinary work.
 
 Chance opportunities should continue to roll only when eligible rather than building a backlog during a blocked story. Explicit triggered requests can wait. Preserve existing quiet intervals and world-event exclusivity unless the user expressly changes them.
 
-See [eligibility and chance authoring](event_eligibility_and_chance.md) for the proposed per-definition rate tables and separate weather/encounter pacing budgets. The coordinator decides admission and starts the weather handler; the simulator owns transition progress and reports when conditions are established. Reserving a linked encounter must not activate the weather-transition hold before its required approach completes.
+See [eligibility and chance authoring](event_eligibility_and_chance.md) for the implemented per-definition rate tables and separate weather/encounter pacing budgets. The coordinator decides admission and starts the weather handler; the simulator owns transition progress and reports when conditions are established. Reserving a linked encounter must not activate the weather-transition hold before its required approach completes.
 
-## Implementation sequence after review
+## Runtime API and lifecycle details
 
-1. Add coordinator/request types and explicit queue-capacity behavior around the existing handlers; do not rewrite the physics or renderer.
-2. Test one weather-only front through calm → approach → established → clear → calm, including a second queued front and a full-queue rejection.
-3. Integrate ordinary encounter admission/transition holds and prove a blocked pair can be bypassed only by safe requests.
-4. Test a linked weather + placeholder encounter fixture: both reserved together, weather settles first, encounter starts, conditions held, clean completion/cancellation. This is a scheduling fixture, not invented story content.
-5. Persist request IDs/order, reservations, active ownership and lifecycle state; verify restore cannot start a pair twice or release only half.
+- `scheduler.submit(request_id, weather_id, encounter_id, story, context)` accepts definition IDs, with weather/encounter optional except for story pairs. Payloads are validated when the catalog is configured. Caller IDs make retries idempotent. Different request IDs may queue the same repeatable definitions behind active work; the laboratory trigger convenience still suppresses duplicate button requests.
+- `runtime.trigger_weather(axis, condition)` and `runtime.trigger_encounter("salvage", flags)` route existing laboratory controls through the same scheduler. `runtime.submit_story(request_id, weather_id, encounter_id, flags)` exercises pairing without inventing narrative content.
+- Explicit requests skip chance weights but recheck hard eligibility and prerequisites at allocation. Story pairs also check that the destination could support their encounter. Once the front reaches hold, actual local fields must support it before activation. If those fields lag, retry during the finite hold; if the front starts clearing first, cancel the unstarted encounter.
+- Story requests currently respect the existing 90-second quiet period. No quiet-time bypass is introduced. Trigger priority is followed by FIFO; viable story pairs prevent ordinary refill while waiting for both tracks.
+- Cancellation of a pending request removes it atomically. Cancelling preparation releases its unstarted encounter; the weather completes its existing lifecycle and normal clear without jumping its spatial envelope. Live encounters resolve/depart through their handler before releasing the track. A cancelled pair does not become narrative completion.
+- The simulator retains its 12s approach / 18s hold / 12s clear defaults and physical response constants. The scheduler sets the transition hold only for an actual active encounter, including departure.
+- The scheduler owns encounter quiet time, cooldowns, request identity/ordering, chance RNG and accumulated hazard. Weather front placement uses a separate RNG. Chance requests are admitted immediately or discarded; they never fill the pending queue.
 
-Tests should cover capacity boundaries, pair validation/no partial allocation, no concurrent weather fronts, no transitions during ordinary encounters, bounded story waiting, cancellation during preparation, and deterministic snapshot replay.
+Snapshots include pending/active requests, both owners, preparation/tail phase, outcomes, cooldowns, quiet time and partial chance ticks. Restore validates ownership and definition identity before replacing live state. Runtime snapshot version 3 rejects earlier laboratory version-2 snapshots instead of silently losing their old queues; this project does not yet have released player saves.
+
+## Verification and remaining scope
+
+The scheduler suite covers capacity including active weather, pair validation, preparation versus active holds, safe bypass, story draining, cancellation, cooldown/quiet ownership, hard exclusions, interpolation, weighted frequency and deterministic restore. Existing weather/encounter integration and actual rendered-scene tests remain the regression checks. See [implementation review](../work_packets/scheduler_chance_implementation.md) for the validation record and limits.
+
+No starter idea, wildlife behavior, inventory reward or new story milestone is implemented here. The next content choice remains with the user.

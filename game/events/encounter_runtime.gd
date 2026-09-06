@@ -207,3 +207,18 @@ func restore(data: Dictionary) -> bool:
 	if _active != null:
 		_update_index()
 	return true
+
+
+## Managed handler API. The integrated game admits exclusively through its
+## coordinator; legacy advance/trigger remain only for isolated fixture tests.
+func start_scheduled(player: Vector2, source: String) -> bool:
+	if _active != null or not _pending.is_empty() or not player.is_finite() or source not in ["trigger", "chance"]:
+		return false
+	_quiet_remaining = 0.0
+	_activate(player, source)
+	return true
+
+func advance_managed(delta: float, player: Vector2) -> void:
+	advance(delta, player, {}, false)
+	# The scheduler owns quiet time in the integrated runtime.
+	_quiet_remaining = 0.0
