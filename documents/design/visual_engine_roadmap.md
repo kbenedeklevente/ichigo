@@ -1,5 +1,9 @@
 # Visual engine experimentation roadmap
 
+## Retained visual-density study — 6 September 2026
+
+The user selected the [visual density iteration](../experiments/visual_water_density.md) to keep on its own branch. A 1–8× slider subdivides illustrated tiles and interpolates their movement on the GPU from the unchanged 4 m logical grid. The next branch addresses keeping the curling crests large while retaining smaller water tiles; follow the study for scope and the confirmed original crest spacing.
+
 ## Selected direction — Paper Theatre, 6 September 2026
 
 The user chose Paper Theatre from the five art studies. It is merged into main at `1622c52`: independent upright illustrated crest cards plus separate reclining ribbon cards, weather-driven cell motion, and an ink-colored backdrop. There is no shared visible water mesh. Older requirements below for a matching visible substrate are superseded by this choice. The existing invisible gameplay sampler is retained as a documented approximation; fish and fishing integration are secondary now.

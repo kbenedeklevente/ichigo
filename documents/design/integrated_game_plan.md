@@ -6,6 +6,8 @@ The user selected the full 12°–52° camera range and removed Keep sky. Framin
 
 ## Current next work
 
+The user retained the [visual-density slider iteration](../experiments/visual_water_density.md) and requested a further branch to separate large curling crests from smaller background water tiles. Logical grid size and weather/event physics remain unchanged.
+
 The user prioritized scheduler/chance implementation before starter content. The [coordinator](weather_encounter_scheduler.md) and [chance tables](event_eligibility_and_chance.md) now drive existing weather and salvage, including atomic linked requests and a two-total weather capacity. See [implementation review](../work_packets/scheduler_chance_implementation.md). All [starter ideas](starter_event_ideas.md) remain unselected.
 
 The user selected **Paper Theatre** as the clear winner of the five art studies. It is merged into main at `1622c52`. Its ocean uses independent illustrated crest cards, separate reclining ribbon cards, and an ink-colored backdrop; the old shared visible water mesh is removed. The invisible gameplay sampler remains approximate and is a later integration concern.

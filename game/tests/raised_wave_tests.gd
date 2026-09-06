@@ -32,26 +32,20 @@ func _run() -> void:
 	_check(vertices[2].y > 3.0, "Card has a substantial upright silhouette")
 	var mm: MultiMesh = presentation._panels.multimesh
 	_check(presentation._ribbons.multimesh.instance_count == 289, "Each cell also owns one separate low scenic ribbon")
-	var ribbon: Transform3D = presentation._ribbon_transforms[0]
-	_check(absf(ribbon.basis.y.z) > 1.3, "Low scenery spans depth between upright crest rows")
-	_check(ribbon.origin != presentation._card_transforms[0].origin, "Low scenery has its own staggered anchor")
-	var first := presentation._card_transforms[0]
-	var second := presentation._card_transforms[1]
-	_check(first.origin.distance_to(second.origin) > 3.0, "Cards retain separate world anchors")
-	_check(first.basis != second.basis, "Different cards have independent roots and pivots")
-	var before: Array[Transform3D] = []
-	for i in range(mm.instance_count):
-		before.append(presentation._card_transforms[i])
+	var first: Transform3D = mm.get_instance_transform(0)
+	var second: Transform3D = mm.get_instance_transform(1)
+	_check(first.origin.distance_to(second.origin) > 3.0, "Baseline cards retain separate logical-spaced anchors")
+	_check(mm.get_instance_custom_data(0) != mm.get_instance_custom_data(1), "Neighbor drawings retain independent artwork choices")
+	_check(presentation._ribbons.multimesh.get_instance_custom_data(0).a == 0.0, "Shader receives an explicit reclining-ribbon kind")
+	var original_field: PackedByteArray = surface._field_image.get_data()
+	var original_layout: int = presentation.get_density_status().layout_rebuilds
 	presentation.update_weather(surface, 0.0, Vector3.ZERO)
-	_check(presentation._card_transforms[0] == before[0], "Paused updates preserve card pose exactly")
+	_check(mm.get_instance_transform(0) == first and surface._field_image.get_data() == original_field, "Paused updates preserve anchor and weather field exactly")
 	weather.advance(1.0, Vector2.ZERO)
 	surface.update()
 	presentation.update_weather(surface, 1.0, Vector3.ZERO)
-	var changed := 0
-	for i in range(mm.instance_count):
-		if presentation._card_transforms[i] != before[i]:
-			changed += 1
-	_check(changed > 200, "The shared spring solver moves independently posed cards")
+	_check(surface._field_image.get_data() != original_field, "Spring evolution reaches the shader's fixed-size texture")
+	_check(mm.get_instance_transform(0) == first and presentation.get_density_status().layout_rebuilds == original_layout, "Wave motion needs no CPU anchor rebuild or per-drawing physics state")
 	var fixed := surface.height_at(Vector2(0.4, 0.2))
 	for angle in [12.0, 20.0, 52.0]:
 		var camera := Camera3D.new()

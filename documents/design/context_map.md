@@ -17,6 +17,8 @@ Use this index to retrieve the smallest useful design context. Start with the cu
 | Architecture, ownership, saves, performance, input, audio, accessibility, delegation | [execution_and_delegation.md](execution_and_delegation.md), [prototype contracts](../work_packets/prototype_contracts.md) | Specific affected system plan; [work packet index](../work_packets/README.md) | `game/tests/`, `scripts/`, affected runtime modules |
 | Development philosophy, workflow, documentation | [dev_philosophy.md](../dev_philosophy.md), [execution_and_delegation.md](execution_and_delegation.md), this map | Relevant system if applying the philosophy to a concrete task | `.codex/skills/ichigo-design-context/SKILL.md`, `AGENTS.md` |
 
+For visual tile size, density, GPU field interpolation and the slider limit study, read [visual water density](../experiments/visual_water_density.md). Its retained branch subdivides drawings without changing logical cells.
+
 ## Current status and precedence
 
 The scheduler and chance authoring are implemented for existing weather/salvage fixtures; weather capacity is two total including active. See [verification](../work_packets/scheduler_chance_implementation.md). For chance-table authoring, read [event eligibility and chance](event_eligibility_and_chance.md) alongside the event-system row. For small next-content proposals, read [starter weather and encounter ideas](starter_event_ideas.md); these are not selected or implemented content.

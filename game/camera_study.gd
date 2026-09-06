@@ -33,6 +33,9 @@ var fishing_line: MeshInstance3D
 var line_material: StandardMaterial3D
 var hud: CanvasLayer
 var pitch_slider: HSlider
+var density_slider: HSlider
+var density_label: Label
+var density_stats: Label
 var pitch_label: Label
 var mode_label: Label
 var footer_label: Label
@@ -58,6 +61,7 @@ func _ready() -> void:
 	if weather_runtime != null:
 		weather_presentation = WeatherPresentation.new()
 		add_child(weather_presentation)
+		weather_presentation.set_visual_density(2)
 		encounter_presentation = EncounterPresentation.new()
 		add_child(encounter_presentation)
 		ocean.get("_surface").visible = false
@@ -399,7 +403,7 @@ func _build_hud() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	panel.offset_left = 24
 	panel.offset_right = -24
-	panel.offset_top = -119
+	panel.offset_top = -164 if weather_runtime != null else -119
 	panel.offset_bottom = -24
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color(0.075,0.19,0.24,0.90)
@@ -448,6 +452,29 @@ func _build_hud() -> void:
 	footer_label.modulate = Color("b2c4c0")
 	column.add_child(footer_label)
 	if weather_runtime != null:
+		var density_row := HBoxContainer.new()
+		density_row.add_theme_constant_override("separation", 14)
+		column.add_child(density_row)
+		density_label = Label.new()
+		density_label.custom_minimum_size.x = 142
+		density_row.add_child(density_label)
+		density_slider = HSlider.new()
+		density_slider.min_value = WeatherPresentation.MIN_VISUAL_DENSITY
+		density_slider.max_value = WeatherPresentation.MAX_VISUAL_DENSITY
+		density_slider.step = 1
+		density_slider.value = weather_presentation.visual_density
+		density_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		density_slider.custom_minimum_size.x = 180
+		density_slider.tooltip_text = "Smaller visual tiles; the logical water simulation stays the same. Works while paused."
+		density_slider.value_changed.connect(func(value: float):
+			weather_presentation.set_visual_density(roundi(value))
+			_update_scene(0.0)
+			_update_hud())
+		density_row.add_child(density_slider)
+		density_stats = Label.new()
+		density_stats.custom_minimum_size.x = 310
+		density_stats.add_theme_font_size_override("font_size", 12)
+		density_row.add_child(density_stats)
 		var weather_hint := Label.new()
 		weather_hint.text = "LAB · 1–4 sky · 5–8 wind · I request salvage · O send salvage away"
 		weather_hint.add_theme_font_size_override("font_size", 12)
@@ -458,6 +485,10 @@ func _update_hud() -> void:
 	pitch_slider.set_value_no_signal(camera.pitch_degrees)
 	pitch_label.text = "View  %.0f°" % camera.pitch_degrees
 	mode_label.text = "PAUSED" if paused else "PROVISIONAL FORMS"
+	if density_label != null:
+		var density: Dictionary = weather_presentation.get_density_status()
+		density_label.text = "Wave density  %d×" % density.density
+		density_stats.text = "%.2f m · %s tiles · %d FPS" % [density.spacing, str(density.tiles), Engine.get_frames_per_second()]
 	if weather_runtime != null and not paused:
 		var status: Dictionary = weather_runtime.weather.get_status()
 		mode_label.text = "%s · %s" % [weather_runtime.last_source.to_upper(), status.stage.to_upper()]

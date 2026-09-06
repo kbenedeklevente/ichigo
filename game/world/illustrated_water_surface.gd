@@ -18,6 +18,8 @@ var _phase := 0.0
 var _texture: ImageTexture
 var _field_image: Image
 var _last_time := -1.0
+var _minimum_height := 0.0
+var _maximum_height := 0.0
 var _panels: Array[Dictionary] = []
 var _vertex_heights: Dictionary = {}
 
@@ -44,11 +46,17 @@ func update() -> void:
 	_heights = _snapshot.fields.height
 	_amplitudes = _snapshot.fields.amplitude
 	var pixels := PackedFloat32Array()
-	pixels.resize(_side * _side * 2)
+	pixels.resize(_side * _side * 4)
+	_minimum_height = INF
+	_maximum_height = -INF
 	for i in range(_side * _side):
-		pixels[i * 2] = _heights[i]
-		pixels[i * 2 + 1] = _amplitudes[i]
-	var image := Image.create_from_data(_side, _side, false, Image.FORMAT_RGF, pixels.to_byte_array())
+		_minimum_height = minf(_minimum_height, _heights[i])
+		_maximum_height = maxf(_maximum_height, _heights[i])
+		pixels[i * 4] = _heights[i]
+		pixels[i * 4 + 1] = _amplitudes[i]
+		pixels[i * 4 + 2] = _snapshot.fields.wind_strength[i]
+		pixels[i * 4 + 3] = _snapshot.fields.cloud_cover[i]
+	var image := Image.create_from_data(_side, _side, false, Image.FORMAT_RGBAF, pixels.to_byte_array())
 	_field_image = image
 	if _texture == null or _texture.get_width() != _side:
 		_texture = ImageTexture.create_from_image(image)
@@ -65,7 +73,8 @@ func get_panel_states() -> Array[Dictionary]:
 func get_render_parameters() -> Dictionary:
 	return {"field_texture": _texture, "field_origin": Vector2(_origin) * _cell_size,
 		"field_side": float(_side), "cell_size": _cell_size, "crest_phase": _phase,
-		"face_rise": FACE_RISE, "profile_travel": PROFILE_TRAVEL}
+		"face_rise": FACE_RISE, "profile_travel": PROFILE_TRAVEL,
+		"minimum_height": _minimum_height, "maximum_height": _maximum_height, "field_time": _last_time}
 
 func sample(point: Vector2) -> Dictionary:
 	if not point.is_finite():

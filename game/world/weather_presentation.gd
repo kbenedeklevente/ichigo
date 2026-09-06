@@ -5,14 +5,23 @@ extends Node3D
 var _panels := MultiMeshInstance3D.new()
 var _rain := MultiMeshInstance3D.new()
 var _ribbons := MultiMeshInstance3D.new()
-var _ribbon_transforms: Array[Transform3D] = []
 var _panel_material := ShaderMaterial.new()
-var _card_transforms: Array[Transform3D] = []
 var _fallback_surface
 # Amplify signed spring displacement equally above/below the existing art roots.
 const VERTICAL_MOTION_SCALE := 2.0
 const CALM_HEIGHT_SCALE := 0.5
 const MAX_HEIGHT_SCALE := 2.0
+const MIN_VISUAL_DENSITY := 1
+const MAX_VISUAL_DENSITY := 8
+var visual_density: int = 1
+var _layout_key: Array = []
+var _layout_rebuilds: int = 0
+var _visual_side: int = 17
+var _visual_spacing: float = 4.0
+var _visual_origin := Vector2.ZERO
+var _layout_ms: float = 0.0
+var _update_ms: float = 0.0
+var _field_side: int = 33
 const SurfaceSampler = preload("res://game/world/illustrated_water_surface.gd")
 
 static func build_surface_mesh(cell_size: float = 4.0) -> ArrayMesh:
@@ -77,45 +86,32 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 			_fallback_surface.configure(simulation)
 		_fallback_surface.update()
 		simulation = _fallback_surface
-	var states: Array[Dictionary] = simulation.get_panel_states()
-	if _panels.multimesh.instance_count != states.size():
-		_panels.multimesh.instance_count = states.size()
-		_ribbons.multimesh.instance_count = states.size()
-	_card_transforms.resize(states.size())
-	_ribbon_transforms.resize(states.size())
-	for index in range(states.size()):
-		var state: Dictionary = states[index]
-		var point: Vector2 = state.position
-		var cell: Vector2i = state.cell_id
-		var seed_value := fposmod(float(cell.x * 17 + cell.y * 31), 13.0) / 13.0
-		var stagger := 2.0 if posmod(cell.y, 2) == 0 else 0.0
-		var tilt: Vector2 = state.tilt
-		var combined_strength := clampf((float(state.wind_intensity) + float(state.sky_strength)) / 6.0, 0.0, 1.0)
-		var height_scale := lerpf(CALM_HEIGHT_SCALE, MAX_HEIGHT_SCALE, combined_strength)
-		# The spring solver already supplies independently coupled height and slope.
-		# The whole drawing rocks about its submerged foot; no UV travel or bending.
-		var basis := Basis.from_euler(Vector3(-0.18 + tilt.x * 0.45,
-			(seed_value - 0.5) * 0.12, tilt.y * 0.6))
-		var size_y := lerpf(0.70, 0.85, seed_value)
-		basis = basis.scaled(Vector3(1.0, size_y, 1.0))
-		# Scale world Y about the moving waterline, including submerged offsets.
-		# Preserve width/depth coverage even for reclining ribbons in calm weather.
-		basis = basis.scaled(Vector3(1.0, height_scale, 1.0))
-		var visual_height := float(state.height) * VERTICAL_MOTION_SCALE
-		var position := Vector3(point.x + stagger, visual_height - 1.65 * height_scale, point.y + (seed_value - 0.5) * 0.36)
-		_card_transforms[index] = Transform3D(basis, position)
-		_panels.multimesh.set_instance_transform(index, _card_transforms[index])
-		var variant := float(posmod(cell.x + cell.y * 3, 3)) * 0.5
-		_panels.multimesh.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0))
-		# A second independent drawing reclines between crest rows. It has real
-		# depth coverage at high pitch, but never joins into a continuous sea mesh.
-		var ribbon_basis := Basis.from_euler(Vector3(-1.15 + tilt.x * 0.2, 0.0, tilt.y * 0.2))
-		ribbon_basis = ribbon_basis * Basis.from_scale(Vector3(1.18, 1.65, 1.0))
-		ribbon_basis = ribbon_basis.scaled(Vector3(1.0, height_scale, 1.0))
-		var ribbon_position := Vector3(point.x + stagger - 1.0, visual_height - 2.25 * height_scale, point.y + 4.0)
-		_ribbon_transforms[index] = Transform3D(ribbon_basis, ribbon_position)
-		_ribbons.multimesh.set_instance_transform(index, _ribbon_transforms[index])
-		_ribbons.multimesh.set_instance_custom_data(index, Color(0.0, seed_value, 0.0, 0.0))
+	var update_started := Time.get_ticks_usec()
+	var status: Dictionary = simulation.get_status()
+	var parameters: Dictionary = simulation.get_render_parameters()
+	var cell_size: float = status.cell_size
+	var center := Vector2i(floori(player.x / cell_size), floori(player.z / cell_size))
+	var key: Array = [visual_density, center, status.render_radius, cell_size]
+	if key != _layout_key:
+		_rebuild_layout(center, int(status.render_radius), cell_size)
+		_layout_key = key
+	_field_side = int(parameters.field_side)
+	_panel_material.set_shader_parameter("weather_fields", parameters.field_texture)
+	_panel_material.set_shader_parameter("field_origin", parameters.field_origin)
+	_panel_material.set_shader_parameter("field_side", parameters.field_side)
+	_panel_material.set_shader_parameter("logical_cell_size", cell_size)
+	_panel_material.set_shader_parameter("visual_spacing", _visual_spacing)
+	_panel_material.set_shader_parameter("visual_center_offset", (_visual_spacing - cell_size) * 0.5)
+	_panel_material.set_shader_parameter("vertical_motion_scale", VERTICAL_MOTION_SCALE)
+	_panel_material.set_shader_parameter("height_range", Vector2(CALM_HEIGHT_SCALE, MAX_HEIGHT_SCALE))
+	# Shader motion is absent from static MultiMesh transforms: include actual
+	# field extrema and the largest artwork in explicit conservative bounds.
+	var y_min: float = float(parameters.minimum_height) * VERTICAL_MOTION_SCALE - 12.0
+	var y_max: float = float(parameters.maximum_height) * VERTICAL_MOTION_SCALE + 12.0
+	var span: float = (_visual_side - 1) * _visual_spacing + 16.0
+	var bounds := AABB(Vector3(_visual_origin.x - 8.0, y_min, _visual_origin.y - 8.0), Vector3(span, y_max - y_min, span))
+	_panels.multimesh.custom_aabb = bounds
+	_ribbons.multimesh.custom_aabb = bounds
 	var local: Dictionary = simulation.sample(Vector2(player.x, player.z))
 	_panel_material.set_shader_parameter("bucket_center", Vector2(player.x, player.z))
 	_panel_material.set_shader_parameter("illumination", lerpf(0.50, 1.0, clampf(local.light, 0.0, 1.0)))
@@ -128,3 +124,41 @@ func update_weather(simulation, time: float, player: Vector3) -> void:
 		var offset: Vector2 = local.wind * (10.0 - y) * 0.025
 		var basis := Basis.from_euler(Vector3(local.wind.y * 0.018, 0, -local.wind.x * 0.018))
 		_rain.multimesh.set_instance_transform(index, Transform3D(basis, Vector3(player.x+x+offset.x, y, player.z+z+offset.y)))
+
+	_update_ms = float(Time.get_ticks_usec() - update_started) / 1000.0
+
+func set_visual_density(value: int) -> void:
+	visual_density = clampi(value, MIN_VISUAL_DENSITY, MAX_VISUAL_DENSITY)
+
+func get_density_status() -> Dictionary:
+	return {"density": visual_density, "spacing": _visual_spacing,
+		"tiles": _visual_side * _visual_side, "drawings": 2 * _visual_side * _visual_side,
+		"field_samples": _field_side * _field_side, "layout_rebuilds": _layout_rebuilds,
+		"layout_ms": _layout_ms, "update_ms": _update_ms}
+
+func _rebuild_layout(center: Vector2i, radius: int, cell_size: float) -> void:
+	var started := Time.get_ticks_usec()
+	_visual_spacing = cell_size / float(visual_density)
+	_visual_side = (radius * 2 + 1) * visual_density
+	var first_cell := (center - Vector2i.ONE * radius) * visual_density
+	var offset := Vector2.ONE * (_visual_spacing - cell_size) * 0.5
+	_visual_origin = Vector2(first_cell) * _visual_spacing + offset
+	var count := _visual_side * _visual_side
+	# Static anchor + artwork choice only. No per-drawing spring, velocity or
+	# accumulated state. Rebuild only on density changes or logical-grid travel.
+	_panels.multimesh.instance_count = count
+	_ribbons.multimesh.instance_count = count
+	for y in range(_visual_side):
+		for x in range(_visual_side):
+			var index := y * _visual_side + x
+			var cell := first_cell + Vector2i(x, y)
+			var point := Vector2(cell) * _visual_spacing + offset
+			var transform := Transform3D(Basis.IDENTITY, Vector3(point.x, 0.0, point.y))
+			var seed_value := fposmod(float(cell.x * 17 + cell.y * 31), 13.0) / 13.0
+			var variant := float(posmod(cell.x + cell.y * 3, 3)) * 0.5
+			_panels.multimesh.set_instance_transform(index, transform)
+			_ribbons.multimesh.set_instance_transform(index, transform)
+			_panels.multimesh.set_instance_custom_data(index, Color(variant, seed_value, 1.0 if posmod(cell.x + cell.y, 5) == 0 else 0.0, 1.0))
+			_ribbons.multimesh.set_instance_custom_data(index, Color(0.0, seed_value, 0.0, 0.0))
+	_layout_rebuilds += 1
+	_layout_ms = float(Time.get_ticks_usec() - started) / 1000.0
