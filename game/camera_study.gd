@@ -33,6 +33,7 @@ var fishing_line: MeshInstance3D
 var line_material: StandardMaterial3D
 var hud: CanvasLayer
 var pitch_slider: HSlider
+var weather_mode_select: OptionButton
 var density_slider: HSlider
 var density_label: Label
 var density_stats: Label
@@ -273,19 +274,21 @@ func _trace_raised_water(origin: Vector3, direction: Vector3, mean_distance: flo
 	return -1.0
 
 func _unhandled_input(event: InputEvent) -> void:
-	if weather_runtime != null and not paused and event is InputEventKey and event.pressed and not event.echo:
-		if event.physical_keycode == KEY_I:
+	if weather_runtime != null and event is InputEventKey and event.pressed and not event.echo:
+		if not paused and event.physical_keycode == KEY_I:
 			weather_runtime.trigger_encounter("salvage")
 			return
-		if event.physical_keycode == KEY_O:
+		if not paused and event.physical_keycode == KEY_O:
 			var active_event = weather_runtime.encounters.get_active()
 			if active_event != null:
 				active_event.resolve("abandoned")
 			return
 		var key_index: int = event.physical_keycode - KEY_1
-		if key_index >= 0 and key_index < 8:
+		if key_index >= 0 and key_index < 8 and (not paused or weather_runtime.weather_change_mode == EnvironmentRuntime.WeatherChangeMode.REPLACE_NOW):
 			var conditions := ["sunny", "cloudy", "raincloud", "storm", "calm", "breeze", "strong", "storm"]
 			weather_runtime.trigger_weather("sky" if key_index < 4 else "wind", conditions[key_index])
+			_update_scene(0.0)
+			_update_hud()
 			return
 	if event is InputEventMouseMotion:
 		_using_controller = false
@@ -403,7 +406,7 @@ func _build_hud() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	panel.offset_left = 24
 	panel.offset_right = -24
-	panel.offset_top = -164 if weather_runtime != null else -119
+	panel.offset_top = -184 if weather_runtime != null else -119
 	panel.offset_bottom = -24
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color(0.075,0.19,0.24,0.90)
@@ -479,7 +482,19 @@ func _build_hud() -> void:
 		weather_hint.text = "LAB · 1–4 sky · 5–8 wind · I request salvage · O send salvage away"
 		weather_hint.add_theme_font_size_override("font_size", 12)
 		weather_hint.modulate = Color("b2c4c0")
-		column.add_child(weather_hint)
+		var weather_row := HBoxContainer.new()
+		column.add_child(weather_row)
+		weather_mode_select = OptionButton.new()
+		weather_mode_select.focus_mode = Control.FOCUS_NONE
+		weather_mode_select.add_item("Weather: transitions", EnvironmentRuntime.WeatherChangeMode.TRANSITIONS)
+		weather_mode_select.add_item("Weather: skip transitions", EnvironmentRuntime.WeatherChangeMode.SKIP_TRANSITIONS)
+		weather_mode_select.add_item("Weather: replace now (lab)", EnvironmentRuntime.WeatherChangeMode.REPLACE_NOW)
+		for state: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+			weather_mode_select.add_theme_color_override(state, Color("183e57"))
+		weather_mode_select.tooltip_text = "Transitions: normal queue. Skip transitions: queue and locks remain; admitted fronts snap on/off. Replace now: 1–8 replace active and queued weather, even paused, and set the baseline. Modes affect future requests; changing this selector alone leaves current weather running."
+		weather_mode_select.item_selected.connect(func(index: int): weather_runtime.weather_change_mode = weather_mode_select.get_item_id(index))
+		weather_row.add_child(weather_mode_select)
+		weather_row.add_child(weather_hint)
 
 func _update_hud() -> void:
 	pitch_slider.set_value_no_signal(camera.pitch_degrees)

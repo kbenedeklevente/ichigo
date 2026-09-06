@@ -40,6 +40,8 @@ func configure(definitions: Array[Dictionary], seed_value: int = 15) -> bool:
 			return false
 		var payload: Dictionary = definition.get("payload", {})
 		if definition.domain == "weather":
+			if not payload.get("instant", false) is bool:
+				return false
 			if payload.get("sky", "sunny") not in Chance.SKIES or payload.get("wind", "calm") not in ["calm", "breeze", "strong", "storm"]:
 				return false
 			for key: String in ["approach_s", "hold_s", "clearing_s"]:
@@ -295,6 +297,16 @@ func _roll(domain: String, delta: float, context: Dictionary, barrier: bool, com
 	_clocks[domain] = 0.0
 	_hazards[domain] = {}
 
+## Explicit laboratory replacement, never used by authored event admission.
+func interrupt_weather_for_testing() -> void:
+	for record: Dictionary in _pending.duplicate():
+		if not record.weather.is_empty():
+			cancel(record.id)
+	if not weather_owner.is_empty():
+		finish_weather("cancelled")
+	_clocks.weather = 0.0
+	_hazards.weather = {}
+
 func finish_weather(outcome: String = "completed") -> bool:
 	if weather_owner.is_empty():
 		return false
@@ -446,7 +458,7 @@ func restore(data: Dictionary) -> bool:
 					if entry.weather_done or not entry.encounter.is_empty():
 						return false
 				"encounter":
-					if entry.encounter_done or (not entry.weather.is_empty() and entry.weather_done):
+					if entry.encounter_done or (not entry.weather.is_empty() and entry.weather_done and not entry.cancelled):
 						return false
 				"weather_tail":
 					if entry.weather_done or not entry.encounter_done:

@@ -2,6 +2,10 @@
 
 Status: implemented study parameters, 5 September 2026. The user authorized initial parameter definition. These values are editable art/game tuning, not measured real-world forecasts or final pacing.
 
+## Current weather change controls — 6 September 2026
+
+The HUD offers transitions, skip transitions (queued), and replace now (lab). Instant events snap fields on arrival/exit while keeping their hold and spatial envelope. Manual replacement sets an immediate uniform baseline and works paused. See [weather algorithm review](weather_algorithm_review.md) for the current contract and analysis; normal profile/response values below remain unchanged.
+
 ## Current renderer and next wind study
 
 Paper Theatre is selected and runs by default; use `--camera-baseline` for the historical camera fixture. Its matching child/bucket art is implemented. The user now classifies the current curling-wave artwork as intensity 2 and requests a separate 0–3 wind intensity field for lateral/vertical animation. That change is pending clarified timing/travel conventions. See [wind visual motion](wind_visual_motion.md). The physical profile table below still describes the implemented solver; do not replace its vector units with animation intensity.

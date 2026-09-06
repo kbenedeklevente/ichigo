@@ -19,6 +19,8 @@ Use this index to retrieve the smallest useful design context. Start with the cu
 
 For visual tile size, density, GPU field interpolation and the slider limit study, read [visual water density](../experiments/visual_water_density.md). Its retained branch subdivides drawings without changing logical cells. For the current correction, read [full-size crests](../experiments/full_size_wave_crests.md): only lower panels subdivide; curling crests retain their original size and spacing.
 
+For instant weather controls, transition modes and a code-based analysis of automatic weather, read [weather algorithm review](weather_algorithm_review.md).
+
 ## Current status and precedence
 
 The scheduler and chance authoring are implemented for existing weather/salvage fixtures; weather capacity is two total including active. See [verification](../work_packets/scheduler_chance_implementation.md). For chance-table authoring, read [event eligibility and chance](event_eligibility_and_chance.md) alongside the event-system row. For small next-content proposals, read [starter weather and encounter ideas](starter_event_ideas.md); these are not selected or implemented content.

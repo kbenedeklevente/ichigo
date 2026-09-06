@@ -2,6 +2,10 @@
 
 6 September 2026. Implemented at the user’s request. The user confirmed the weather capacity is **two total, including active weather**. The coordinator wraps the existing weather and salvage handlers; no starter content is enabled by this change.
 
+## Weather execution modes — 6 September 2026
+
+The study now supports normal transitions, queued instant execution and explicit laboratory replacement. Future event definitions may set `payload.instant = true` without bypassing admission or encounter locks. Only the manual replacement mode interrupts active/waiting weather. See [weather algorithm review](weather_algorithm_review.md) for exact semantics, baseline behavior, cancellation and automatic selection analysis.
+
 ## Problem and existing foundation
 
 Weather and encounters need independent scheduling, with linked story requests able to require both. Independent queue heads and partial allocation could leave weather waiting for an encounter while the encounter waits for weather. Ordinary eligible requests should be able to pass a blocked request without interrupting an active one.

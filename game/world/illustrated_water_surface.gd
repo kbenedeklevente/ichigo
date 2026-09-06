@@ -18,6 +18,7 @@ var _phase := 0.0
 var _texture: ImageTexture
 var _field_image: Image
 var _last_time := -1.0
+var _last_revision := -1
 var _minimum_height := 0.0
 var _maximum_height := 0.0
 var _panels: Array[Dictionary] = []
@@ -32,11 +33,12 @@ func update() -> void:
 	if _simulation == null:
 		return
 	var status: Dictionary = _simulation.get_status()
-	if float(status.simulation_time) == _last_time and status.origin == _origin:
+	if float(status.simulation_time) == _last_time and status.origin == _origin and int(status.get("field_revision", 0)) == _last_revision:
 		return
 	_vertex_heights.clear()
 	_status = status
 	_last_time = status.simulation_time
+	_last_revision = int(status.get("field_revision", 0))
 	_phase = status.phase
 	_origin = status.origin
 	_cell_size = status.cell_size

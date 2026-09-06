@@ -42,6 +42,7 @@ var _phase: float = 0.0
 var _wave_speed: float = 0.65
 var _active: bool = false
 var _complete: bool = false
+var _instant_event: bool = false
 var _elapsed: float = 0.0
 var _approach_s: float = 12.0
 var _hold_s: float = 18.0
@@ -52,6 +53,7 @@ var _direction := Vector2.RIGHT
 var _center := Vector2.ZERO
 var _transition_held: bool = false
 var _event_modifiers: Array = []
+var _field_revision: int = 0
 
 func set_transition_hold(enabled: bool) -> void:
 	_transition_held = enabled
@@ -89,6 +91,7 @@ func configure(seed_value: int = 15) -> void:
 	_phase = 0.0
 	_wave_speed = float(WIND_PROFILES[baseline_wind].wave_speed)
 	_active = false
+	_instant_event = false
 	_complete = false
 	_elapsed = 0.0
 	_sky = baseline_sky
@@ -97,6 +100,7 @@ func configure(seed_value: int = 15) -> void:
 	_center = Vector2.ZERO
 	_transition_held = false
 	_event_modifiers.clear()
+	_field_revision += 1
 	_fields.clear()
 	for field_name in FIELD_NAMES:
 		var values := PackedFloat64Array()
@@ -106,7 +110,9 @@ func configure(seed_value: int = 15) -> void:
 		for x in _side:
 			_initialize_cell(y * _side + x, _origin + Vector2i(x, y))
 
-func start_event(payload: Dictionary) -> bool:
+func start_event(payload: Dictionary, player_position: Variant = null) -> bool:
+	if player_position != null and (not player_position is Vector2 or not player_position.is_finite()):
+		return false
 	if _fields.is_empty():
 		configure(_seed)
 	if _active or _transition_held:
@@ -115,20 +121,54 @@ func start_event(payload: Dictionary) -> bool:
 	var wind_name := str(payload.get("wind", baseline_wind))
 	if not SKY_PROFILES.has(sky_name) or not WIND_PROFILES.has(wind_name):
 		return false
+	if not payload.get("instant", false) is bool:
+		return false
 	for key in ["approach_s", "hold_s", "clearing_s"]:
 		if payload.has(key) and (not (payload[key] is float or payload[key] is int) or not is_finite(float(payload[key])) or float(payload[key]) <= 0.0):
 			return false
+	if player_position != null:
+		_player = player_position
+		_scroll_grid()
 	_approach_s = float(payload.get("approach_s", 12.0))
 	_hold_s = float(payload.get("hold_s", 18.0))
 	_clearing_s = float(payload.get("clearing_s", 12.0))
 	_sky = sky_name
 	_wind = wind_name
 	_direction = Vector2.from_angle(_rng.randf_range(0.0, TAU))
-	_elapsed = 0.0
+	_instant_event = payload.get("instant", false)
+	_elapsed = _approach_s if _instant_event else 0.0
 	_active = true
 	_complete = false
 	_update_center()
+	if _instant_event:
+		_snap_fields_to_targets()
 	return true
+
+## Laboratory override only. Runtime must release scheduler ownership first.
+func set_baseline_instantly(sky: String, wind: String) -> bool:
+	if not SKY_PROFILES.has(sky) or not WIND_PROFILES.has(wind):
+		return false
+	if _fields.is_empty():
+		configure(_seed)
+	baseline_sky = sky
+	baseline_wind = wind
+	_sky = sky
+	_wind = wind
+	_active = false
+	_instant_event = false
+	_complete = false
+	_elapsed = 0.0
+	_update_center()
+	_snap_fields_to_targets()
+	return true
+
+func _snap_fields_to_targets() -> void:
+	_field_revision += 1
+	# Keep world position, clock, day phase and wave phase; remove old swell energy.
+	_wave_speed = lerpf(float(WIND_PROFILES[baseline_wind].wave_speed), float(WIND_PROFILES[_wind].wave_speed), _influence(_player))
+	for y in _side:
+		for x in _side:
+			_initialize_cell(y * _side + x, _origin + Vector2i(x, y))
 
 func advance(delta: float, player_position: Vector2) -> void:
 	if not is_finite(delta) or delta <= 0.0 or not player_position.is_finite():
@@ -179,9 +219,9 @@ func sample(point: Vector2) -> Dictionary:
 	return result
 
 func get_status() -> Dictionary:
-	return {"active": _active, "event_complete": _complete, "stage": _stage(), "transition_held": _transition_held, "incoming_direction": _direction, "center": _center,
+	return {"active": _active, "instant": _instant_event, "event_complete": _complete, "stage": _stage(), "transition_held": _transition_held, "incoming_direction": _direction, "center": _center,
 		"sky": _sky if _active else baseline_sky, "wind": _wind if _active else baseline_wind, "elapsed": _elapsed,
-		"progress": _stage_progress(), "simulation_time": _clock, "phase": _phase, "wave_speed": _wave_speed, "cell_size": cell_size,
+		"progress": _stage_progress(), "simulation_time": _clock, "field_revision": _field_revision, "phase": _phase, "wave_speed": _wave_speed, "cell_size": cell_size,
 		"render_radius": render_radius, "simulation_radius": simulation_radius, "origin": _origin,
 		"simulated_cells": _side * _side, "rendered_cells": (2 * render_radius + 1) ** 2}
 
@@ -207,12 +247,14 @@ func snapshot() -> Dictionary:
 		"simulation_radius": simulation_radius, "baseline_sky": baseline_sky, "baseline_wind": baseline_wind,
 		"day_period_s": day_period_s, "day_phase": day_phase, "origin": _origin, "player": _player,
 		"clock": _clock, "remainder": _remainder, "phase": _phase, "wave_speed": _wave_speed,
-		"active": _active, "complete": _complete, "transition_held": _transition_held, "elapsed": _elapsed, "approach_s": _approach_s,
+		"active": _active, "instant": _instant_event, "complete": _complete, "transition_held": _transition_held, "elapsed": _elapsed, "approach_s": _approach_s,
 		"hold_s": _hold_s, "clearing_s": _clearing_s, "sky": _sky, "wind": _wind,
 		"direction": _direction, "center": _center, "fields": _fields.duplicate(true)}
 
 ## Native Godot Variant snapshot (store_var/get_var); invalid snapshots do not mutate state.
 func restore(data: Dictionary) -> bool:
+	if not data.get("instant", false) is bool:
+		return false
 	var required := ["seed", "rng_state", "cell_size", "render_radius", "simulation_radius", "baseline_sky", "baseline_wind", "day_period_s", "day_phase", "origin", "player", "clock", "remainder", "phase", "wave_speed", "active", "complete", "elapsed", "approach_s", "hold_s", "clearing_s", "sky", "wind", "direction", "center", "fields"]
 	if data.get("version", 0) != 1:
 		return false
@@ -258,6 +300,7 @@ func restore(data: Dictionary) -> bool:
 	_remainder = data.remainder
 	_phase = data.phase
 	_wave_speed = data.wave_speed
+	_instant_event = data.get("instant", false)
 	_active = data.active
 	_complete = data.complete
 	_elapsed = data.elapsed
@@ -268,6 +311,7 @@ func restore(data: Dictionary) -> bool:
 	_wind = data.wind
 	_direction = data.direction
 	_center = data.center
+	_field_revision += 1
 	_fields = data.fields.duplicate(true)
 	_transition_held = bool(data.get("transition_held", false))
 	_event_modifiers.clear()
@@ -277,9 +321,12 @@ func _step(dt: float) -> void:
 	_clock += dt
 	if _active and not _transition_held:
 		_elapsed += dt
-		if _elapsed >= _approach_s + _hold_s + _clearing_s:
+		var duration := _approach_s + _hold_s + (0.0 if _instant_event else _clearing_s)
+		if _elapsed + 0.0000001 >= duration:
 			_active = false
 			_complete = true
+			if _instant_event:
+				_snap_fields_to_targets()
 	_update_center()
 	var local_strength := _influence(_player)
 	var speed_target := lerpf(float(WIND_PROFILES[baseline_wind].wave_speed), float(WIND_PROFILES[_wind].wave_speed), local_strength)

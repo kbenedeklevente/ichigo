@@ -15,6 +15,9 @@ var last_source: String = ""
 var last_event_id: String = ""
 var selected_sky: String = "sunny"
 var selected_wind: String = "calm"
+## Lab preference, deliberately not a world-save field. Event payloads own their policy.
+enum WeatherChangeMode { TRANSITIONS, SKIP_TRANSITIONS, REPLACE_NOW }
+var weather_change_mode: WeatherChangeMode = WeatherChangeMode.TRANSITIONS
 var _accumulator: float = 0.0
 
 func configure(seed_value: int = 15, enable_encounters: bool = false) -> void:
@@ -28,6 +31,7 @@ func configure(seed_value: int = 15, enable_encounters: bool = false) -> void:
 	selected_sky = "sunny"
 	selected_wind = "calm"
 	_accumulator = 0.0
+	weather_change_mode = WeatherChangeMode.TRANSITIONS
 
 func trigger_weather(axis: String, condition: String) -> bool:
 	var sky: String = selected_sky
@@ -38,7 +42,13 @@ func trigger_weather(axis: String, condition: String) -> bool:
 		wind = condition
 	else:
 		return false
-	if not scheduler.trigger("weather.mix.%s.%s" % [sky, wind]):
+	if weather_change_mode == WeatherChangeMode.REPLACE_NOW:
+		scheduler.interrupt_weather_for_testing()
+		weather.set_baseline_instantly(sky, wind)
+		active_weather_id = ""
+		last_event_id = "weather.mix.%s.%s" % [sky, wind]
+		last_source = "trigger"
+	elif not scheduler.trigger("weather.mix.%s.%s" % [sky, wind]):
 		return false
 	selected_sky = sky
 	selected_wind = wind
@@ -69,7 +79,10 @@ func advance(delta: float, player_position: Vector2, flags: Array[String] = []) 
 		weather.set_transition_hold(encounters.get_active() != null)
 		for command: Dictionary in scheduler.advance(STEP, context):
 			if command.kind == "start_weather":
-				if weather.start_event(command.payload):
+				var payload: Dictionary = command.payload.duplicate(true)
+				if weather_change_mode == WeatherChangeMode.SKIP_TRANSITIONS:
+					payload.instant = true
+				if weather.start_event(payload, player_position):
 					active_weather_id = command.id
 					last_event_id = command.id
 					last_source = command.source
